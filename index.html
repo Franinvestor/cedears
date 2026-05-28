@@ -1,0 +1,994 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Listado de CEDEARs · Leiva Hnos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --leiva-red: #DA0F2C;
+  --leiva-red-dark: #B00A22;
+  --leiva-red-light: #FFE5E9;
+  --ink: #1A1A1A;
+  --ink-soft: #4A4A4A;
+  --ink-muted: #8A8A8A;
+  --line: #E8E8E8;
+  --line-soft: #F2F2F2;
+  --bg: #FAFAFA;
+  --white: #FFFFFF;
+
+  /* Sector colors - mismo rojo de marca como acento, identidades secundarias suaves */
+  --c-tec: #2E5BFF;
+  --c-com: #8B5CF6;
+  --c-sal: #14B8A6;
+  --c-fin: #0EA5E9;
+  --c-rea: #F59E0B;
+  --c-ene: #EA580C;
+  --c-mat: #78716C;
+  --c-uti: #65A30D;
+  --c-ind: #475569;
+  --c-cm: #DC2626;
+  --c-cd: #DB2777;
+  --c-etf: #6366F1;
+}
+
+html, body { height: 100%; }
+body {
+  font-family: 'Manrope', system-ui, -apple-system, sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  font-size: 14px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ============ HEADER ============ */
+.header {
+  background: var(--white);
+  border-bottom: 3px solid var(--leiva-red);
+  padding: 18px 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+}
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.logo {
+  display: flex;
+  align-items: baseline;
+  gap: 2px;
+  font-weight: 800;
+  font-size: 26px;
+  letter-spacing: -0.5px;
+  line-height: 1;
+}
+.logo .l-red { color: var(--leiva-red); }
+.logo .l-ink { color: var(--ink); }
+.brand-divider {
+  width: 1px;
+  height: 28px;
+  background: var(--line);
+}
+.brand-sub {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--ink-muted);
+  font-weight: 600;
+}
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  font-size: 12px;
+  color: var(--ink-muted);
+}
+.header-right .pill {
+  background: var(--leiva-red-light);
+  color: var(--leiva-red-dark);
+  padding: 5px 12px;
+  border-radius: 100px;
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: 0.5px;
+}
+
+/* ============ HERO ============ */
+.hero {
+  padding: 32px 32px 16px;
+  background: var(--white);
+  border-bottom: 1px solid var(--line);
+}
+.hero h1 {
+  font-size: 32px;
+  font-weight: 800;
+  letter-spacing: -1px;
+  margin-bottom: 6px;
+}
+.hero h1 .accent { color: var(--leiva-red); }
+.hero p {
+  color: var(--ink-soft);
+  font-size: 15px;
+  max-width: 720px;
+}
+
+/* ============ STATS ============ */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1px;
+  background: var(--line);
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+.stat {
+  background: var(--white);
+  padding: 18px 24px;
+  position: relative;
+}
+.stat-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  color: var(--ink-muted);
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+.stat-value {
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: -0.8px;
+  font-family: 'JetBrains Mono', monospace;
+  color: var(--ink);
+}
+.stat-value.accent { color: var(--leiva-red); }
+.stat-detail {
+  font-size: 12px;
+  color: var(--ink-muted);
+  margin-top: 2px;
+}
+
+/* ============ TOOLBAR ============ */
+.toolbar {
+  padding: 20px 32px;
+  background: var(--white);
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+}
+.search-box {
+  position: relative;
+  flex: 1;
+  min-width: 280px;
+  max-width: 480px;
+}
+.search-box input {
+  width: 100%;
+  padding: 11px 14px 11px 40px;
+  border: 1.5px solid var(--line);
+  border-radius: 6px;
+  font-size: 14px;
+  font-family: inherit;
+  background: var(--white);
+  transition: all 0.15s;
+}
+.search-box input:focus {
+  outline: none;
+  border-color: var(--leiva-red);
+  box-shadow: 0 0 0 3px rgba(218, 15, 44, 0.12);
+}
+.search-box .icon {
+  position: absolute;
+  left: 13px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--ink-muted);
+  pointer-events: none;
+}
+.tab-group {
+  display: flex;
+  background: var(--line-soft);
+  border-radius: 6px;
+  padding: 3px;
+  gap: 2px;
+}
+.tab {
+  padding: 8px 14px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink-soft);
+  border-radius: 4px;
+  transition: all 0.15s;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.tab:hover { color: var(--ink); }
+.tab.active {
+  background: var(--white);
+  color: var(--leiva-red);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+}
+.tab .count {
+  background: var(--line);
+  color: var(--ink-muted);
+  padding: 1px 7px;
+  border-radius: 100px;
+  font-size: 11px;
+  font-weight: 700;
+  font-family: 'JetBrains Mono', monospace;
+}
+.tab.active .count { background: var(--leiva-red-light); color: var(--leiva-red-dark); }
+
+.btn-secondary {
+  padding: 10px 16px;
+  background: var(--white);
+  border: 1.5px solid var(--line);
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  color: var(--ink-soft);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.15s;
+}
+.btn-secondary:hover {
+  border-color: var(--leiva-red);
+  color: var(--leiva-red);
+}
+.btn-secondary.active {
+  background: var(--leiva-red);
+  border-color: var(--leiva-red);
+  color: var(--white);
+}
+
+/* ============ FILTROS ============ */
+.filters-bar {
+  padding: 16px 32px;
+  background: var(--white);
+  border-bottom: 1px solid var(--line);
+  display: none;
+  flex-wrap: wrap;
+  gap: 16px;
+  align-items: flex-end;
+}
+.filters-bar.open { display: flex; }
+.filter-group { display: flex; flex-direction: column; gap: 6px; min-width: 180px; }
+.filter-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  color: var(--ink-muted);
+  font-weight: 600;
+}
+.filter-input {
+  position: relative;
+}
+.filter-input input {
+  width: 100%;
+  padding: 9px 12px 9px 12px;
+  border: 1.5px solid var(--line);
+  border-radius: 6px;
+  font-size: 13px;
+  font-family: inherit;
+  background: var(--white);
+}
+.filter-input input:focus { outline: none; border-color: var(--leiva-red); box-shadow: 0 0 0 3px rgba(218,15,44,0.12); }
+.filter-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 8px;
+  max-height: 100px;
+  overflow-y: auto;
+  padding: 4px;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+}
+.chip {
+  padding: 4px 10px;
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: 100px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--ink-soft);
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.15s;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  white-space: nowrap;
+}
+.chip:hover { border-color: var(--leiva-red); color: var(--leiva-red); }
+.chip.active { background: var(--leiva-red); border-color: var(--leiva-red); color: var(--white); }
+.chip .ct {
+  background: var(--line);
+  color: var(--ink-muted);
+  padding: 0 6px;
+  border-radius: 100px;
+  font-size: 10px;
+  font-family: 'JetBrains Mono', monospace;
+}
+.chip.active .ct { background: rgba(255,255,255,0.25); color: var(--white); }
+
+.filters-summary {
+  padding: 10px 32px;
+  background: var(--leiva-red-light);
+  border-bottom: 1px solid var(--line);
+  display: none;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+}
+.filters-summary.show { display: flex; }
+.filters-summary .label { font-weight: 600; color: var(--leiva-red-dark); }
+.filters-summary .clear {
+  background: var(--white);
+  border: 1px solid var(--leiva-red);
+  color: var(--leiva-red);
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  margin-left: auto;
+}
+.filters-summary .clear:hover { background: var(--leiva-red); color: var(--white); }
+
+/* ============ VIEW MODES ============ */
+.results-container {
+  padding: 24px 32px 64px;
+}
+
+/* TABLA VIEW */
+.results-table-wrap {
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+thead {
+  background: var(--ink);
+  color: var(--white);
+}
+thead th {
+  text-align: left;
+  padding: 13px 14px;
+  font-weight: 600;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  white-space: nowrap;
+  cursor: pointer;
+  user-select: none;
+  position: relative;
+}
+thead th:hover { background: #2a2a2a; }
+thead th.sort-asc::after { content: ' ↑'; color: var(--leiva-red); }
+thead th.sort-desc::after { content: ' ↓'; color: var(--leiva-red); }
+tbody tr {
+  border-bottom: 1px solid var(--line-soft);
+  transition: background 0.1s;
+}
+tbody tr:hover { background: var(--leiva-red-light); }
+tbody td {
+  padding: 12px 14px;
+  vertical-align: middle;
+}
+tbody td.nombre { font-weight: 600; color: var(--ink); max-width: 280px; }
+tbody td.ticker {
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 700;
+  color: var(--leiva-red);
+}
+tbody td.cod {
+  font-family: 'JetBrains Mono', monospace;
+  color: var(--ink-soft);
+  font-size: 12px;
+}
+tbody td.ratio {
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 600;
+  font-size: 12px;
+  text-align: center;
+}
+tbody td.mercado { color: var(--ink-soft); font-size: 12px; }
+
+/* Badge Tipo */
+.badge-tipo {
+  display: inline-block;
+  padding: 3px 9px;
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.badge-tipo.tipo-Acción {
+  background: var(--ink);
+  color: var(--white);
+}
+.badge-tipo.tipo-ETF {
+  background: var(--leiva-red);
+  color: var(--white);
+}
+
+/* Tag sector */
+.tag-sector {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px 4px 8px;
+  border-radius: 100px;
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+  background: var(--line-soft);
+  color: var(--ink);
+}
+.tag-sector::before {
+  content: '';
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--c, var(--ink-muted));
+}
+.tag-sector[data-sec="Tecnología"] { --c: var(--c-tec); }
+.tag-sector[data-sec="Comunicaciones y Medios"] { --c: var(--c-com); }
+.tag-sector[data-sec="Salud y Farma"] { --c: var(--c-sal); }
+.tag-sector[data-sec="Bancos y Finanzas"] { --c: var(--c-fin); }
+.tag-sector[data-sec="Real Estate (REITs)"] { --c: var(--c-rea); }
+.tag-sector[data-sec="Energía"] { --c: var(--c-ene); }
+.tag-sector[data-sec="Materiales y Minería"] { --c: var(--c-mat); }
+.tag-sector[data-sec="Utilities"] { --c: var(--c-uti); }
+.tag-sector[data-sec="Industria y Defensa"] { --c: var(--c-ind); }
+.tag-sector[data-sec="Consumo Masivo"] { --c: var(--c-cm); }
+.tag-sector[data-sec="Consumo Discrecional"] { --c: var(--c-cd); }
+.tag-sector[data-sec="Índices y Estrategias Amplias"] { --c: var(--c-etf); }
+
+/* GROUPED VIEW */
+.group {
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  margin-bottom: 16px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+}
+.group-header {
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  cursor: pointer;
+  user-select: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.15s;
+}
+.group.open .group-header { border-bottom-color: var(--line); }
+.group-header:hover { background: var(--bg); }
+.group-color {
+  width: 4px;
+  height: 32px;
+  border-radius: 100px;
+  background: var(--c, var(--ink-muted));
+}
+.group-title {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+.group-name {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--ink);
+  letter-spacing: -0.3px;
+}
+.group-desc {
+  font-size: 12px;
+  color: var(--ink-muted);
+  margin-top: 1px;
+}
+.group-counts {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.group-count-pill {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 6px;
+  background: var(--line-soft);
+  color: var(--ink-soft);
+}
+.group-count-pill.acc { background: var(--ink); color: var(--white); }
+.group-count-pill.etf { background: var(--leiva-red); color: var(--white); }
+.group-arrow {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ink-muted);
+  transition: transform 0.2s;
+}
+.group.open .group-arrow { transform: rotate(180deg); }
+.group-body { display: none; }
+.group.open .group-body { display: block; }
+.group-body table { font-size: 13px; }
+.group-body thead { background: var(--bg); color: var(--ink-soft); }
+.group-body thead th { font-size: 10px; }
+.group-body thead th:hover { background: var(--line-soft); }
+
+/* Empty state */
+.empty-state {
+  padding: 80px 32px;
+  text-align: center;
+  background: var(--white);
+  border: 1px dashed var(--line);
+  border-radius: 8px;
+}
+.empty-state h3 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 6px;
+}
+.empty-state p {
+  color: var(--ink-muted);
+  font-size: 14px;
+}
+
+/* Footer */
+.footer {
+  padding: 24px 32px;
+  border-top: 1px solid var(--line);
+  background: var(--white);
+  font-size: 12px;
+  color: var(--ink-muted);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.footer .leiva-mark {
+  color: var(--leiva-red);
+  font-weight: 700;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .header { padding: 14px 16px; }
+  .hero, .toolbar, .filters-bar, .filters-summary, .results-container, .footer { padding-left: 16px; padding-right: 16px; }
+  .hero h1 { font-size: 24px; }
+  .stat-value { font-size: 22px; }
+  .results-table-wrap { overflow-x: auto; }
+  table { min-width: 800px; }
+}
+
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: #C8C8C8; border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--ink-muted); }
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="brand">
+    <div class="logo"><span class="l-red">LEIVA</span></div>
+    <div class="brand-divider"></div>
+    <div class="brand-sub">Mesa de Inversiones · Herramienta Asesores</div>
+  </div>
+  <div class="header-right">
+    <span class="pill">CEDEARs · Listado completo</span>
+  </div>
+</header>
+
+<section class="hero">
+  <h1>Universo de <span class="accent">CEDEARs</span> disponibles</h1>
+  <p>Listado consolidado de Caja de Valores y Banco Comafi, con clasificación por sector propia de Leiva Hnos para facilitar la asesoría a clientes.</p>
+</section>
+
+<section class="stats" id="stats"></section>
+
+<section class="toolbar">
+  <div class="search-box">
+    <svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+    <input type="search" id="search" placeholder="Buscar por nombre, ticker, código...">
+  </div>
+
+  <div class="tab-group" id="tabTipo">
+    <button class="tab active" data-tipo="all">Todos <span class="count" id="ct-all">0</span></button>
+    <button class="tab" data-tipo="Acción">Acciones <span class="count" id="ct-acc">0</span></button>
+    <button class="tab" data-tipo="ETF">ETFs <span class="count" id="ct-etf">0</span></button>
+  </div>
+
+  <button class="btn-secondary" id="btnFilters">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M3 6h18M7 12h10M10 18h4"/></svg>
+    Filtros
+  </button>
+
+  <button class="btn-secondary" id="btnView">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="4" width="18" height="4" rx="1"/><rect x="3" y="10" width="18" height="4" rx="1"/><rect x="3" y="16" width="18" height="4" rx="1"/></svg>
+    <span id="viewLabel">Agrupado por sector</span>
+  </button>
+</section>
+
+<section class="filters-bar" id="filtersBar">
+  <div class="filter-group" style="flex:1; min-width:260px;">
+    <div class="filter-label">Sector (clasificación propia)</div>
+    <div class="filter-input"><input type="text" id="searchSector" placeholder="Buscar sector..."></div>
+    <div class="filter-chips" id="chipsSector"></div>
+  </div>
+
+  <div class="filter-group" style="flex:1; min-width:220px;">
+    <div class="filter-label">Mercado de origen</div>
+    <div class="filter-input"><input type="text" id="searchMercado" placeholder="Buscar mercado..."></div>
+    <div class="filter-chips" id="chipsMercado"></div>
+  </div>
+
+  <div class="filter-group" style="flex:1; min-width:220px;">
+    <div class="filter-label">País</div>
+    <div class="filter-input"><input type="text" id="searchPais" placeholder="Buscar país..."></div>
+    <div class="filter-chips" id="chipsPais"></div>
+  </div>
+
+  <div class="filter-group" style="flex:1; min-width:200px;">
+    <div class="filter-label">Fuente</div>
+    <div class="filter-chips" id="chipsFuente"></div>
+  </div>
+</section>
+
+<section class="filters-summary" id="filtersSummary">
+  <span class="label">Filtros aplicados:</span>
+  <span id="filtersSummaryText"></span>
+  <button class="clear" id="clearFilters">Limpiar todo</button>
+</section>
+
+<main class="results-container">
+  <div id="results"></div>
+</main>
+
+<footer class="footer">
+  <div>Fuentes: <strong>Caja de Valores</strong> (Tabla emisores · 17/04/2026) · <strong>Banco Comafi</strong> (Lista total CEDEARs · 27/05/2026). Información de referencia; verificar siempre con la fuente oficial.</div>
+  <div><span class="leiva-mark">LEIVA</span> · Herramienta interna de asesoramiento</div>
+</footer>
+
+<script>
+const DATA = [{"nombre":"AEGON LTD NPV","ticker":"AEG","cod_caja_cedear":"8242","ratio":"1:1","mercado_origen":"NYSE","pais":"Países Bajos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Bancos y Finanzas","sector_desc":"Bancos, seguros, capital markets, asset management","industria_orig":"Financial","desc_industria_orig":"Insurance"},{"nombre":"AMERICAN EXPRESS Co.","ticker":"AXP","cod_caja_cedear":"8009","ratio":"15:1","mercado_origen":"NYSE","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Bancos y Finanzas","sector_desc":"Bancos, seguros, capital markets, asset management","industria_orig":"Financial","desc_industria_orig":"Consumer Finance"},{"nombre":"AMERICAN INTERNATIONAL GROUP INC (AIG)","ticker":"AIG","cod_caja_cedear":"8069","ratio":"5:1","mercado_origen":"NYSE","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Bancos y Finanzas","sector_desc":"Bancos, seguros, capital markets, asset management","industria_orig":"Financial","desc_industria_orig":"Insurance"},{"nombre":"BANCO BILBAO VIZCAYA-SP ADR","ticker":"BBVA","cod_caja_cedear":"8229","ratio":"1:1","mercado_origen":"NYSE","pais":"España","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Bancos y Finanzas","sector_desc":"Bancos, seguros, capital markets, asset management","industria_orig":"Financial","desc_industria_orig":"Banks"},{"nombre":"BANCO BRADESCO S.A.","ticker":"BBDC3","cod_caja_cedear":"8603","ratio":"1:1","mercado_origen":"B3 (Brasil)","pais":"N/D","tipo":"Acción","fuente":"Caja de Valores","sector_propio":"Bancos y Finanzas","sector_desc":"Bancos, seguros, capital markets, asset management","industria_orig":"","desc_industria_orig":""},{"nombre":"BANCO BRADESCO, S.A.","ticker":"BBD","cod_caja_cedear":"8431","ratio":"1:1","mercado_origen":"NYSE","pais":"Brasil","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Bancos y Finanzas","sector_desc":"Bancos, seguros, capital markets, asset management","industria_orig":"Financial","desc_industria_orig":"Banks"},{"nombre":"BANCO BTG PACTUAL S.A. UNIT","ticker":"BPA11","cod_caja_cedear":"8618","ratio":"1:1","mercado_origen":"B3 (Brasil)","pais":"N/D","tipo":"Acción","fuente":"Caja de Valores","sector_propio":"Bancos y Finanzas","sector_desc":"Bancos, seguros, capital markets, asset management","industria_orig":"","desc_industria_orig":""},{"nombre":"BANCO DO BRASIL S.A.","ticker":"BBAS3","cod_caja_cedear":"8607","ratio":"2:1","mercado_origen":"B3 (Brasil)","pais":"N/D","tipo":"Acción","fuente":"Caja de Valores","sector_propio":"Bancos y Finanzas","sector_desc":"Bancos, seguros, capital markets, asset management","industria_orig":"","desc_industria_orig":""},{"nombre":"BANCO ITAÚ UNIBANCO S.A.","ticker":"ITUB3","cod_caja_cedear":"8605","ratio":"1:1","mercado_origen":"B3 (Brasil)","pais":"N/D","tipo":"Acción","fuente":"Caja de Valores","sector_propio":"Bancos y Finanzas","sector_desc":"Bancos, seguros, capital markets, asset management","industria_orig":"","desc_industria_orig":""},{"nombre":"BANCO SANTANDER  S.A. (ADR)","ticker":"SAN","cod_caja_cedear":"8525","ratio":"1 :4","mercado_origen":"NYSE","pais":"España","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Bancos y Finanzas","sector_desc":"Bancos, seguros, capital markets, asset management","industria_orig":"Financial","desc_industria_orig":"Banks"},{"nombre":"BANCO SANTANDER (BRASIL) S.A.","ticker":"BSBR","cod_caja_cedear":"8430","ratio":"1:1","mercado_origen":"NYSE","pais":"Brasil","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Bancos y Finanzas","sector_desc":"Bancos, seguros, capital markets, asset management","industria_orig":"Financial","desc_industria_orig":"Banks"},{"nombre":"BANK OF AMERICA CORPORATION","ticker":"BAC","cod_caja_cedear":"8281","ratio":"4:1","mercado_origen":"NYSE","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Bancos y Finanzas","sector_desc":"Bancos, seguros, capital markets, asset management","industria_orig":"Financial","desc_industria_orig":"Banks"},{"nombre":"BANK OF NEW YORK MELLON CORP","ticker":"BNY","cod_caja_cedear":"8080","ratio":"2:1","mercado_origen":"NYSE","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Bancos y Finanzas","sector_desc":"Bancos, seguros, capital markets, asset management","industria_orig":"Financial","desc_industria_orig":"Capital Markets"},{"nombre":"BARCLAYS BANK plc ADR","ticker":"BCS","cod_caja_cedear":"8183","ratio":"1:1","mercado_origen":"NYSE","pais":"Reino Unido","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Bancos y Finanzas","sector_desc":"Bancos, seguros, capital markets, asset management","industria_orig":"Financial","desc_industria_orig":"Banks"},{"nombre":"BERKSHIRE HATHAWAY INC","ticker":"BRK/B","cod_caja_cedear":"8529","ratio":"22:1","mercado_origen":"NYSE","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Bancos y Finanzas","sector_desc":"Bancos, seguros, capital markets, asset management","industria_orig":"Financial","desc_industria_orig":"Diversified Financial Services"},{"nombre":"BLACKSTONE INC.","ticker":"BX","cod_caja_cedear":"8718","ratio":"30:1","mercado_origen":"NYSE","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Bancos y Finanzas","sector_desc":"Bancos, seguros, capital markets, asset management","industria_orig":"Financial","desc_industria_orig":"Private Equity"},{"nombre":"CHARLES SCHWAB CORP.","ticker":"SCHW","cod_caja_cedear":"8636","ratio":"13:1","mercado_origen":"NYSE","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Bancos y Finanzas","sector_desc":"Bancos, seguros, capital markets, asset management","industria_orig":"Financial","desc_industria_orig":"Financial"},{"nombre":"CITIGROUP INCORPORATED","ticker":"C","cod_caja_cedear":"8046","ratio":"3:1","mercado_origen":"NYSE","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Bancos y Finanzas","sector_desc":"Bancos, seguros, capital markets, asset management","industria_orig":"Financial","desc_industria_orig":"Banks"},{"nombre":"COINBASE GLOBAL INC","ticker":"COIN","cod_caja_cedear":"8562","ratio":"27:1","mercado_origen":"NASDAQ GS","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Bancos y Finanzas","sector_desc":"Bancos, seguros, capital markets, asset management","industria_orig":"Financial","desc_industria_orig":"Capital Markets"},{"nombre":"FED. NATL, MORT - FANNIE MAE","ticker":"FNMA","cod_caja_cedear":"8102","ratio":"1:1","mercado_origen":"OTC US","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Bancos y Finanzas","sector_desc":"Bancos, seguros, capital markets, asset management","industria_orig":"Financial","desc_industria_orig":"Thrifts & Mortgage Finance"},{"nombre":"FREDDIE MAC (FEDERAL HOME LOAN MORTGAGE CORP.)","ticker":"FMCC","cod_caja_cedear":"8238","ratio":"1:1","mercado_origen":"OTC US","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Bancos y Finanzas","sector_desc":"Bancos, seguros, capital markets, asset management","industria_orig":"Financial","desc_industria_orig":"Thrifts & Mortgage Finance"},{"nombre":"HDFC BANK LIMITED","ticker":"HDB","cod_caja_cedear":"8368","ratio":"2:1","mercado_origen":"NYSE","pais":"India","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Bancos y Finanzas","sector_desc":"Bancos, seguros, capital markets, asset management","industria_orig":"Financial","desc_industria_orig":"Banks"},{"nombre":"HSBC HOLDINGS plc ADR","ticker":"HSBC","cod_caja_cedear":"8231","ratio":"2:1","mercado_origen":"NYSE","pais":"Reino Unido","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Bancos y Finanzas","sector_desc":"Bancos, seguros, capital markets, asset management","industria_orig":"Financial","desc_industria_orig":"Banks"},{"nombre":"ICICI BANK LTD","ticker":"IBN","cod_caja_cedear":"8370","ratio":"1:1","mercado_origen":"NYSE","pais":"India","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Bancos y Finanzas","sector_desc":"Bancos, seguros, capital markets, asset management","industria_orig":"Financial","desc_industria_orig":"Banks"},{"nombre":"ING Group NV ADR","ticker":"ING","cod_caja_cedear":"8199","ratio":"3:1","mercado_origen":"NYSE","pais":"Países Bajos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Bancos y Finanzas","sector_desc":"Bancos, seguros, capital markets, asset management","industria_orig":"Financial","desc_industria_orig":"Banks"},{"nombre":"ITAÚ UNIBANCO HOLDING S.A.","ticker":"ITUB","cod_caja_cedear":"8514","ratio":"1 :1","mercado_origen":"NYSE","pais":"Brasil","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Bancos y Finanzas","sector_desc":"Bancos, seguros, capital markets, asset management","industria_orig":"Financial","desc_industria_orig":"Banks"},{"nombre":"J.P. MORGAN & CHASE Co.","ticker":"JPM","cod_caja_cedear":"8028","ratio":"15:1","mercado_origen":"NYSE","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Bancos y Finanzas","sector_desc":"Bancos, seguros, capital markets, asset management","industria_orig":"Financial","desc_industria_orig":"Banks"},{"nombre":"KB FINANCIAL GROUP INC.","ticker":"KB","cod_caja_cedear":"8410","ratio":"2:1","mercado_origen":"NYSE","pais":"Corea del Sur","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Bancos y Finanzas","sector_desc":"Bancos, seguros, capital markets, asset management","industria_orig":"Financial","desc_industria_orig":"Banks"},{"nombre":"LLOYDS BANKING GROUP plc.","ticker":"LYG","cod_caja_cedear":"8250","ratio":"2:1","mercado_origen":"NYSE","pais":"Reino Unido","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Bancos y Finanzas","sector_desc":"Bancos, seguros, capital markets, asset management","industria_orig":"Financial","desc_industria_orig":"Banks"},{"nombre":"MARSH","ticker":"MRSH","cod_caja_cedear":"8135","ratio":"16:1","mercado_origen":"NYSE","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Bancos y Finanzas","sector_desc":"Bancos, seguros, capital markets, asset management","industria_orig":"Financial","desc_industria_orig":"Insurance"},{"nombre":"MITSUBISHI UFJ FINANCIAL GROUP","ticker":"MUFG","cod_caja_cedear":"8182","ratio":"1:1","mercado_origen":"NYSE","pais":"Japón","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Bancos y Finanzas","sector_desc":"Bancos, seguros, capital markets, asset management","industria_orig":"Financial","desc_industria_orig":"Banks"},{"nombre":"MIZUHO FINANCIAL GROUP","ticker":"MFG","cod_caja_cedear":"8395","ratio":"1:1","mercado_origen":"NYSE","pais":"Japón","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Bancos y Finanzas","sector_desc":"Bancos, seguros, capital markets, asset management","industria_orig":"Financial","desc_industria_orig":"Banks"},{"nombre":"NOMURA HOLDINGS INC.","ticker":"NMR","cod_caja_cedear":"8298","ratio":"1:1","mercado_origen":"NYSE","pais":"Japón","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Bancos y Finanzas","sector_desc":"Bancos, seguros, capital markets, asset management","industria_orig":"Financial","desc_industria_orig":"Capital Markets"},{"nombre":"NU HOLDINGS LTD/CAYMAN ISLANDS","ticker":"NU","cod_caja_cedear":"8596","ratio":"2:1","mercado_origen":"NYSE","pais":"Reino Unido","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Bancos y Finanzas","sector_desc":"Bancos, seguros, capital markets, asset management","industria_orig":"Consumer, Cyclical","desc_industria_orig":"Consumer, Cyclical"},{"nombre":"S&P GLOBAL INC","ticker":"SPGI","cod_caja_cedear":"8563","ratio":"45:1","mercado_origen":"NYSE","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Bancos y Finanzas","sector_desc":"Bancos, seguros, capital markets, asset management","industria_orig":"Consumer, Non-cyclical","desc_industria_orig":"Capital Markets"},{"nombre":"SILVERGATE CAPITAL CORPORATION","ticker":"SI","cod_caja_cedear":"8582","ratio":"10:1","mercado_origen":"NYSE","pais":"N/D","tipo":"Acción","fuente":"Caja de Valores","sector_propio":"Bancos y Finanzas","sector_desc":"Bancos, seguros, capital markets, asset management","industria_orig":"","desc_industria_orig":""},{"nombre":"STONECO LTD","ticker":"STNE","cod_caja_cedear":"8628","ratio":"3:1","mercado_origen":"NASDAQ GS","pais":"Islas Caimán","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Bancos y Finanzas","sector_desc":"Bancos, seguros, capital markets, asset management","industria_orig":"Financial","desc_industria_orig":"Financial"},{"nombre":"THE GOLDMAN SACHS GROUP, INC","ticker":"GS","cod_caja_cedear":"8494","ratio":"13 : 1","mercado_origen":"NYSE","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Bancos y Finanzas","sector_desc":"Bancos, seguros, capital markets, asset management","industria_orig":"Financial","desc_industria_orig":"Capital Markets"},{"nombre":"The Travelers Companies, Inc.","ticker":"TRV","cod_caja_cedear":"8437","ratio":"6:1","mercado_origen":"NYSE","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Bancos y Finanzas","sector_desc":"Bancos, seguros, capital markets, asset management","industria_orig":"Financial","desc_industria_orig":"Insurance"},{"nombre":"U.S. BANCORP","ticker":"USB","cod_caja_cedear":"8287","ratio":"5:1","mercado_origen":"NYSE","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Bancos y Finanzas","sector_desc":"Bancos, seguros, capital markets, asset management","industria_orig":"Financial","desc_industria_orig":"Banks"},{"nombre":"UPSTART HLDGS INC","ticker":"UPST","cod_caja_cedear":"8578","ratio":"5:1","mercado_origen":"NASDAQ GS","pais":"N/D","tipo":"Acción","fuente":"Caja de Valores","sector_propio":"Bancos y Finanzas","sector_desc":"Bancos, seguros, capital markets, asset management","industria_orig":"","desc_industria_orig":""},{"nombre":"WELLS FARGO & COMPANY","ticker":"WFC","cod_caja_cedear":"8047","ratio":"5:1","mercado_origen":"NYSE","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Bancos y Finanzas","sector_desc":"Bancos, seguros, capital markets, asset management","industria_orig":"Financial","desc_industria_orig":"Banks"},{"nombre":"XP INC","ticker":"XP","cod_caja_cedear":"8567","ratio":"4:1","mercado_origen":"NASDAQ GS","pais":"Brasil","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Bancos y Finanzas","sector_desc":"Bancos, seguros, capital markets, asset management","industria_orig":"Financial","desc_industria_orig":"Capital Markets"},{"nombre":"AMERICA MOVIL-SPN ADR","ticker":"AMX","cod_caja_cedear":"8268","ratio":"1:1","mercado_origen":"NYSE","pais":"México","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Comunicaciones y Medios","sector_desc":"Telecom, redes sociales, streaming, entretenimiento","industria_orig":"Communications","desc_industria_orig":"Wireless Telecommunication Ser"},{"nombre":"ARISTA NETWORKS INC.","ticker":"ANET","cod_caja_cedear":"8728","ratio":"29:1","mercado_origen":"NYSE","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Comunicaciones y Medios","sector_desc":"Telecom, redes sociales, streaming, entretenimiento","industria_orig":"Communications","desc_industria_orig":"Communications Equipment"},{"nombre":"AST SPACEMOBILE INC","ticker":"ASTS","cod_caja_cedear":"8714","ratio":"15.1","mercado_origen":"NASDAQ GS","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Comunicaciones y Medios","sector_desc":"Telecom, redes sociales, streaming, entretenimiento","industria_orig":"Communications","desc_industria_orig":"Communications"},{"nombre":"AT&T INC","ticker":"T","cod_caja_cedear":"8177","ratio":"3:1","mercado_origen":"NYSE","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Comunicaciones y Medios","sector_desc":"Telecom, redes sociales, streaming, entretenimiento","industria_orig":"Communications","desc_industria_orig":"Diversified Telecommunication"},{"nombre":"Alphabet Inc. CL  \"A\"","ticker":"GOOGL","cod_caja_cedear":"8442","ratio":"58:1","mercado_origen":"NASDAQ GS","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Comunicaciones y Medios","sector_desc":"Telecom, redes sociales, streaming, entretenimiento","industria_orig":"Communications","desc_industria_orig":"Interactive Media & Services"},{"nombre":"BAIDU, INC.","ticker":"BIDU","cod_caja_cedear":"8501","ratio":"11 : 1","mercado_origen":"NASDAQ GS","pais":"China","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Comunicaciones y Medios","sector_desc":"Telecom, redes sociales, streaming, entretenimiento","industria_orig":"Communications","desc_industria_orig":"Interactive Media & Services"},{"nombre":"BOOKING HOLDINGS INC.","ticker":"BKNG","cod_caja_cedear":"8639","ratio":"700:1","mercado_origen":"NASDAQ GS","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Comunicaciones y Medios","sector_desc":"Telecom, redes sociales, streaming, entretenimiento","industria_orig":"Communications","desc_industria_orig":"Communications"},{"nombre":"CISCO SYSTEMS  Inc.","ticker":"CSCO","cod_caja_cedear":"8014","ratio":"5:1","mercado_origen":"NASDAQ GS","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Comunicaciones y Medios","sector_desc":"Telecom, redes sociales, streaming, entretenimiento","industria_orig":"Communications","desc_industria_orig":"Communications Equipment"},{"nombre":"DEUTSCHE TELEKOM AG ADR","ticker":"DTEA GR","cod_caja_cedear":"8189","ratio":"3:1","mercado_origen":"OTC US","pais":"Alemania","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Comunicaciones y Medios","sector_desc":"Telecom, redes sociales, streaming, entretenimiento","industria_orig":"Communications","desc_industria_orig":"Diversified Telecommunication"},{"nombre":"DISNEY COMMON STOCK","ticker":"DIS","cod_caja_cedear":"8017","ratio":"12:1","mercado_origen":"NYSE","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Comunicaciones y Medios","sector_desc":"Telecom, redes sociales, streaming, entretenimiento","industria_orig":"Communications","desc_industria_orig":"Entertainment"},{"nombre":"ELECTRONIC ARTS INC","ticker":"EA","cod_caja_cedear":"8566","ratio":"14:1","mercado_origen":"NASDAQ GS","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Comunicaciones y Medios","sector_desc":"Telecom, redes sociales, streaming, entretenimiento","industria_orig":"Technology","desc_industria_orig":"Entertainment"},{"nombre":"GRUPO TELEVISA S.A. ADR","ticker":"TV","cod_caja_cedear":"8219","ratio":"3:1","mercado_origen":"NYSE","pais":"México","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Comunicaciones y Medios","sector_desc":"Telecom, redes sociales, streaming, entretenimiento","industria_orig":"Communications","desc_industria_orig":"Media"},{"nombre":"JOYY Inc.","ticker":"JOYY","cod_caja_cedear":"8508","ratio":"5 : 1","mercado_origen":"NASDAQ GS","pais":"China","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Comunicaciones y Medios","sector_desc":"Telecom, redes sociales, streaming, entretenimiento","industria_orig":"Communications","desc_industria_orig":"Interactive Media & Services"},{"nombre":"LM ERICSSON TELEPHONE Co. ADR","ticker":"ERIC","cod_caja_cedear":"8056","ratio":"2:1","mercado_origen":"NASDAQ GS","pais":"Suiza","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Comunicaciones y Medios","sector_desc":"Telecom, redes sociales, streaming, entretenimiento","industria_orig":"Communications","desc_industria_orig":"Communications Equipment"},{"nombre":"META PLATFORMS INC.","ticker":"META","cod_caja_cedear":"8467","ratio":"24:1","mercado_origen":"NASDAQ GS","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Comunicaciones y Medios","sector_desc":"Telecom, redes sociales, streaming, entretenimiento","industria_orig":"Communications","desc_industria_orig":"Interactive Media & Services"},{"nombre":"MOBILE TELESYSTEMS***","ticker":"MBT","cod_caja_cedear":"8372","ratio":"2:1","mercado_origen":"NYSE","pais":"Rusia","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Comunicaciones y Medios","sector_desc":"Telecom, redes sociales, streaming, entretenimiento","industria_orig":"Communications","desc_industria_orig":"Wireless Telecommunication Ser"},{"nombre":"MOTOROLA SOLUTIONS Inc.","ticker":"MSI","cod_caja_cedear":"8034","ratio":"20:1","mercado_origen":"NYSE","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Comunicaciones y Medios","sector_desc":"Telecom, redes sociales, streaming, entretenimiento","industria_orig":"Communications","desc_industria_orig":"Communications Equipment"},{"nombre":"NETEASE, INC.","ticker":"NTES","cod_caja_cedear":"8506","ratio":"14 : 1","mercado_origen":"NASDAQ GS","pais":"China","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Comunicaciones y Medios","sector_desc":"Telecom, redes sociales, streaming, entretenimiento","industria_orig":"Technology","desc_industria_orig":"Entertainment"},{"nombre":"NETFLIX, INC.","ticker":"NFLX","cod_caja_cedear":"8474","ratio":"48:1","mercado_origen":"NASDAQ GS","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Comunicaciones y Medios","sector_desc":"Telecom, redes sociales, streaming, entretenimiento","industria_orig":"Communications","desc_industria_orig":"Entertainment"},{"nombre":"NOKIA CORPORATION ADR","ticker":"NOK","cod_caja_cedear":"8057","ratio":"1:1","mercado_origen":"NYSE","pais":"Finlandia","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Comunicaciones y Medios","sector_desc":"Telecom, redes sociales, streaming, entretenimiento","industria_orig":"Communications","desc_industria_orig":"Communications Equipment"},{"nombre":"ONDAS HOLDINGS INC.","ticker":"ONDS","cod_caja_cedear":"8734","ratio":"2:1","mercado_origen":"NASDAQ CM","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Comunicaciones y Medios","sector_desc":"Telecom, redes sociales, streaming, entretenimiento","industria_orig":"Industrial","desc_industria_orig":"Communications Equipment"},{"nombre":"ORANGE**","ticker":"ORANY","cod_caja_cedear":"8192","ratio":"1:1","mercado_origen":"OTC US","pais":"Francia","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Comunicaciones y Medios","sector_desc":"Telecom, redes sociales, streaming, entretenimiento","industria_orig":"Communications","desc_industria_orig":"Diversified Telecommunication"},{"nombre":"PDD HOLDINGS INC","ticker":"PDD","cod_caja_cedear":"8675","ratio":"25:1","mercado_origen":"NASDAQ GS","pais":"Irlanda","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Comunicaciones y Medios","sector_desc":"Telecom, redes sociales, streaming, entretenimiento","industria_orig":"Communications","desc_industria_orig":"Communications"},{"nombre":"PEARSON PLC.","ticker":"PSO","cod_caja_cedear":"8362","ratio":"1:1","mercado_origen":"NYSE","pais":"Reino Unido","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Comunicaciones y Medios","sector_desc":"Telecom, redes sociales, streaming, entretenimiento","industria_orig":"Communications","desc_industria_orig":"Media"},{"nombre":"PINTEREST INC.","ticker":"PINS","cod_caja_cedear":"8646","ratio":"7:1","mercado_origen":"NYSE","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Comunicaciones y Medios","sector_desc":"Telecom, redes sociales, streaming, entretenimiento","industria_orig":"Communications","desc_industria_orig":"Communications"},{"nombre":"ROBINHOOD MARKETS INC","ticker":"HOOD","cod_caja_cedear":"8709","ratio":"29:1","mercado_origen":"NASDAQ GS","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Comunicaciones y Medios","sector_desc":"Telecom, redes sociales, streaming, entretenimiento","industria_orig":"Communications","desc_industria_orig":"Communications"},{"nombre":"ROKU INC.","ticker":"ROKU","cod_caja_cedear":"8643","ratio":"13:1","mercado_origen":"NASDAQ GS","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Comunicaciones y Medios","sector_desc":"Telecom, redes sociales, streaming, entretenimiento","industria_orig":"Communications","desc_industria_orig":"Communications"},{"nombre":"SEA LTD","ticker":"SE","cod_caja_cedear":"8560","ratio":"32:1","mercado_origen":"NYSE","pais":"Islas Caimán","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Comunicaciones y Medios","sector_desc":"Telecom, redes sociales, streaming, entretenimiento","industria_orig":"Communications","desc_industria_orig":"Entertainment"},{"nombre":"SNAP INC.","ticker":"SNAP","cod_caja_cedear":"8488","ratio":"1 :1","mercado_origen":"NYSE","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Comunicaciones y Medios","sector_desc":"Telecom, redes sociales, streaming, entretenimiento","industria_orig":"Communications","desc_industria_orig":"Interactive Media & Services"},{"nombre":"SPOTIFY TECHNOLOGY SA","ticker":"SPOT","cod_caja_cedear":"8547","ratio":"28:1","mercado_origen":"NYSE","pais":"Suecia","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Comunicaciones y Medios","sector_desc":"Telecom, redes sociales, streaming, entretenimiento","industria_orig":"Communications","desc_industria_orig":"Entertainment"},{"nombre":"T-MOBILE US INC.","ticker":"TMUS","cod_caja_cedear":"8640","ratio":"33:1","mercado_origen":"NASDAQ GS","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Comunicaciones y Medios","sector_desc":"Telecom, redes sociales, streaming, entretenimiento","industria_orig":"Communications","desc_industria_orig":"Communications"},{"nombre":"TELECOM ITALIA SPA ADR","ticker":"TIIAY","cod_caja_cedear":"8211","ratio":"1:1","mercado_origen":"OTC US","pais":"Italia","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Comunicaciones y Medios","sector_desc":"Telecom, redes sociales, streaming, entretenimiento","industria_orig":"Communications","desc_industria_orig":"Diversified Telecommunication"},{"nombre":"TELEFONICA BRASIL S.A.","ticker":"VIVT3","cod_caja_cedear":"8624","ratio":"1:1","mercado_origen":"B3 (Brasil)","pais":"N/D","tipo":"Acción","fuente":"Caja de Valores","sector_propio":"Comunicaciones y Medios","sector_desc":"Telecom, redes sociales, streaming, entretenimiento","industria_orig":"","desc_industria_orig":""},{"nombre":"TELEFONICA S.A. ADR**","ticker":"TELFY","cod_caja_cedear":"8062","ratio":"8:1","mercado_origen":"NYSE","pais":"España","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Comunicaciones y Medios","sector_desc":"Telecom, redes sociales, streaming, entretenimiento","industria_orig":"Communications","desc_industria_orig":"Diversified Telecommunication"},{"nombre":"TELEFÔNICA BRASIL S.A.","ticker":"VIV","cod_caja_cedear":"8503","ratio":"1 :1","mercado_origen":"NYSE","pais":"Brasil","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Comunicaciones y Medios","sector_desc":"Telecom, redes sociales, streaming, entretenimiento","industria_orig":"Communications","desc_industria_orig":"Diversified Telecommunication"},{"nombre":"TIM PARTICIPAÇÕES S.A.","ticker":"TIMB","cod_caja_cedear":"8521","ratio":"1 :1","mercado_origen":"NYSE","pais":"Brasil","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Comunicaciones y Medios","sector_desc":"Telecom, redes sociales, streaming, entretenimiento","industria_orig":"Communications","desc_industria_orig":"Wireless Telecommunication Ser"},{"nombre":"TIM S.A.","ticker":"TIMS3","cod_caja_cedear":"8625","ratio":"1:1","mercado_origen":"B3 (Brasil)","pais":"N/D","tipo":"Acción","fuente":"Caja de Valores","sector_propio":"Comunicaciones y Medios","sector_desc":"Telecom, redes sociales, streaming, entretenimiento","industria_orig":"","desc_industria_orig":""},{"nombre":"TRIPADVISOR, INC.","ticker":"TRIP","cod_caja_cedear":"8483","ratio":"2 : 1","mercado_origen":"NASDAQ GS","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Comunicaciones y Medios","sector_desc":"Telecom, redes sociales, streaming, entretenimiento","industria_orig":"Communications","desc_industria_orig":"Interactive Media & Services"},{"nombre":"VERIZON COMMUNICATIONS INC.","ticker":"VZ","cod_caja_cedear":"8288","ratio":"4:1","mercado_origen":"NYSE","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Comunicaciones y Medios","sector_desc":"Telecom, redes sociales, streaming, entretenimiento","industria_orig":"Communications","desc_industria_orig":"Diversified Telecommunication"},{"nombre":"VODAFONE GROUP plc. ADR","ticker":"VOD","cod_caja_cedear":"8064","ratio":"1:1","mercado_origen":"NASDAQ GS","pais":"Reino Unido","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Comunicaciones y Medios","sector_desc":"Telecom, redes sociales, streaming, entretenimiento","industria_orig":"Communications","desc_industria_orig":"Wireless Telecommunication Ser"},{"nombre":"WEIBO CORPORATION","ticker":"WB","cod_caja_cedear":"8513","ratio":"6:1","mercado_origen":"NASDAQ GS","pais":"China","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Comunicaciones y Medios","sector_desc":"Telecom, redes sociales, streaming, entretenimiento","industria_orig":"Communications","desc_industria_orig":"Interactive Media & Services"},{"nombre":"YELP INC.","ticker":"YELP","cod_caja_cedear":"8491","ratio":"2 : 1","mercado_origen":"NYSE","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Comunicaciones y Medios","sector_desc":"Telecom, redes sociales, streaming, entretenimiento","industria_orig":"Communications","desc_industria_orig":"Interactive Media & Services"},{"nombre":"ABERCROMBIE & FITCH CO.","ticker":"ANF","cod_caja_cedear":"8484","ratio":"1 : 1","mercado_origen":"NYSE","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Consumo Discrecional","sector_desc":"Autos, retail, hoteles, lujo, indumentaria","industria_orig":"Consumer","desc_industria_orig":"Specialty Retail"},{"nombre":"ADIDAS AG","ticker":"ADS","cod_caja_cedear":"8570","ratio":"22:1","mercado_origen":"XETRA","pais":"Alemania","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Consumo Discrecional","sector_desc":"Autos, retail, hoteles, lujo, indumentaria","industria_orig":"Consumer","desc_industria_orig":"Textiles, Apparel & Luxury Goo"},{"nombre":"ADVANCE AUTO PARTS INC","ticker":"AAP","cod_caja_cedear":"8592","ratio":"14:1","mercado_origen":"NYSE","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Consumo Discrecional","sector_desc":"Autos, retail, hoteles, lujo, indumentaria","industria_orig":"Financial","desc_industria_orig":"Financial"},{"nombre":"AIRBNB INC","ticker":"ABNB","cod_caja_cedear":"8585","ratio":"15:1","mercado_origen":"NASDAQ GS","pais":"N/D","tipo":"Acción","fuente":"Caja de Valores","sector_propio":"Consumo Discrecional","sector_desc":"Autos, retail, hoteles, lujo, indumentaria","industria_orig":"","desc_industria_orig":""},{"nombre":"ARCOS DORADOS HOLDINGS INC.","ticker":"ARCO","cod_caja_cedear":"8496","ratio":"1 :2","mercado_origen":"NYSE","pais":"Uruguay","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Consumo Discrecional","sector_desc":"Autos, retail, hoteles, lujo, indumentaria","industria_orig":"Consumer","desc_industria_orig":"Hotels, Restaurants & Leisure"},{"nombre":"CARNIVAL CORP. LTD","ticker":"CCL","cod_caja_cedear":"8634","ratio":"3:1","mercado_origen":"NYSE","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Consumo Discrecional","sector_desc":"Autos, retail, hoteles, lujo, indumentaria","industria_orig":"Consumer, Cyclical","desc_industria_orig":"Consumer, Cyclical"},{"nombre":"DECKERS OUTDOOR CORPORATION","ticker":"DECK","cod_caja_cedear":"8682","ratio":"25.1","mercado_origen":"NYSE","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Consumo Discrecional","sector_desc":"Autos, retail, hoteles, lujo, indumentaria","industria_orig":"Consumer, Cyclical","desc_industria_orig":"Consumer, Cyclical"},{"nombre":"DELTA AIR LINES INC.","ticker":"DAL","cod_caja_cedear":"8633","ratio":"8:1","mercado_origen":"NYSE","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Consumo Discrecional","sector_desc":"Autos, retail, hoteles, lujo, indumentaria","industria_orig":"Consumer, Cyclical","desc_industria_orig":"Consumer, Cyclical"},{"nombre":"FERRARI NV","ticker":"RACE","cod_caja_cedear":"8644","ratio":"83:1","mercado_origen":"NYSE","pais":"Italia","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Consumo Discrecional","sector_desc":"Autos, retail, hoteles, lujo, indumentaria","industria_orig":"Consumer, Cyclical","desc_industria_orig":"Consumer, Cyclical"},{"nombre":"FORD MOTOR COMPANY","ticker":"F","cod_caja_cedear":"8571","ratio":"1:1","mercado_origen":"NYSE","pais":"N/D","tipo":"Acción","fuente":"Caja de Valores","sector_propio":"Consumo Discrecional","sector_desc":"Autos, retail, hoteles, lujo, indumentaria","industria_orig":"","desc_industria_orig":""},{"nombre":"GARMIN LTD.","ticker":"GRMN","cod_caja_cedear":"8487","ratio":"3 : 1","mercado_origen":"NYSE","pais":"Suiza","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Consumo Discrecional","sector_desc":"Autos, retail, hoteles, lujo, indumentaria","industria_orig":"Industrial","desc_industria_orig":"Household Durables"},{"nombre":"GENERAL MOTORS CO","ticker":"GM","cod_caja_cedear":"8568","ratio":"6:1","mercado_origen":"NYSE","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Consumo Discrecional","sector_desc":"Autos, retail, hoteles, lujo, indumentaria","industria_orig":"Consumer, Cyclical","desc_industria_orig":"Automobiles"},{"nombre":"GOODYEAR TIRE & RUBBER CO./THE","ticker":"GT","cod_caja_cedear":"8649","ratio":"2:1","mercado_origen":"NASDAQ GS","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Consumo Discrecional","sector_desc":"Autos, retail, hoteles, lujo, indumentaria","industria_orig":"Consumer, Cyclical","desc_industria_orig":"Auto Parts&Equipment"},{"nombre":"HARLEY DAVIDSON INC.","ticker":"HOG","cod_caja_cedear":"8111","ratio":"3:1","mercado_origen":"NYSE","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Consumo Discrecional","sector_desc":"Autos, retail, hoteles, lujo, indumentaria","industria_orig":"Consumer","desc_industria_orig":"Automobiles"},{"nombre":"HONDA MOTOR  CO. LTD","ticker":"HMC","cod_caja_cedear":"8291","ratio":"1:1","mercado_origen":"NYSE","pais":"Japón","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Consumo Discrecional","sector_desc":"Autos, retail, hoteles, lujo, indumentaria","industria_orig":"Consumer","desc_industria_orig":"Automobiles"},{"nombre":"LAS VEGAS SANDS CORP.","ticker":"LVS","cod_caja_cedear":"8436","ratio":"2:1","mercado_origen":"NYSE","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Consumo Discrecional","sector_desc":"Autos, retail, hoteles, lujo, indumentaria","industria_orig":"Consumer","desc_industria_orig":"Hotels, Restaurants & Leisure"},{"nombre":"LOCALIZA RENT A CAR S.A.","ticker":"RENT3","cod_caja_cedear":"8608","ratio":"2:1","mercado_origen":"B3 (Brasil)","pais":"N/D","tipo":"Acción","fuente":"Caja de Valores","sector_propio":"Consumo Discrecional","sector_desc":"Autos, retail, hoteles, lujo, indumentaria","industria_orig":"","desc_industria_orig":""},{"nombre":"LOJAS RENNER S.A.","ticker":"LREN3","cod_caja_cedear":"8615","ratio":"1:1","mercado_origen":"B3 (Brasil)","pais":"N/D","tipo":"Acción","fuente":"Caja de Valores","sector_propio":"Consumo Discrecional","sector_desc":"Autos, retail, hoteles, lujo, indumentaria","industria_orig":"","desc_industria_orig":""},{"nombre":"MAGAZINE LUIZA S.A.","ticker":"MGLU3","cod_caja_cedear":"8604","ratio":"1:1","mercado_origen":"B3 (Brasil)","pais":"N/D","tipo":"Acción","fuente":"Caja de Valores","sector_propio":"Consumo Discrecional","sector_desc":"Autos, retail, hoteles, lujo, indumentaria","industria_orig":"","desc_industria_orig":""},{"nombre":"MERCEDES-BENZ AG","ticker":"MBG GR","cod_caja_cedear":"8188","ratio":"4:1","mercado_origen":"OTC US","pais":"Alemania","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Consumo Discrecional","sector_desc":"Autos, retail, hoteles, lujo, indumentaria","industria_orig":"Consumer","desc_industria_orig":"Automobiles"},{"nombre":"Mc DONALD'S Corp.","ticker":"MCD","cod_caja_cedear":"8030","ratio":"24:1","mercado_origen":"NYSE","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Consumo Discrecional","sector_desc":"Autos, retail, hoteles, lujo, indumentaria","industria_orig":"Consumer","desc_industria_orig":"Hotels, Restaurants & Leisure"},{"nombre":"NIKE Inc.","ticker":"NKE","cod_caja_cedear":"8139","ratio":"12:1","mercado_origen":"NYSE","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Consumo Discrecional","sector_desc":"Autos, retail, hoteles, lujo, indumentaria","industria_orig":"Consumer","desc_industria_orig":"Textiles, Apparel & Luxury Goo"},{"nombre":"NIO INC","ticker":"NIO","cod_caja_cedear":"8559","ratio":"4:1","mercado_origen":"NYSE","pais":"China","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Consumo Discrecional","sector_desc":"Autos, retail, hoteles, lujo, indumentaria","industria_orig":"Consumer, Cyclical","desc_industria_orig":"Automobiles"},{"nombre":"NISSAN MOTOR CO.","ticker":"NSANY","cod_caja_cedear":"8299","ratio":"1:1","mercado_origen":"OTC US","pais":"Japón","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Consumo Discrecional","sector_desc":"Autos, retail, hoteles, lujo, indumentaria","industria_orig":"Consumer","desc_industria_orig":"Automobiles"},{"nombre":"O'REILLY AUTOMOTIVE INC.","ticker":"ORLY","cod_caja_cedear":"8653","ratio":"222:1","mercado_origen":"NASDAQ GS","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Consumo Discrecional","sector_desc":"Autos, retail, hoteles, lujo, indumentaria","industria_orig":"Consumer, Cyclical","desc_industria_orig":"Retail"},{"nombre":"ROSS STORES, INC.","ticker":"ROST","cod_caja_cedear":"8492","ratio":"4 : 1","mercado_origen":"NASDAQ GS","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Consumo Discrecional","sector_desc":"Autos, retail, hoteles, lujo, indumentaria","industria_orig":"Consumer","desc_industria_orig":"Specialty Retail"},{"nombre":"SONY GROUP CORPORATION","ticker":"SONY","cod_caja_cedear":"8294","ratio":"8:1","mercado_origen":"NYSE","pais":"Japón","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Consumo Discrecional","sector_desc":"Autos, retail, hoteles, lujo, indumentaria","industria_orig":"Consumer","desc_industria_orig":"Household Durables"},{"nombre":"STARBUCKS CORPORATION","ticker":"SBUX","cod_caja_cedear":"8154","ratio":"12:1","mercado_origen":"NASDAQ GS","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Consumo Discrecional","sector_desc":"Autos, retail, hoteles, lujo, indumentaria","industria_orig":"Consumer","desc_industria_orig":"Hotels, Restaurants & Leisure"},{"nombre":"STELLANTIS NV","ticker":"STLA","cod_caja_cedear":"8638","ratio":"5:1","mercado_origen":"NYSE","pais":"Países Bajos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Consumo Discrecional","sector_desc":"Autos, retail, hoteles, lujo, indumentaria","industria_orig":"Consumer, Cyclical","desc_industria_orig":"Consumer, Cyclical"},{"nombre":"TARGET CORPORATION","ticker":"TGT","cod_caja_cedear":"8493","ratio":"24:1","mercado_origen":"NYSE","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Consumo Discrecional","sector_desc":"Autos, retail, hoteles, lujo, indumentaria","industria_orig":"Consumer","desc_industria_orig":"Multiline Retail"},{"nombre":"TESLA, INC.","ticker":"TSLA","cod_caja_cedear":"8479","ratio":"15 : 1","mercado_origen":"NASDAQ GS","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Consumo Discrecional","sector_desc":"Autos, retail, hoteles, lujo, indumentaria","industria_orig":"Consumer","desc_industria_orig":"Automobiles"},{"nombre":"TJX COMPANIES INC./THE","ticker":"TJX","cod_caja_cedear":"8654","ratio":"22:1","mercado_origen":"NYSE","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Consumo Discrecional","sector_desc":"Autos, retail, hoteles, lujo, indumentaria","industria_orig":"Consumer, Cyclical","desc_industria_orig":"Retail"},{"nombre":"TOYOTA MOTOR CORPORATION ADR","ticker":"TM","cod_caja_cedear":"8214","ratio":"15:1","mercado_origen":"NYSE","pais":"Japón","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Consumo Discrecional","sector_desc":"Autos, retail, hoteles, lujo, indumentaria","industria_orig":"Consumer","desc_industria_orig":"Automobiles"},{"nombre":"URBAN OUTFITTERS, INC.","ticker":"URBN","cod_caja_cedear":"8485","ratio":"2 : 1","mercado_origen":"NASDAQ GS","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Consumo Discrecional","sector_desc":"Autos, retail, hoteles, lujo, indumentaria","industria_orig":"Consumer","desc_industria_orig":"Specialty Retail"},{"nombre":"VERTEX PHARMACEUTICALS INC","ticker":"VRTX","cod_caja_cedear":"8688","ratio":"101:1","mercado_origen":"NASDAQ GS","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Consumo Discrecional","sector_desc":"Autos, retail, hoteles, lujo, indumentaria","industria_orig":"Consumer, Cyclical","desc_industria_orig":"Consumer, Non-cyclical"},{"nombre":"XPENG INC","ticker":"XPEV","cod_caja_cedear":"8676","ratio":"4:1","mercado_origen":"NYSE","pais":"China","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Consumo Discrecional","sector_desc":"Autos, retail, hoteles, lujo, indumentaria","industria_orig":"Consumer, Cyclical","desc_industria_orig":"Consumer, Cyclical"},{"nombre":"ADECOAGRO S.A.","ticker":"AGRO","cod_caja_cedear":"8498","ratio":"1:1","mercado_origen":"NYSE","pais":"Argentina","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Consumo Masivo","sector_desc":"Alimentos, bebidas, productos del hogar, tabaco","industria_orig":"Consumer","desc_industria_orig":"Food Products"},{"nombre":"ALTRIA GROUP, INC","ticker":"MO","cod_caja_cedear":"8036","ratio":"4:1","mercado_origen":"NYSE","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Consumo Masivo","sector_desc":"Alimentos, bebidas, productos del hogar, tabaco","industria_orig":"Consumer","desc_industria_orig":"Tobacco"},{"nombre":"AMBEV S.A.","ticker":"ABEV","cod_caja_cedear":"8502","ratio":"1 :3","mercado_origen":"NYSE","pais":"Brasil","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Consumo Masivo","sector_desc":"Alimentos, bebidas, productos del hogar, tabaco","industria_orig":"Consumer","desc_industria_orig":"Beverages"},{"nombre":"AMBEV S.A.","ticker":"ABEV3","cod_caja_cedear":"8612","ratio":"1:1","mercado_origen":"B3 (Brasil)","pais":"N/D","tipo":"Acción","fuente":"Caja de Valores","sector_propio":"Consumo Masivo","sector_desc":"Alimentos, bebidas, productos del hogar, tabaco","industria_orig":"","desc_industria_orig":""},{"nombre":"BIOCERES CROP SOLUTIONS CORP","ticker":"BIOX","cod_caja_cedear":"8530","ratio":"1:1","mercado_origen":"NASDAQ GS","pais":"Argentina","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Consumo Masivo","sector_desc":"Alimentos, bebidas, productos del hogar, tabaco","industria_orig":"Consumer","desc_industria_orig":"Food Products"},{"nombre":"BRASILAGRO - CO BRASILEIRA DE PROPRIEDADES AGRICOLAS","ticker":"LND","cod_caja_cedear":"8590","ratio":"1:1","mercado_origen":"NYSE","pais":"Brasil","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Consumo Masivo","sector_desc":"Alimentos, bebidas, productos del hogar, tabaco","industria_orig":"Basic Materials","desc_industria_orig":"Food Products"},{"nombre":"BUNGE GLOBAL SA NPV","ticker":"BG","cod_caja_cedear":"8399","ratio":"5:1","mercado_origen":"NYSE","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Consumo Masivo","sector_desc":"Alimentos, bebidas, productos del hogar, tabaco","industria_orig":"Consumer","desc_industria_orig":"Food Products"},{"nombre":"COCA COLA Co.","ticker":"KO","cod_caja_cedear":"8006","ratio":"5:1","mercado_origen":"NYSE","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Consumo Masivo","sector_desc":"Alimentos, bebidas, productos del hogar, tabaco","industria_orig":"Consumer","desc_industria_orig":"Beverages"},{"nombre":"COCA-COLA FEMSA, S.A.B DE CV","ticker":"KOF","cod_caja_cedear":"8401","ratio":"2:1","mercado_origen":"NYSE","pais":"México","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Consumo Masivo","sector_desc":"Alimentos, bebidas, productos del hogar, tabaco","industria_orig":"Consumer","desc_industria_orig":"Beverages"},{"nombre":"COLGATE PALMOLIVE COMPANY","ticker":"CL","cod_caja_cedear":"8090","ratio":"3:1","mercado_origen":"NYSE","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Consumo Masivo","sector_desc":"Alimentos, bebidas, productos del hogar, tabaco","industria_orig":"Consumer","desc_industria_orig":"Household Products"},{"nombre":"COMPANHIA BRASILEIRA DE DISTRIBUIÇÃO**","ticker":"CBD","cod_caja_cedear":"8511","ratio":"1 :1","mercado_origen":"OTC US","pais":"Brasil","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Consumo Masivo","sector_desc":"Alimentos, bebidas, productos del hogar, tabaco","industria_orig":"Consumer","desc_industria_orig":"Food & Staples Retailing"},{"nombre":"COSTCO WHOLSALE CORP","ticker":"COST","cod_caja_cedear":"8091","ratio":"48:1","mercado_origen":"NASDAQ GS","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Consumo Masivo","sector_desc":"Alimentos, bebidas, productos del hogar, tabaco","industria_orig":"Consumer","desc_industria_orig":"Food & Staples Retailing"},{"nombre":"CVS HEALTH CORP.","ticker":"CVS","cod_caja_cedear":"8631","ratio":"15:1","mercado_origen":"NYSE","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Consumo Masivo","sector_desc":"Alimentos, bebidas, productos del hogar, tabaco","industria_orig":"Consumer, Non-cyclical","desc_industria_orig":"Consumer, Non-cyclical"},{"nombre":"DANAHER CORP.","ticker":"DHR","cod_caja_cedear":"8648","ratio":"54:1","mercado_origen":"NYSE","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Consumo Masivo","sector_desc":"Alimentos, bebidas, productos del hogar, tabaco","industria_orig":"Consumer, Non-cyclical","desc_industria_orig":"Healthcare-Products"},{"nombre":"DANONE","ticker":"BSN GR","cod_caja_cedear":"8053","ratio":"20:1","mercado_origen":"OTC US","pais":"Francia","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Consumo Masivo","sector_desc":"Alimentos, bebidas, productos del hogar, tabaco","industria_orig":"Consumer","desc_industria_orig":"Food Products"},{"nombre":"DIAGEO PLC ADR","ticker":"DEO","cod_caja_cedear":"8248","ratio":"6:1","mercado_origen":"NYSE","pais":"Reino Unido","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Consumo Masivo","sector_desc":"Alimentos, bebidas, productos del hogar, tabaco","industria_orig":"Consumer","desc_industria_orig":"Beverages"},{"nombre":"EMBOTELLADORA ANDINA S.A.","ticker":"AKO.B","cod_caja_cedear":"8558","ratio":"1:1","mercado_origen":"NYSE","pais":"Chile","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Consumo Masivo","sector_desc":"Alimentos, bebidas, productos del hogar, tabaco","industria_orig":"Consumer, Non-cyclical","desc_industria_orig":"Beverages"},{"nombre":"FOMENTO ECONOMICO MEXICANO - FEMSA ADR","ticker":"FMX","cod_caja_cedear":"8191","ratio":"6:1","mercado_origen":"NYSE","pais":"México","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Consumo Masivo","sector_desc":"Alimentos, bebidas, productos del hogar, tabaco","industria_orig":"Consumer","desc_industria_orig":"Beverages"},{"nombre":"INTUITIVE SURGICAL INC.","ticker":"ISRG","cod_caja_cedear":"8650","ratio":"90:1","mercado_origen":"NASDAQ GS","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Consumo Masivo","sector_desc":"Alimentos, bebidas, productos del hogar, tabaco","industria_orig":"Consumer, Non-cyclical","desc_industria_orig":"Healthcare-Products"},{"nombre":"KIMBERLY CLARK CORPORATION","ticker":"KMB","cod_caja_cedear":"8122","ratio":"6:1","mercado_origen":"NYSE","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Consumo Masivo","sector_desc":"Alimentos, bebidas, productos del hogar, tabaco","industria_orig":"Consumer","desc_industria_orig":"Household Products"},{"nombre":"MODERNA INC.","ticker":"MRNA","cod_caja_cedear":"8637","ratio":"19:1","mercado_origen":"NASDAQ GS","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Consumo Masivo","sector_desc":"Alimentos, bebidas, productos del hogar, tabaco","industria_orig":"Consumer, Non-cyclical","desc_industria_orig":"Consumer, Non-cyclical"},{"nombre":"MONDELEZ INTERNATIONAL, INC.","ticker":"MDLZ","cod_caja_cedear":"8632","ratio":"15:1","mercado_origen":"NASDAQ GS","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Consumo Masivo","sector_desc":"Alimentos, bebidas, productos del hogar, tabaco","industria_orig":"Consumer, Non-cyclical","desc_industria_orig":"Consumer, Non-cyclical"},{"nombre":"NATURA COSMETICOS SA","ticker":"NATU3","cod_caja_cedear":"8619","ratio":"1:1","mercado_origen":"B3 (Brasil)","pais":"N/D","tipo":"Acción","fuente":"Caja de Valores","sector_propio":"Consumo Masivo","sector_desc":"Alimentos, bebidas, productos del hogar, tabaco","industria_orig":"","desc_industria_orig":""},{"nombre":"PEPSICO INC","ticker":"PEP","cod_caja_cedear":"8146","ratio":"18:1","mercado_origen":"NASDAQ GS","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Consumo Masivo","sector_desc":"Alimentos, bebidas, productos del hogar, tabaco","industria_orig":"Consumer","desc_industria_orig":"Beverages"},{"nombre":"PHILIP MORRIS INTERNATIONAL INC.","ticker":"PM","cod_caja_cedear":"8630","ratio":"18:1","mercado_origen":"NYSE","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Consumo Masivo","sector_desc":"Alimentos, bebidas, productos del hogar, tabaco","industria_orig":"Consumer, Non-cyclical","desc_industria_orig":"Consumer, Non-cyclical"},{"nombre":"PROCTER & GAMBLE Co.","ticker":"PG","cod_caja_cedear":"8037","ratio":"15:1","mercado_origen":"NYSE","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Consumo Masivo","sector_desc":"Alimentos, bebidas, productos del hogar, tabaco","industria_orig":"Consumer","desc_industria_orig":"Household Products"},{"nombre":"RIOT PLATFORMS INC.","ticker":"RIOT","cod_caja_cedear":"8642","ratio":"3:1","mercado_origen":"NASDAQ CM","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Consumo Masivo","sector_desc":"Alimentos, bebidas, productos del hogar, tabaco","industria_orig":"Consumer, Non-cyclical","desc_industria_orig":"Consumer, Non-cyclical"},{"nombre":"SUNCAR TECHNOLOGY GROUP INC","ticker":"SDA","cod_caja_cedear":"8629","ratio":"2:1","mercado_origen":"NASDAQ CM","pais":"Islas Caimán","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Consumo Masivo","sector_desc":"Alimentos, bebidas, productos del hogar, tabaco","industria_orig":"Consumer, Non-cyclical","desc_industria_orig":"Consumer, Non-cyclical"},{"nombre":"SYSCO CORPORATION","ticker":"SYY","cod_caja_cedear":"8165","ratio":"8:1","mercado_origen":"NYSE","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Consumo Masivo","sector_desc":"Alimentos, bebidas, productos del hogar, tabaco","industria_orig":"Consumer","desc_industria_orig":"Food & Staples Retailing"},{"nombre":"THE HERSHEY COMPANY","ticker":"HSY","cod_caja_cedear":"8117","ratio":"21:1","mercado_origen":"NYSE","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Consumo Masivo","sector_desc":"Alimentos, bebidas, productos del hogar, tabaco","industria_orig":"Consumer","desc_industria_orig":"Food Products"},{"nombre":"UNILEVER PLC-SPONSORED ADR","ticker":"UL","cod_caja_cedear":"8215","ratio":"3:1","mercado_origen":"NYSE","pais":"Reino Unido","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Consumo Masivo","sector_desc":"Alimentos, bebidas, productos del hogar, tabaco","industria_orig":"Consumer","desc_industria_orig":"Personal Products"},{"nombre":"WALMART Inc.","ticker":"WMT","cod_caja_cedear":"8044","ratio":"18:1","mercado_origen":"NASDAQ GS","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Consumo Masivo","sector_desc":"Alimentos, bebidas, productos del hogar, tabaco","industria_orig":"Consumer","desc_industria_orig":"Food & Staples Retailing"},{"nombre":"ARK INNOVATION","ticker":"ARKK","cod_caja_cedear":"8557","ratio":"10:1","mercado_origen":"NYSE ARCA","pais":"N/D","tipo":"ETF","fuente":"Caja de Valores","sector_propio":"Tecnología","sector_desc":"Software, semis, internet, e-commerce, hardware","industria_orig":"","desc_industria_orig":""},{"nombre":"DIREXION DAILY S&P 500 BULL 3X","ticker":"SPXL","cod_caja_cedear":"8696","ratio":"25:1","mercado_origen":"NYSE ARCA","pais":"N/D","tipo":"ETF","fuente":"Caja de Valores","sector_propio":"Índices y Estrategias Amplias","sector_desc":"Índices broad-market, factores, regiones, alternativos","industria_orig":"","desc_industria_orig":""},{"nombre":"ENERGY SELECT SECTOR SPDR FUND","ticker":"XLE","cod_caja_cedear":"8554","ratio":"2:1","mercado_origen":"NYSE ARCA","pais":"N/D","tipo":"ETF","fuente":"Caja de Valores","sector_propio":"Energía","sector_desc":"Petróleo, gas, renovables y servicios energéticos","industria_orig":"","desc_industria_orig":""},{"nombre":"ETF SPDR GOLD TRUST","ticker":"GLD","cod_caja_cedear":"8658","ratio":"50:1","mercado_origen":"NYSE ARCA","pais":"N/D","tipo":"ETF","fuente":"Caja de Valores","sector_propio":"Materiales y Minería","sector_desc":"Minería, metales, químicos, materiales básicos","industria_orig":"","desc_industria_orig":""},{"nombre":"FINANCIAL SELECT SECTOR SPDR FUND","ticker":"XLF","cod_caja_cedear":"8553","ratio":"2:1","mercado_origen":"NYSE ARCA","pais":"N/D","tipo":"ETF","fuente":"Caja de Valores","sector_propio":"Bancos y Finanzas","sector_desc":"Bancos, seguros, capital markets, asset management","industria_orig":"","desc_industria_orig":""},{"nombre":"FIRST TRUST NASDAQ CYBERSECURITY","ticker":"CIBR","cod_caja_cedear":"8698","ratio":"10:1","mercado_origen":"NASDAQ GM","pais":"N/D","tipo":"ETF","fuente":"Caja de Valores","sector_propio":"Tecnología","sector_desc":"Software, semis, internet, e-commerce, hardware","industria_orig":"","desc_industria_orig":""},{"nombre":"GLOBAL X COPPER MINERS ETF","ticker":"COPX","cod_caja_cedear":"8719","ratio":"14:1","mercado_origen":"NYSE Arca","pais":"Estados Unidos","tipo":"ETF","fuente":"Banco Comafi","sector_propio":"Materiales y Minería","sector_desc":"Minería, metales, químicos, materiales básicos","industria_orig":"ETF","desc_industria_orig":"ETF"},{"nombre":"GLOBAL X URANIUM ETF","ticker":"URA","cod_caja_cedear":"8694","ratio":"5:1","mercado_origen":"NYSE ARCA","pais":"N/D","tipo":"ETF","fuente":"Caja de Valores","sector_propio":"Energía","sector_desc":"Petróleo, gas, renovables y servicios energéticos","industria_orig":"","desc_industria_orig":""},{"nombre":"INVESCO QQQ TRUST","ticker":"QQQ","cod_caja_cedear":"8550","ratio":"20:1","mercado_origen":"NASDAQ GM","pais":"N/D","tipo":"ETF","fuente":"Caja de Valores","sector_propio":"Tecnología","sector_desc":"Software, semis, internet, e-commerce, hardware","industria_orig":"","desc_industria_orig":""},{"nombre":"INVESCO S&P 500 EQL WGHT ETF","ticker":"RSP","cod_caja_cedear":"8726","ratio":"30:1","mercado_origen":"NYSE ARCA","pais":"N/D","tipo":"ETF","fuente":"Caja de Valores","sector_propio":"Índices y Estrategias Amplias","sector_desc":"Índices broad-market, factores, regiones, alternativos","industria_orig":"","desc_industria_orig":""},{"nombre":"IPATH SERIES B S&P 500 VIX","ticker":"VXX","cod_caja_cedear":"8706","ratio":"5:1","mercado_origen":"CBOE BZX","pais":"N/D","tipo":"ETF","fuente":"Caja de Valores","sector_propio":"Índices y Estrategias Amplias","sector_desc":"Índices broad-market, factores, regiones, alternativos","industria_orig":"","desc_industria_orig":""},{"nombre":"ISHARES BITCOIN TRUST","ticker":"IBIT","cod_caja_cedear":"8660","ratio":"10:1","mercado_origen":"NASDAQ GM","pais":"Estados Unidos","tipo":"ETF","fuente":"Banco Comafi","sector_propio":"Índices y Estrategias Amplias","sector_desc":"Índices broad-market, factores, regiones, alternativos","industria_orig":"Funds","desc_industria_orig":"Exchange Trade Fund"},{"nombre":"ISHARES CHINA LARGE-CAP ETF","ticker":"FXI","cod_caja_cedear":"8661","ratio":"5:1","mercado_origen":"NYSE Arca","pais":"Estados Unidos","tipo":"ETF","fuente":"Banco Comafi","sector_propio":"Índices y Estrategias Amplias","sector_desc":"Índices broad-market, factores, regiones, alternativos","industria_orig":"ETF","desc_industria_orig":"Exchange Trade Fund"},{"nombre":"ISHARES CORE S&P 500 ETF","ticker":"IVV","cod_caja_cedear":"8722","ratio":"692:1","mercado_origen":"NYSE Arca","pais":"Estados Unidos","tipo":"ETF","fuente":"Banco Comafi","sector_propio":"Índices y Estrategias Amplias","sector_desc":"Índices broad-market, factores, regiones, alternativos","industria_orig":"ETF","desc_industria_orig":"ETF"},{"nombre":"ISHARES ESG AWARE MSCI USA ETF","ticker":"ESGU","cod_caja_cedear":"8721","ratio":"30:1","mercado_origen":"NASDAQ GM","pais":"Estados Unidos","tipo":"ETF","fuente":"Banco Comafi","sector_propio":"Índices y Estrategias Amplias","sector_desc":"Índices broad-market, factores, regiones, alternativos","industria_orig":"ETF","desc_industria_orig":"ETF"},{"nombre":"ISHARES ETHEREUM TR ETF","ticker":"ETHA","cod_caja_cedear":"8659","ratio":"5:1","mercado_origen":"NASDAQ GM","pais":"N/D","tipo":"ETF","fuente":"Caja de Valores","sector_propio":"Índices y Estrategias Amplias","sector_desc":"Índices broad-market, factores, regiones, alternativos","industria_orig":"","desc_industria_orig":""},{"nombre":"ISHARES LATIN AMERICA 40 ETF","ticker":"ILF","cod_caja_cedear":"8720","ratio":"6:1","mercado_origen":"NYSE Arca","pais":"Estados Unidos","tipo":"ETF","fuente":"Banco Comafi","sector_propio":"Índices y Estrategias Amplias","sector_desc":"Índices broad-market, factores, regiones, alternativos","industria_orig":"ETF","desc_industria_orig":"ETF"},{"nombre":"ISHARES MSCI BRAZIL CAP","ticker":"EWZ","cod_caja_cedear":"8556","ratio":"2:1","mercado_origen":"NYSE ARCA","pais":"N/D","tipo":"ETF","fuente":"Caja de Valores","sector_propio":"Índices y Estrategias Amplias","sector_desc":"Índices broad-market, factores, regiones, alternativos","industria_orig":"","desc_industria_orig":""},{"nombre":"ISHARES MSCI EMERGING MARKET","ticker":"EEM","cod_caja_cedear":"8552","ratio":"5:1","mercado_origen":"NYSE ARCA","pais":"N/D","tipo":"ETF","fuente":"Caja de Valores","sector_propio":"Índices y Estrategias Amplias","sector_desc":"Índices broad-market, factores, regiones, alternativos","industria_orig":"","desc_industria_orig":""},{"nombre":"ISHARES TRUST RUSSELL 2000","ticker":"IWM","cod_caja_cedear":"8551","ratio":"10:1","mercado_origen":"NYSE ARCA","pais":"N/D","tipo":"ETF","fuente":"Caja de Valores","sector_propio":"Índices y Estrategias Amplias","sector_desc":"Índices broad-market, factores, regiones, alternativos","industria_orig":"","desc_industria_orig":""},{"nombre":"ISHARES US AEROSPACE & DEFENSE ETF","ticker":"ITA","cod_caja_cedear":"8707","ratio":"50:1","mercado_origen":"CBOE BZX","pais":"N/D","tipo":"ETF","fuente":"Caja de Valores","sector_propio":"Industria y Defensa","sector_desc":"Aeroespacial, defensa, maquinaria, transporte","industria_orig":"","desc_industria_orig":""},{"nombre":"ISHARES GLOBAL CLEAN ENERGY ETF","ticker":"ICLN","cod_caja_cedear":"8723","ratio":"5:1","mercado_origen":"NASDAQ GM","pais":"N/D","tipo":"ETF","fuente":"Caja de Valores","sector_propio":"Energía","sector_desc":"Petróleo, gas, renovables y servicios energéticos","industria_orig":"","desc_industria_orig":""},{"nombre":"ISHARES MSCI SOUTH KOREA ETF","ticker":"EWY","cod_caja_cedear":"8724","ratio":"50:1","mercado_origen":"NYSE ARCA","pais":"N/D","tipo":"ETF","fuente":"Caja de Valores","sector_propio":"Índices y Estrategias Amplias","sector_desc":"Índices broad-market, factores, regiones, alternativos","industria_orig":"","desc_industria_orig":""},{"nombre":"Invesco S&P 500 Quality ETF","ticker":"SPHQ","cod_caja_cedear":"8708","ratio":"14:1","mercado_origen":"NYSE Arca","pais":"Estados Unidos","tipo":"ETF","fuente":"Banco Comafi","sector_propio":"Índices y Estrategias Amplias","sector_desc":"Índices broad-market, factores, regiones, alternativos","industria_orig":"ETF","desc_industria_orig":"ETF"},{"nombre":"PROSHARES  SHORT S&P500","ticker":"SH","cod_caja_cedear":"8657","ratio":"8:1","mercado_origen":"NYSE ARCA","pais":"N/D","tipo":"ETF","fuente":"Caja de Valores","sector_propio":"Índices y Estrategias Amplias","sector_desc":"Índices broad-market, factores, regiones, alternativos","industria_orig":"","desc_industria_orig":""},{"nombre":"PROSHARES SHORT QQQ","ticker":"PSQ","cod_caja_cedear":"8692","ratio":"8:1","mercado_origen":"NYSE Arca","pais":"Estados Unidos","tipo":"ETF","fuente":"Banco Comafi","sector_propio":"Índices y Estrategias Amplias","sector_desc":"Índices broad-market, factores, regiones, alternativos","industria_orig":"ETF","desc_industria_orig":"ETF"},{"nombre":"PROSHARES ULTRAPRO QQQ","ticker":"TQQQ","cod_caja_cedear":"8705","ratio":"25:1","mercado_origen":"NASDAQ GM","pais":"N/D","tipo":"ETF","fuente":"Caja de Valores","sector_propio":"Tecnología","sector_desc":"Software, semis, internet, e-commerce, hardware","industria_orig":"","desc_industria_orig":""},{"nombre":"SPDR DOW JONES INDUSTRIAL","ticker":"DIA","cod_caja_cedear":"8555","ratio":"20:1","mercado_origen":"NYSE ARCA","pais":"N/D","tipo":"ETF","fuente":"Caja de Valores","sector_propio":"Índices y Estrategias Amplias","sector_desc":"Índices broad-market, factores, regiones, alternativos","industria_orig":"","desc_industria_orig":""},{"nombre":"SPDR S&P 500","ticker":"SPY","cod_caja_cedear":"8549","ratio":"20:1","mercado_origen":"NYSE ARCA","pais":"N/D","tipo":"ETF","fuente":"Caja de Valores","sector_propio":"Índices y Estrategias Amplias","sector_desc":"Índices broad-market, factores, regiones, alternativos","industria_orig":"","desc_industria_orig":""},{"nombre":"STATE STREET SPDR S&P METALS & MINING ETF","ticker":"XME","cod_caja_cedear":"8725","ratio":"30:1","mercado_origen":"NYSE ARCA","pais":"N/D","tipo":"ETF","fuente":"Caja de Valores","sector_propio":"Materiales y Minería","sector_desc":"Minería, metales, químicos, materiales básicos","industria_orig":"","desc_industria_orig":""},{"nombre":"State Street Communication Services Select Sector SPDR ETF","ticker":"XLC","cod_caja_cedear":"8667","ratio":"19:1","mercado_origen":"NYSE Arca","pais":"Estados Unidos","tipo":"ETF","fuente":"Banco Comafi","sector_propio":"Comunicaciones y Medios","sector_desc":"Telecom, redes sociales, streaming, entretenimiento","industria_orig":"ETF","desc_industria_orig":"Exchange Trade Fund"},{"nombre":"State Street Consumer Discretionary Select Sector SPDR ETF","ticker":"XLY","cod_caja_cedear":"8668","ratio":"43:1","mercado_origen":"NYSE Arca","pais":"Estados Unidos","tipo":"ETF","fuente":"Banco Comafi","sector_propio":"Consumo Discrecional","sector_desc":"Autos, retail, hoteles, lujo, indumentaria","industria_orig":"ETF","desc_industria_orig":"Exchange Trade Fund"},{"nombre":"State Street Consumer Staples Select Sector SPDR ETF","ticker":"XLP","cod_caja_cedear":"8673","ratio":"16:1","mercado_origen":"NYSE Arca","pais":"Estados Unidos","tipo":"ETF","fuente":"Banco Comafi","sector_propio":"Consumo Masivo","sector_desc":"Alimentos, bebidas, productos del hogar, tabaco","industria_orig":"ETF","desc_industria_orig":"Exchange Trade Fund"},{"nombre":"State Street Health Care Select Sector SPDR ETF","ticker":"XLV","cod_caja_cedear":"8672","ratio":"29:1","mercado_origen":"NYSE Arca","pais":"Estados Unidos","tipo":"ETF","fuente":"Banco Comafi","sector_propio":"Salud y Farma","sector_desc":"Farma, biotech, equipos médicos, prestadores","industria_orig":"ETF","desc_industria_orig":"Exchange Trade Fund"},{"nombre":"State Street Industrials Select Sector SPDR ETF","ticker":"XLI","cod_caja_cedear":"8670","ratio":"28:1","mercado_origen":"NYSE Arca","pais":"Estados Unidos","tipo":"ETF","fuente":"Banco Comafi","sector_propio":"Industria y Defensa","sector_desc":"Aeroespacial, defensa, maquinaria, transporte","industria_orig":"ETF","desc_industria_orig":"Exchange Trade Fund"},{"nombre":"State Street Materials Select Sector SPDR ETF","ticker":"XLB","cod_caja_cedear":"8669","ratio":"18:1","mercado_origen":"NYSE Arca","pais":"Estados Unidos","tipo":"ETF","fuente":"Banco Comafi","sector_propio":"Materiales y Minería","sector_desc":"Minería, metales, químicos, materiales básicos","industria_orig":"ETF","desc_industria_orig":"Exchange Trade Fund"},{"nombre":"State Street Real Estate Select Sector SPDR ETF","ticker":"XLRE","cod_caja_cedear":"8674","ratio":"9:1","mercado_origen":"NYSE Arca","pais":"Estados Unidos","tipo":"ETF","fuente":"Banco Comafi","sector_propio":"Real Estate (REITs)","sector_desc":"Fideicomisos inmobiliarios y bienes raíces","industria_orig":"ETF","desc_industria_orig":"Exchange Trade Fund"},{"nombre":"State Street Technology Select Sector SPDR ETF","ticker":"XLK","cod_caja_cedear":"8671","ratio":"46:1","mercado_origen":"NYSE Arca","pais":"Estados Unidos","tipo":"ETF","fuente":"Banco Comafi","sector_propio":"Tecnología","sector_desc":"Software, semis, internet, e-commerce, hardware","industria_orig":"ETF","desc_industria_orig":"Exchange Trade Fund"},{"nombre":"UTILITIES SELECT SECTOR SPDR FUND","ticker":"XLU","cod_caja_cedear":"8697","ratio":"15:1","mercado_origen":"NYSE ARCA","pais":"N/D","tipo":"ETF","fuente":"Caja de Valores","sector_propio":"Utilities","sector_desc":"Electricidad, gas, agua, servicios públicos","industria_orig":"","desc_industria_orig":""},{"nombre":"United States Oil Fund, LP","ticker":"USO","cod_caja_cedear":"8699","ratio":"15:1","mercado_origen":"NYSE Arca","pais":"Estados Unidos","tipo":"ETF","fuente":"Banco Comafi","sector_propio":"Energía","sector_desc":"Petróleo, gas, renovables y servicios energéticos","industria_orig":"ETF","desc_industria_orig":"ETF"},{"nombre":"VAN ECK SEMICONDUCTOR ETF","ticker":"SMH","cod_caja_cedear":"8695","ratio":"50:1","mercado_origen":"NASDAQ GM","pais":"N/D","tipo":"ETF","fuente":"Caja de Valores","sector_propio":"Tecnología","sector_desc":"Software, semis, internet, e-commerce, hardware","industria_orig":"","desc_industria_orig":""},{"nombre":"VANGUARD DIVIDEND APPRECIATION","ticker":"VIG","cod_caja_cedear":"8693","ratio":"39:1","mercado_origen":"NYSE Arca","pais":"Estados Unidos","tipo":"ETF","fuente":"Banco Comafi","sector_propio":"Índices y Estrategias Amplias","sector_desc":"Índices broad-market, factores, regiones, alternativos","industria_orig":"ETF","desc_industria_orig":"ETF"},{"nombre":"Van Eck Gold Miners ETF/USA","ticker":"GDX","cod_caja_cedear":"8703","ratio":"10:1","mercado_origen":"NYSE Arca","pais":"Estados Unidos","tipo":"ETF","fuente":"Banco Comafi","sector_propio":"Materiales y Minería","sector_desc":"Minería, metales, químicos, materiales básicos","industria_orig":"ETF","desc_industria_orig":"ETF"},{"nombre":"Vanguard FTSE Developed Markets ETF","ticker":"VEA","cod_caja_cedear":"8664","ratio":"10:1","mercado_origen":"NYSE Arca","pais":"Estados Unidos","tipo":"ETF","fuente":"Banco Comafi","sector_propio":"Índices y Estrategias Amplias","sector_desc":"Índices broad-market, factores, regiones, alternativos","industria_orig":"ETF","desc_industria_orig":"Exchange Trade Fund"},{"nombre":"iShares CORE S&P MID-CAP ETF","ticker":"IJH","cod_caja_cedear":"8689","ratio":"12:1","mercado_origen":"NYSE Arca","pais":"Estados Unidos","tipo":"ETF","fuente":"Banco Comafi","sector_propio":"Índices y Estrategias Amplias","sector_desc":"Índices broad-market, factores, regiones, alternativos","industria_orig":"ETF","desc_industria_orig":"ETF"},{"nombre":"iShares Core MSCI Emerging Markets ETF","ticker":"IEMG","cod_caja_cedear":"8701","ratio":"12:1","mercado_origen":"NYSE Arca","pais":"Estados Unidos","tipo":"ETF","fuente":"Banco Comafi","sector_propio":"Índices y Estrategias Amplias","sector_desc":"Índices broad-market, factores, regiones, alternativos","industria_orig":"ETF","desc_industria_orig":"ETF"},{"nombre":"iShares Core MSCI Europe ETF","ticker":"IEUR","cod_caja_cedear":"8662","ratio":"11:1","mercado_origen":"NYSE Arca","pais":"Estados Unidos","tipo":"ETF","fuente":"Banco Comafi","sector_propio":"Índices y Estrategias Amplias","sector_desc":"Índices broad-market, factores, regiones, alternativos","industria_orig":"ETF","desc_industria_orig":"Exchange Trade Fund"},{"nombre":"iShares Core MSCI World UCITS ETF","ticker":"IWDA","cod_caja_cedear":"8704","ratio":"24:1","mercado_origen":"London","pais":"Irlanda","tipo":"ETF","fuente":"Banco Comafi","sector_propio":"Índices y Estrategias Amplias","sector_desc":"Índices broad-market, factores, regiones, alternativos","industria_orig":"ETF","desc_industria_orig":"UCITS ETF"},{"nombre":"iShares MSCI ACWI ETF","ticker":"ACWI","cod_caja_cedear":"8702","ratio":"26:1","mercado_origen":"NASDAQ GM","pais":"Estados Unidos","tipo":"ETF","fuente":"Banco Comafi","sector_propio":"Índices y Estrategias Amplias","sector_desc":"Índices broad-market, factores, regiones, alternativos","industria_orig":"ETF","desc_industria_orig":"ETF"},{"nombre":"iShares MSCI EAFE ETF","ticker":"EFA","cod_caja_cedear":"8700","ratio":"18:1","mercado_origen":"NYSE Arca","pais":"Estados Unidos","tipo":"ETF","fuente":"Banco Comafi","sector_propio":"Índices y Estrategias Amplias","sector_desc":"Índices broad-market, factores, regiones, alternativos","industria_orig":"ETF","desc_industria_orig":"ETF"},{"nombre":"iShares MSCI JAPAN ETF","ticker":"EWJ","cod_caja_cedear":"8690","ratio":"14:1","mercado_origen":"NYSE Arca","pais":"Estados Unidos","tipo":"ETF","fuente":"Banco Comafi","sector_propio":"Índices y Estrategias Amplias","sector_desc":"Índices broad-market, factores, regiones, alternativos","industria_orig":"ETF","desc_industria_orig":"ETF"},{"nombre":"iShares Nasdaq Biotechnology ETF","ticker":"IBB","cod_caja_cedear":"8663","ratio":"27:1","mercado_origen":"NASDAQ GM","pais":"Estados Unidos","tipo":"ETF","fuente":"Banco Comafi","sector_propio":"Salud y Farma","sector_desc":"Farma, biotech, equipos médicos, prestadores","industria_orig":"ETF","desc_industria_orig":"Exchange Trade Fund"},{"nombre":"iShares S&P 500 Growth ETF","ticker":"IVW","cod_caja_cedear":"8666","ratio":"20:1","mercado_origen":"NYSE Arca","pais":"Estados Unidos","tipo":"ETF","fuente":"Banco Comafi","sector_propio":"Índices y Estrategias Amplias","sector_desc":"Índices broad-market, factores, regiones, alternativos","industria_orig":"ETF","desc_industria_orig":"Exchange Trade Fund"},{"nombre":"iShares S&P 500 Value ETF","ticker":"IVE","cod_caja_cedear":"8665","ratio":"40:1","mercado_origen":"NYSE Arca","pais":"Estados Unidos","tipo":"ETF","fuente":"Banco Comafi","sector_propio":"Índices y Estrategias Amplias","sector_desc":"Índices broad-market, factores, regiones, alternativos","industria_orig":"ETF","desc_industria_orig":"Exchange Trade Fund"},{"nombre":"iShares SILVER TRUST","ticker":"SLV","cod_caja_cedear":"8691","ratio":"6:1","mercado_origen":"NYSE Arca","pais":"Estados Unidos","tipo":"ETF","fuente":"Banco Comafi","sector_propio":"Materiales y Minería","sector_desc":"Minería, metales, químicos, materiales básicos","industria_orig":"ETF","desc_industria_orig":"ETF"},{"nombre":"BAKER HUGHES CO.","ticker":"BKR","cod_caja_cedear":"8647","ratio":"7:1","mercado_origen":"NASDAQ GS","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Energía","sector_desc":"Petróleo, gas y servicios energéticos","industria_orig":"Energy","desc_industria_orig":"Oil&Gas Services"},{"nombre":"BP  plc. ADR","ticker":"BP","cod_caja_cedear":"8063","ratio":"5:1","mercado_origen":"NYSE","pais":"Reino Unido","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Energía","sector_desc":"Petróleo, gas y servicios energéticos","industria_orig":"Energy","desc_industria_orig":"Oil, Gas & Consumable Fuels"},{"nombre":"CAMECO CORPORATION","ticker":"CCJ","cod_caja_cedear":"8738","ratio":"23:1","mercado_origen":"NYSE","pais":"Canadá","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Energía","sector_desc":"Petróleo, gas y servicios energéticos","industria_orig":"Basic Materials","desc_industria_orig":"Oil, Gas & Consumable Fuels"},{"nombre":"CHEVRON CORP","ticker":"CVX","cod_caja_cedear":"8013","ratio":"16:1","mercado_origen":"NYSE","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Energía","sector_desc":"Petróleo, gas y servicios energéticos","industria_orig":"Energy","desc_industria_orig":"Oil, Gas & Consumable Fuels"},{"nombre":"CONOCOPHILLIPS","ticker":"COP","cod_caja_cedear":"8735","ratio":"25:1","mercado_origen":"NYSE","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Energía","sector_desc":"Petróleo, gas y servicios energéticos","industria_orig":"Energy","desc_industria_orig":"Oil, Gas & Consumable Fuels"},{"nombre":"ENI SPA - ADR","ticker":"E","cod_caja_cedear":"8265","ratio":"4:1","mercado_origen":"NYSE","pais":"Italia","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Energía","sector_desc":"Petróleo, gas y servicios energéticos","industria_orig":"Energy","desc_industria_orig":"Oil, Gas & Consumable Fuels"},{"nombre":"EQUINOR ASA","ticker":"EQNR","cod_caja_cedear":"8655","ratio":"6:1","mercado_origen":"NYSE","pais":"Noruega","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Energía","sector_desc":"Petróleo, gas y servicios energéticos","industria_orig":"Energy","desc_industria_orig":"Oil, Gas & Consumable Fuels"},{"nombre":"EXXON MOBIL CORPORATION","ticker":"XOM","cod_caja_cedear":"8019","ratio":"10:1","mercado_origen":"NYSE","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Energía","sector_desc":"Petróleo, gas y servicios energéticos","industria_orig":"Energy","desc_industria_orig":"Oil, Gas & Consumable Fuels"},{"nombre":"GAZPROM PJSC***","ticker":"OGZD","cod_caja_cedear":"8379","ratio":"2:1","mercado_origen":"OTC US","pais":"Rusia","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Energía","sector_desc":"Petróleo, gas y servicios energéticos","industria_orig":"Energy","desc_industria_orig":"Oil, Gas & Consumable Fuels"},{"nombre":"GEOPARK LTD","ticker":"GPRK","cod_caja_cedear":"8535","ratio":"1:1","mercado_origen":"NYSE","pais":"Chile","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Energía","sector_desc":"Petróleo, gas y servicios energéticos","industria_orig":"Energy","desc_industria_orig":"Oil, Gas & Consumable Fuels"},{"nombre":"GOLAR LNG LTD.","ticker":"GLNG","cod_caja_cedear":"8730","ratio":"10:1","mercado_origen":"NASDAQ GS","pais":"Bermuda","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Energía","sector_desc":"Petróleo, gas y servicios energéticos","industria_orig":"Energy","desc_industria_orig":"Oil, Gas & Consumable Fuels"},{"nombre":"HALLIBURTON CO","ticker":"HAL","cod_caja_cedear":"8536","ratio":"2:1","mercado_origen":"NYSE","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Energía","sector_desc":"Petróleo, gas y servicios energéticos","industria_orig":"Energy","desc_industria_orig":"Energy Equipment & Services"},{"nombre":"LUKOIL PJSC**","ticker":"LKOD","cod_caja_cedear":"8378","ratio":"4:1","mercado_origen":"OTC US","pais":"Rusia","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Energía","sector_desc":"Petróleo, gas y servicios energéticos","industria_orig":"Energy","desc_industria_orig":"Oil, Gas & Consumable Fuels"},{"nombre":"OCCIDENTAL PETROLEUM CORP.","ticker":"OXY","cod_caja_cedear":"8576","ratio":"5:1","mercado_origen":"NYSE","pais":"N/D","tipo":"Acción","fuente":"Caja de Valores","sector_propio":"Energía","sector_desc":"Petróleo, gas y servicios energéticos","industria_orig":"","desc_industria_orig":""},{"nombre":"PETRO RIO S.A.","ticker":"PRIO3","cod_caja_cedear":"8606","ratio":"2:1","mercado_origen":"B3 (Brasil)","pais":"N/D","tipo":"Acción","fuente":"Caja de Valores","sector_propio":"Energía","sector_desc":"Petróleo, gas y servicios energéticos","industria_orig":"","desc_industria_orig":""},{"nombre":"PETROBRAS - PETROLEO BRASILERO S.A.","ticker":"PETR3","cod_caja_cedear":"8602","ratio":"1:1","mercado_origen":"B3 (Brasil)","pais":"N/D","tipo":"Acción","fuente":"Caja de Valores","sector_propio":"Energía","sector_desc":"Petróleo, gas y servicios energéticos","industria_orig":"","desc_industria_orig":""},{"nombre":"PETROLEO BRASILEIRO - PETROBRAS (ADR)","ticker":"PBR","cod_caja_cedear":"8526","ratio":"1 :1","mercado_origen":"NYSE","pais":"Brasil","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Energía","sector_desc":"Petróleo, gas y servicios energéticos","industria_orig":"Energy","desc_industria_orig":"Oil, Gas & Consumable Fuels"},{"nombre":"PHILLIPS 66","ticker":"PSX","cod_caja_cedear":"8539","ratio":"6:1","mercado_origen":"NYSE","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Energía","sector_desc":"Petróleo, gas y servicios energéticos","industria_orig":"Energy","desc_industria_orig":"Oil, Gas & Consumable Fuels"},{"nombre":"SHELL PLC","ticker":"SHEL","cod_caja_cedear":"8255","ratio":"2:1","mercado_origen":"NYSE","pais":"Reino Unido","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Energía","sector_desc":"Petróleo, gas y servicios energéticos","industria_orig":"Energy","desc_industria_orig":"Oil, Gas & Consumable Fuels"},{"nombre":"SLB LTD","ticker":"SLB","cod_caja_cedear":"8157","ratio":"3:1","mercado_origen":"NYSE","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Energía","sector_desc":"Petróleo, gas y servicios energéticos","industria_orig":"Energy","desc_industria_orig":"Energy Equipment & Services"},{"nombre":"TATNEFT PAO**","ticker":"ATAD","cod_caja_cedear":"8374","ratio":"4:1","mercado_origen":"OTC US","pais":"Rusia","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Energía","sector_desc":"Petróleo, gas y servicios energéticos","industria_orig":"Energy","desc_industria_orig":"Oil, Gas & Consumable Fuels"},{"nombre":"TENARIS S.A. (ADS)","ticker":"TS","cod_caja_cedear":"8524","ratio":"1 :1","mercado_origen":"NYSE","pais":"Luxemburgo","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Energía","sector_desc":"Petróleo, gas y servicios energéticos","industria_orig":"Industrial","desc_industria_orig":"Energy Equipment & Services"},{"nombre":"TotalEnergies SE - ADR","ticker":"TTE","cod_caja_cedear":"8213","ratio":"3:1","mercado_origen":"NYSE","pais":"Francia","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Energía","sector_desc":"Petróleo, gas y servicios energéticos","industria_orig":"Energy","desc_industria_orig":"Oil, Gas & Consumable Fuels"},{"nombre":"ULTRAPAR PARTICIPAÇÕES S.A.","ticker":"UGP","cod_caja_cedear":"8516","ratio":"1 :1","mercado_origen":"NYSE","pais":"Brasil","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Energía","sector_desc":"Petróleo, gas y servicios energéticos","industria_orig":"Energy","desc_industria_orig":"Oil, Gas & Consumable Fuels"},{"nombre":"VISTA ENERGY S.A.B. de C.V (ADS)","ticker":"VIST","cod_caja_cedear":"8527","ratio":"3:1","mercado_origen":"NYSE","pais":"México","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Energía","sector_desc":"Petróleo, gas y servicios energéticos","industria_orig":"Energy","desc_industria_orig":"Oil, Gas & Consumable Fuels"},{"nombre":"YANKUANG ENERGY GROUP CO. LTD.","ticker":"YZCAY","cod_caja_cedear":"8397","ratio":"2:1","mercado_origen":"OTC US","pais":"China","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Energía","sector_desc":"Petróleo, gas y servicios energéticos","industria_orig":"Energy","desc_industria_orig":"Oil, Gas & Consumable Fuels"},{"nombre":"3M COMPANY","ticker":"MMM","cod_caja_cedear":"8033","ratio":"10:1","mercado_origen":"NYSE","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Industria y Defensa","sector_desc":"Aeroespacial, defensa, maquinaria, transporte","industria_orig":"Industrial","desc_industria_orig":"Industrial Conglomerates"},{"nombre":"AMERICAN AIRLINES GROUP INC","ticker":"AAL","cod_caja_cedear":"8564","ratio":"2:1","mercado_origen":"NASDAQ GS","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Industria y Defensa","sector_desc":"Aeroespacial, defensa, maquinaria, transporte","industria_orig":"Consumer","desc_industria_orig":"Airlines"},{"nombre":"AVIS BUDGET GROUP INC.","ticker":"CAR","cod_caja_cedear":"8087","ratio":"26:1","mercado_origen":"NASDAQ GS","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Industria y Defensa","sector_desc":"Aeroespacial, defensa, maquinaria, transporte","industria_orig":"Consumer","desc_industria_orig":"Road & Rail"},{"nombre":"BOEING Co.","ticker":"BA","cod_caja_cedear":"8011","ratio":"24:1","mercado_origen":"NYSE","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Industria y Defensa","sector_desc":"Aeroespacial, defensa, maquinaria, transporte","industria_orig":"Industrial","desc_industria_orig":"Aerospace & Defense"},{"nombre":"CATERPILLAR Inc.","ticker":"CAT","cod_caja_cedear":"8012","ratio":"20:1","mercado_origen":"NYSE","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Industria y Defensa","sector_desc":"Aeroespacial, defensa, maquinaria, transporte","industria_orig":"Industrial","desc_industria_orig":"Machinery"},{"nombre":"CELESTICA INC","ticker":"CLS","cod_caja_cedear":"8680","ratio":"20:1","mercado_origen":"NYSE","pais":"Canadá","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Industria y Defensa","sector_desc":"Aeroespacial, defensa, maquinaria, transporte","industria_orig":"Industrial","desc_industria_orig":"Industrial"},{"nombre":"CORP AMERICA AIRPORTS SA","ticker":"CAAP","cod_caja_cedear":"8532","ratio":"1:4","mercado_origen":"NYSE","pais":"Argentina","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Industria y Defensa","sector_desc":"Aeroespacial, defensa, maquinaria, transporte","industria_orig":"Consumer","desc_industria_orig":"Transportation Infrastructure"},{"nombre":"DEERE & COMPANY","ticker":"DE","cod_caja_cedear":"8095","ratio":"40:1","mercado_origen":"NYSE","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Industria y Defensa","sector_desc":"Aeroespacial, defensa, maquinaria, transporte","industria_orig":"Industrial","desc_industria_orig":"Machinery"},{"nombre":"EMBRAER-EMPRESA BRASILEIRA DE AERONÁUTICA S.A.","ticker":"ERJ","cod_caja_cedear":"8515","ratio":"1 :1","mercado_origen":"NYSE","pais":"Brasil","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Industria y Defensa","sector_desc":"Aeroespacial, defensa, maquinaria, transporte","industria_orig":"Industrial","desc_industria_orig":"Aerospace & Defense"},{"nombre":"EQUIFAX INC","ticker":"EFX","cod_caja_cedear":"8544","ratio":"16:1","mercado_origen":"NYSE","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Industria y Defensa","sector_desc":"Aeroespacial, defensa, maquinaria, transporte","industria_orig":"Consumer","desc_industria_orig":"Professional Services"},{"nombre":"FEDEX CORP","ticker":"FDX","cod_caja_cedear":"8101","ratio":"10:1","mercado_origen":"NYSE","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Industria y Defensa","sector_desc":"Aeroespacial, defensa, maquinaria, transporte","industria_orig":"Industrial","desc_industria_orig":"Air Freight & Logistics"},{"nombre":"GE AEROSPACE.","ticker":"GE","cod_caja_cedear":"8020","ratio":"8:1","mercado_origen":"NYSE","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Industria y Defensa","sector_desc":"Aeroespacial, defensa, maquinaria, transporte","industria_orig":"Industrial","desc_industria_orig":"Industrial Conglomerates"},{"nombre":"GRUPO AEROPORTUARIO DEL PACIFICO, S.A.B. de C.V.","ticker":"PAC","cod_caja_cedear":"8405","ratio":"16:1","mercado_origen":"NYSE","pais":"México","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Industria y Defensa","sector_desc":"Aeroespacial, defensa, maquinaria, transporte","industria_orig":"Industrial","desc_industria_orig":"Transportation Infrastructure"},{"nombre":"GRUPO AEROPORTUARIO DEL SURESTE , S.A.B. de C.V.","ticker":"ASR","cod_caja_cedear":"8406","ratio":"20:1","mercado_origen":"NYSE","pais":"México","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Industria y Defensa","sector_desc":"Aeroespacial, defensa, maquinaria, transporte","industria_orig":"Industrial","desc_industria_orig":"Transportation Infrastructure"},{"nombre":"HONEYWELL INTERNATIONAL INC. (ex Allied S.)","ticker":"HON","cod_caja_cedear":"8008","ratio":"8:1","mercado_origen":"NASDAQ GS","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Industria y Defensa","sector_desc":"Aeroespacial, defensa, maquinaria, transporte","industria_orig":"Industrial","desc_industria_orig":"Industrial Conglomerates"},{"nombre":"HOWMET AEROSPACE INC","ticker":"HWM","cod_caja_cedear":"8007","ratio":"1:1","mercado_origen":"NYSE","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Industria y Defensa","sector_desc":"Aeroespacial, defensa, maquinaria, transporte","industria_orig":"Industrial","desc_industria_orig":"Aerospace & Defense"},{"nombre":"JOHNSON CONTROLS INTERNATIONAL","ticker":"JCI","cod_caja_cedear":"8169","ratio":"2:1","mercado_origen":"NYSE","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Industria y Defensa","sector_desc":"Aeroespacial, defensa, maquinaria, transporte","industria_orig":"Industrial","desc_industria_orig":"Building Products"},{"nombre":"LOCKHEED MARTIN CORPORATION","ticker":"LMT","cod_caja_cedear":"8125","ratio":"20:1","mercado_origen":"NYSE","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Industria y Defensa","sector_desc":"Aeroespacial, defensa, maquinaria, transporte","industria_orig":"Industrial","desc_industria_orig":"Aerospace & Defense"},{"nombre":"PACCAR INC","ticker":"PCAR","cod_caja_cedear":"8144","ratio":"3:1","mercado_origen":"NASDAQ GS","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Industria y Defensa","sector_desc":"Aeroespacial, defensa, maquinaria, transporte","industria_orig":"Consumer","desc_industria_orig":"Machinery"},{"nombre":"PITNEY BOWES INC","ticker":"PBI","cod_caja_cedear":"8143","ratio":"1:1","mercado_origen":"NYSE","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Industria y Defensa","sector_desc":"Aeroespacial, defensa, maquinaria, transporte","industria_orig":"Technology","desc_industria_orig":"Commercial Services & Supplies"},{"nombre":"ROCKET LAB CORP","ticker":"RKLB","cod_caja_cedear":"8712","ratio":"12:1","mercado_origen":"NASDAQ GS","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Industria y Defensa","sector_desc":"Aeroespacial, defensa, maquinaria, transporte","industria_orig":"Industrial","desc_industria_orig":"Industrial"},{"nombre":"RTX CORPORATION","ticker":"RTX","cod_caja_cedear":"8042","ratio":"5:1","mercado_origen":"NYSE","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Industria y Defensa","sector_desc":"Aeroespacial, defensa, maquinaria, transporte","industria_orig":"Industrial","desc_industria_orig":"Aerospace & Defense"},{"nombre":"SATELLOGIC INC.","ticker":"SATL","cod_caja_cedear":"8574","ratio":"1:1","mercado_origen":"NASDAQ GS","pais":"N/D","tipo":"Acción","fuente":"Caja de Valores","sector_propio":"Industria y Defensa","sector_desc":"Aeroespacial, defensa, maquinaria, transporte","industria_orig":"","desc_industria_orig":""},{"nombre":"SHAPEWAYS HOLDINGS INC***","ticker":"SHPW","cod_caja_cedear":"8599","ratio":"1:2","mercado_origen":"OTC US","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Industria y Defensa","sector_desc":"Aeroespacial, defensa, maquinaria, transporte","industria_orig":"Communications","desc_industria_orig":"Communications"},{"nombre":"SIEMENS AG ADR","ticker":"SIEGY","cod_caja_cedear":"8256","ratio":"3:1","mercado_origen":"OTC US","pais":"Alemania","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Industria y Defensa","sector_desc":"Aeroespacial, defensa, maquinaria, transporte","industria_orig":"Industrial","desc_industria_orig":"Industrial Conglomerates"},{"nombre":"SNAP-ON INCORPORATED","ticker":"SNA","cod_caja_cedear":"8160","ratio":"6:1","mercado_origen":"NYSE","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Industria y Defensa","sector_desc":"Aeroespacial, defensa, maquinaria, transporte","industria_orig":"Industrial","desc_industria_orig":"Machinery"},{"nombre":"UNION PACIFIC CORP","ticker":"UNP","cod_caja_cedear":"8540","ratio":"20:1","mercado_origen":"NYSE","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Industria y Defensa","sector_desc":"Aeroespacial, defensa, maquinaria, transporte","industria_orig":"Industrial","desc_industria_orig":"Road & Rail"},{"nombre":"UNITED AIRLINES HOLDINGS INC.","ticker":"UAL","cod_caja_cedear":"8573","ratio":"5:1","mercado_origen":"NASDAQ GS","pais":"N/D","tipo":"Acción","fuente":"Caja de Valores","sector_propio":"Industria y Defensa","sector_desc":"Aeroespacial, defensa, maquinaria, transporte","industria_orig":"","desc_industria_orig":""},{"nombre":"VIRGIN GALACTIC HOLDINGS INC.","ticker":"SPCE","cod_caja_cedear":"8641","ratio":"1:2","mercado_origen":"NYSE","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Industria y Defensa","sector_desc":"Aeroespacial, defensa, maquinaria, transporte","industria_orig":"Consumer, Cyclical","desc_industria_orig":"Consumer, Cyclical"},{"nombre":"WEG S.A.","ticker":"WEGE3","cod_caja_cedear":"8620","ratio":"1:1","mercado_origen":"B3 (Brasil)","pais":"N/D","tipo":"Acción","fuente":"Caja de Valores","sector_propio":"Industria y Defensa","sector_desc":"Aeroespacial, defensa, maquinaria, transporte","industria_orig":"","desc_industria_orig":""},{"nombre":"AGNICO EAGLE MINES LIMITED","ticker":"AEM","cod_caja_cedear":"8416","ratio":"6:1","mercado_origen":"NYSE","pais":"Canadá","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Materiales y Minería","sector_desc":"Minería, metales, químicos, materiales básicos","industria_orig":"Basic Materials","desc_industria_orig":"Metals & Mining"},{"nombre":"AVERY DENNISON CORPORATION","ticker":"AVY","cod_caja_cedear":"8075","ratio":"18:1","mercado_origen":"NYSE","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Materiales y Minería","sector_desc":"Minería, metales, químicos, materiales básicos","industria_orig":"Consumer","desc_industria_orig":"Containers & Packaging"},{"nombre":"BARRICK GOLD CORP.","ticker":"B","cod_caja_cedear":"8260","ratio":"2:1","mercado_origen":"NYSE","pais":"Canadá","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Materiales y Minería","sector_desc":"Minería, metales, químicos, materiales básicos","industria_orig":"Basic Materials","desc_industria_orig":"Metals & Mining"},{"nombre":"BASF SE","ticker":"BAS GR","cod_caja_cedear":"8245","ratio":"2:1","mercado_origen":"OTC US","pais":"Alemania","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Materiales y Minería","sector_desc":"Minería, metales, químicos, materiales básicos","industria_orig":"Basic Materials","desc_industria_orig":"Chemicals"},{"nombre":"BHP GROUP LTD","ticker":"BHP","cod_caja_cedear":"8295","ratio":"2:1","mercado_origen":"NYSE","pais":"Australia","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Materiales y Minería","sector_desc":"Minería, metales, químicos, materiales básicos","industria_orig":"Basic Materials","desc_industria_orig":"Metals & Mining"},{"nombre":"BITFARMS LTD.","ticker":"KEEL","cod_caja_cedear":"8583","ratio":"1:5","mercado_origen":"NASDAQ GM","pais":"N/D","tipo":"Acción","fuente":"Caja de Valores","sector_propio":"Materiales y Minería","sector_desc":"Minería, metales, químicos, materiales básicos","industria_orig":"","desc_industria_orig":""},{"nombre":"BITMINE INMERSION TECHNOLOGIES, INC.","ticker":"BMNR","cod_caja_cedear":"8717","ratio":"8:1","mercado_origen":"NYSE","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Materiales y Minería","sector_desc":"Minería, metales, químicos, materiales básicos","industria_orig":"Financial","desc_industria_orig":"Diversified Finan Serv"},{"nombre":"CEMEX S.A.B. de C.V. ADR","ticker":"CX","cod_caja_cedear":"8227","ratio":"1:1","mercado_origen":"NYSE","pais":"México","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Materiales y Minería","sector_desc":"Minería, metales, químicos, materiales básicos","industria_orig":"Industrial","desc_industria_orig":"Construction Materials"},{"nombre":"COEUR MINING INC","ticker":"CDE","cod_caja_cedear":"8418","ratio":"1:1","mercado_origen":"NYSE","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Materiales y Minería","sector_desc":"Minería, metales, químicos, materiales básicos","industria_orig":"Basic Materials","desc_industria_orig":"Metals & Mining"},{"nombre":"COMPANHIA SIDERÚRGICA NACIONAL","ticker":"SID","cod_caja_cedear":"8522","ratio":"1 :8","mercado_origen":"NYSE","pais":"Brasil","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Materiales y Minería","sector_desc":"Minería, metales, químicos, materiales básicos","industria_orig":"Basic Materials","desc_industria_orig":"Metals & Mining"},{"nombre":"COMPANHIA SIDERÚRGICA NACIONAL S.A.","ticker":"CSNA3","cod_caja_cedear":"8617","ratio":"1:1","mercado_origen":"B3 (Brasil)","pais":"N/D","tipo":"Acción","fuente":"Caja de Valores","sector_propio":"Materiales y Minería","sector_desc":"Minería, metales, químicos, materiales básicos","industria_orig":"","desc_industria_orig":""},{"nombre":"DOW INC","ticker":"DOW","cod_caja_cedear":"8569","ratio":"6:1","mercado_origen":"NYSE","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Materiales y Minería","sector_desc":"Minería, metales, químicos, materiales básicos","industria_orig":"Basic Materials","desc_industria_orig":"Chemicals"},{"nombre":"DUPONT DE NOMOURS INC","ticker":"DD","cod_caja_cedear":"8018","ratio":"5:1","mercado_origen":"NYSE","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Materiales y Minería","sector_desc":"Minería, metales, químicos, materiales básicos","industria_orig":"Basic Materials","desc_industria_orig":"Chemicals"},{"nombre":"ECOLAB INC","ticker":"ECL","cod_caja_cedear":"8716","ratio":"56:1","mercado_origen":"NYSE","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Materiales y Minería","sector_desc":"Minería, metales, químicos, materiales básicos","industria_orig":"Basic Materials","desc_industria_orig":"Basic Materials"},{"nombre":"FREEPORT MCMORAN INC.","ticker":"FCX","cod_caja_cedear":"8434","ratio":"3:1","mercado_origen":"NYSE","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Materiales y Minería","sector_desc":"Minería, metales, químicos, materiales básicos","industria_orig":"Basic Materials","desc_industria_orig":"Metals & Mining"},{"nombre":"GERDAU S.A.","ticker":"GGB","cod_caja_cedear":"8509","ratio":"1 :4","mercado_origen":"NYSE","pais":"Brasil","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Materiales y Minería","sector_desc":"Minería, metales, químicos, materiales básicos","industria_orig":"Basic Materials","desc_industria_orig":"Metals & Mining"},{"nombre":"GOLD FIELDS LTD.","ticker":"GFI","cod_caja_cedear":"8420","ratio":"1:1","mercado_origen":"NYSE","pais":"Sudáfrica","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Materiales y Minería","sector_desc":"Minería, metales, químicos, materiales básicos","industria_orig":"Basic Materials","desc_industria_orig":"Metals & Mining"},{"nombre":"HARMONY GOLD MINING COMPANY LTD.","ticker":"HMY","cod_caja_cedear":"8421","ratio":"1:1","mercado_origen":"NYSE","pais":"Sudáfrica","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Materiales y Minería","sector_desc":"Minería, metales, químicos, materiales básicos","industria_orig":"Basic Materials","desc_industria_orig":"Metals & Mining"},{"nombre":"HECLA MINING CO","ticker":"HL","cod_caja_cedear":"8419","ratio":"1:1","mercado_origen":"NYSE","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Materiales y Minería","sector_desc":"Minería, metales, químicos, materiales básicos","industria_orig":"Basic Materials","desc_industria_orig":"Metals & Mining"},{"nombre":"HUT 8 MINING CORP.","ticker":"HUT","cod_caja_cedear":"8584","ratio":"1:5","mercado_origen":"NASDAQ GS","pais":"N/D","tipo":"Acción","fuente":"Caja de Valores","sector_propio":"Materiales y Minería","sector_desc":"Minería, metales, químicos, materiales básicos","industria_orig":"","desc_industria_orig":""},{"nombre":"INTERNATIONAL FLAVORS & FRAGRANCE INC.","ticker":"IFF","cod_caja_cedear":"8118","ratio":"12:1","mercado_origen":"NYSE","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Materiales y Minería","sector_desc":"Minería, metales, químicos, materiales básicos","industria_orig":"Basic Materials","desc_industria_orig":"Chemicals"},{"nombre":"INTERNATIONAL PAPER Co.","ticker":"IP","cod_caja_cedear":"8026","ratio":"4:1","mercado_origen":"NYSE","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Materiales y Minería","sector_desc":"Minería, metales, químicos, materiales básicos","industria_orig":"Basic Materials","desc_industria_orig":"Containers & Packaging"},{"nombre":"IREN LTD","ticker":"IREN","cod_caja_cedear":"8715","ratio":"12:1","mercado_origen":"NASDAQ GS","pais":"Australia","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Materiales y Minería","sector_desc":"Minería, metales, químicos, materiales básicos","industria_orig":"Financial","desc_industria_orig":"Financial"},{"nombre":"KINROSS GOLD CORP.","ticker":"KGC","cod_caja_cedear":"8417","ratio":"1:1","mercado_origen":"NYSE","pais":"Canadá","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Materiales y Minería","sector_desc":"Minería, metales, químicos, materiales básicos","industria_orig":"Basic Materials","desc_industria_orig":"Metals & Mining"},{"nombre":"LITHIUM ARGENTINA AG.","ticker":"LAR","cod_caja_cedear":"8651","ratio":"1:1","mercado_origen":"NYSE","pais":"Canadá","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Materiales y Minería","sector_desc":"Minería, metales, químicos, materiales básicos","industria_orig":"Basic Materials","desc_industria_orig":"Mining"},{"nombre":"MARVELL TECHNOLOGY INC","ticker":"MRVL","cod_caja_cedear":"8594","ratio":"14:1","mercado_origen":"NASDAQ GS","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Materiales y Minería","sector_desc":"Minería, metales, químicos, materiales básicos","industria_orig":"Basic Materials","desc_industria_orig":"Basic Materials"},{"nombre":"MCEWEN  INC","ticker":"MUX","cod_caja_cedear":"8595","ratio":"2:1","mercado_origen":"NYSE","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Materiales y Minería","sector_desc":"Minería, metales, químicos, materiales básicos","industria_orig":"Basic Materials","desc_industria_orig":"Basic Materials"},{"nombre":"MP MATERIALS CORP.","ticker":"MP","cod_caja_cedear":"8737","ratio":"10:1","mercado_origen":"NYSE","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Materiales y Minería","sector_desc":"Minería, metales, químicos, materiales básicos","industria_orig":"Basic Materials","desc_industria_orig":"Metals & Mining"},{"nombre":"NEWMONT  CORPORATION","ticker":"NEM","cod_caja_cedear":"8261","ratio":"3:1","mercado_origen":"NYSE","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Materiales y Minería","sector_desc":"Minería, metales, químicos, materiales básicos","industria_orig":"Basic Materials","desc_industria_orig":"Metals & Mining"},{"nombre":"NEXGEN ENERGY LTD","ticker":"NXE","cod_caja_cedear":"8652","ratio":"1:1","mercado_origen":"NYSE","pais":"Canadá","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Materiales y Minería","sector_desc":"Minería, metales, químicos, materiales básicos","industria_orig":"Basic Materials","desc_industria_orig":"Mining"},{"nombre":"NOVAGOLD RESOURCES INC.","ticker":"NG","cod_caja_cedear":"8482","ratio":"1 :4","mercado_origen":"NYSE American","pais":"Canadá","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Materiales y Minería","sector_desc":"Minería, metales, químicos, materiales básicos","industria_orig":"Basic Materials","desc_industria_orig":"Metals & Mining"},{"nombre":"NOVOLIPETSK STEEL PJSC**","ticker":"NLMK LI","cod_caja_cedear":"8398","ratio":"2.1","mercado_origen":"London","pais":"Rusia","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Materiales y Minería","sector_desc":"Minería, metales, químicos, materiales básicos","industria_orig":"Basic Materials","desc_industria_orig":"Metals & Mining"},{"nombre":"NUCOR CORPORATION","ticker":"NUE","cod_caja_cedear":"8140","ratio":"16:1","mercado_origen":"NYSE","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Materiales y Minería","sector_desc":"Minería, metales, químicos, materiales básicos","industria_orig":"Basic Materials","desc_industria_orig":"Metals & Mining"},{"nombre":"PAN AMERICAN SILVER CORP","ticker":"PAAS","cod_caja_cedear":"8538","ratio":"3:1","mercado_origen":"NYSE","pais":"Canadá","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Materiales y Minería","sector_desc":"Minería, metales, químicos, materiales básicos","industria_orig":"Basic Materials","desc_industria_orig":"Metals & Mining"},{"nombre":"POSCO HOLDINGS INC","ticker":"PKX","cod_caja_cedear":"8411","ratio":"3:1","mercado_origen":"NYSE","pais":"Corea del Sur","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Materiales y Minería","sector_desc":"Minería, metales, químicos, materiales básicos","industria_orig":"Basic Materials","desc_industria_orig":"Metals & Mining"},{"nombre":"RIO TINTO PLC - ADR","ticker":"RIO","cod_caja_cedear":"8267","ratio":"8:1","mercado_origen":"NYSE","pais":"Reino Unido","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Materiales y Minería","sector_desc":"Minería, metales, químicos, materiales básicos","industria_orig":"Basic Materials","desc_industria_orig":"Metals & Mining"},{"nombre":"SOUTHERN COPPER CORP.","ticker":"SCCO","cod_caja_cedear":"8435","ratio":"2:1","mercado_origen":"NYSE","pais":"Perú","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Materiales y Minería","sector_desc":"Minería, metales, químicos, materiales básicos","industria_orig":"Basic Materials","desc_industria_orig":"Metals & Mining"},{"nombre":"SUZANO S.A.","ticker":"SUZB3","cod_caja_cedear":"8611","ratio":"1:1","mercado_origen":"B3 (Brasil)","pais":"N/D","tipo":"Acción","fuente":"Caja de Valores","sector_propio":"Materiales y Minería","sector_desc":"Minería, metales, químicos, materiales básicos","industria_orig":"","desc_industria_orig":""},{"nombre":"SUZANO SA","ticker":"SUZ","cod_caja_cedear":"8518","ratio":"1 :1","mercado_origen":"NYSE","pais":"Brasil","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Materiales y Minería","sector_desc":"Minería, metales, químicos, materiales básicos","industria_orig":"Basic Materials","desc_industria_orig":"Paper & Forest Products"},{"nombre":"TERNIUM S.A.","ticker":"TX","cod_caja_cedear":"8432","ratio":"4:1","mercado_origen":"NYSE","pais":"Luxemburgo","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Materiales y Minería","sector_desc":"Minería, metales, químicos, materiales básicos","industria_orig":"Basic Materials","desc_industria_orig":"Metals & Mining"},{"nombre":"THE MOSAIC CO","ticker":"MOS","cod_caja_cedear":"8580","ratio":"5:1","mercado_origen":"NYSE","pais":"N/D","tipo":"Acción","fuente":"Caja de Valores","sector_propio":"Materiales y Minería","sector_desc":"Minería, metales, químicos, materiales básicos","industria_orig":"","desc_industria_orig":""},{"nombre":"VALE S.A.","ticker":"VALE","cod_caja_cedear":"8358","ratio":"2:1","mercado_origen":"NYSE","pais":"Brasil","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Materiales y Minería","sector_desc":"Minería, metales, químicos, materiales básicos","industria_orig":"Basic Materials","desc_industria_orig":"Metals & Mining"},{"nombre":"VALE S.A.","ticker":"VALE3","cod_caja_cedear":"8601","ratio":"1:1","mercado_origen":"B3 (Brasil)","pais":"N/D","tipo":"Acción","fuente":"Caja de Valores","sector_propio":"Materiales y Minería","sector_desc":"Minería, metales, químicos, materiales básicos","industria_orig":"","desc_industria_orig":""},{"nombre":"REALTY INCOME CORP.","ticker":"O","cod_caja_cedear":"8729","ratio":"13:1","mercado_origen":"NYSE","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Real Estate (REITs)","sector_desc":"Fideicomisos inmobiliarios y bienes raíces","industria_orig":"Financial","desc_industria_orig":"Retail REITs"},{"nombre":"ABBOTT LABORATORIES","ticker":"ABT","cod_caja_cedear":"8065","ratio":"4:1","mercado_origen":"NYSE","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Salud y Farma","sector_desc":"Farma, biotech, equipos médicos, prestadores","industria_orig":"Consumer","desc_industria_orig":"Health Care Equipment & Suppli"},{"nombre":"ABBVIE INC","ticker":"ABBV","cod_caja_cedear":"8528","ratio":"10:1","mercado_origen":"NYSE","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Salud y Farma","sector_desc":"Farma, biotech, equipos médicos, prestadores","industria_orig":"Consumer","desc_industria_orig":"Biotechnology"},{"nombre":"AMGEN INC.","ticker":"AMGN","cod_caja_cedear":"8071","ratio":"30:1","mercado_origen":"NASDAQ GS","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Salud y Farma","sector_desc":"Farma, biotech, equipos médicos, prestadores","industria_orig":"Consumer","desc_industria_orig":"Biotechnology"},{"nombre":"ASTRAZENECA PLC","ticker":"AZN","cod_caja_cedear":"8244","ratio":"2:1","mercado_origen":"NYSE","pais":"Reino Unido","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Salud y Farma","sector_desc":"Farma, biotech, equipos médicos, prestadores","industria_orig":"Consumer","desc_industria_orig":"Pharmaceuticals"},{"nombre":"BAYER AG","ticker":"BAYN GR","cod_caja_cedear":"8246","ratio":"3:1","mercado_origen":"OTC US","pais":"Alemania","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Salud y Farma","sector_desc":"Farma, biotech, equipos médicos, prestadores","industria_orig":"Consumer","desc_industria_orig":"Pharmaceuticals"},{"nombre":"BIOGEN INC.","ticker":"BIIB","cod_caja_cedear":"8471","ratio":"13 : 1","mercado_origen":"NASDAQ GS","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Salud y Farma","sector_desc":"Farma, biotech, equipos médicos, prestadores","industria_orig":"Consumer","desc_industria_orig":"Biotechnology"},{"nombre":"BRASKEM SA","ticker":"BAK","cod_caja_cedear":"8591","ratio":"2:1","mercado_origen":"NYSE","pais":"Brasil","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Salud y Farma","sector_desc":"Farma, biotech, equipos médicos, prestadores","industria_orig":"Industrial","desc_industria_orig":"Health Care Providers & Servic"},{"nombre":"BRISTOL MYERS SQUIBB COMPANY","ticker":"BMY","cod_caja_cedear":"8283","ratio":"3:1","mercado_origen":"NYSE","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Salud y Farma","sector_desc":"Farma, biotech, equipos médicos, prestadores","industria_orig":"Consumer","desc_industria_orig":"Pharmaceuticals"},{"nombre":"CARDINAL HEALTH INC","ticker":"CAH","cod_caja_cedear":"8084","ratio":"3:1","mercado_origen":"NYSE","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Salud y Farma","sector_desc":"Farma, biotech, equipos médicos, prestadores","industria_orig":"Consumer","desc_industria_orig":"Health Care Providers & Servic"},{"nombre":"ELI LILLY AND COMPANY","ticker":"LLY","cod_caja_cedear":"8124","ratio":"56:1","mercado_origen":"NYSE","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Salud y Farma","sector_desc":"Farma, biotech, equipos médicos, prestadores","industria_orig":"Consumer","desc_industria_orig":"Pharmaceuticals"},{"nombre":"GILEAD SCIENCES, INC.","ticker":"GILD","cod_caja_cedear":"8473","ratio":"4 : 1","mercado_origen":"NASDAQ GS","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Salud y Farma","sector_desc":"Farma, biotech, equipos médicos, prestadores","industria_orig":"Consumer","desc_industria_orig":"Biotechnology"},{"nombre":"GSK plc","ticker":"GSK","cod_caja_cedear":"8052","ratio":"4:1","mercado_origen":"NYSE","pais":"Reino Unido","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Salud y Farma","sector_desc":"Farma, biotech, equipos médicos, prestadores","industria_orig":"Consumer","desc_industria_orig":"Pharmaceuticals"},{"nombre":"HAPVIDA PARTICIPACOES E INVESTIMENTOS S.A.","ticker":"HAPV3","cod_caja_cedear":"8613","ratio":"1:1","mercado_origen":"B3 (Brasil)","pais":"N/D","tipo":"Acción","fuente":"Caja de Valores","sector_propio":"Salud y Farma","sector_desc":"Farma, biotech, equipos médicos, prestadores","industria_orig":"","desc_industria_orig":""},{"nombre":"HIMS & HERS HEALTH, INC.","ticker":"HIMS","cod_caja_cedear":"8733","ratio":"4:1","mercado_origen":"NYSE","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Salud y Farma","sector_desc":"Farma, biotech, equipos médicos, prestadores","industria_orig":"Communications","desc_industria_orig":"Health Care Providers & Servic"},{"nombre":"JNJ6.95","ticker":"DJNJ3-XD004","cod_caja_cedear":"8272","ratio":"1:1","mercado_origen":"NYSE","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Salud y Farma","sector_desc":"Farma, biotech, equipos médicos, prestadores","industria_orig":"Corp","desc_industria_orig":"Corp"},{"nombre":"JOHNSON & JOHNSON","ticker":"JNJ","cod_caja_cedear":"8027","ratio":"15:1","mercado_origen":"NYSE","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Salud y Farma","sector_desc":"Farma, biotech, equipos médicos, prestadores","industria_orig":"Consumer","desc_industria_orig":"Pharmaceuticals"},{"nombre":"KONINKLIJKE PHILIPS N.V","ticker":"PHG","cod_caja_cedear":"8059","ratio":"5:1","mercado_origen":"NYSE","pais":"Países Bajos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Salud y Farma","sector_desc":"Farma, biotech, equipos médicos, prestadores","industria_orig":"Consumer","desc_industria_orig":"Health Care Equipment & Suppli"},{"nombre":"MEDTRONIC PLC","ticker":"MDT","cod_caja_cedear":"8133","ratio":"4:1","mercado_origen":"NYSE","pais":"Irlanda","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Salud y Farma","sector_desc":"Farma, biotech, equipos médicos, prestadores","industria_orig":"Consumer","desc_industria_orig":"Health Care Equipment & Suppli"},{"nombre":"MERCK & Co. Inc.","ticker":"MRK","cod_caja_cedear":"8031","ratio":"5:1","mercado_origen":"NYSE","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Salud y Farma","sector_desc":"Farma, biotech, equipos médicos, prestadores","industria_orig":"Consumer","desc_industria_orig":"Pharmaceuticals"},{"nombre":"NOVARTIS AG - ADR","ticker":"NVS","cod_caja_cedear":"8251","ratio":"4:1","mercado_origen":"NYSE","pais":"Suiza","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Salud y Farma","sector_desc":"Farma, biotech, equipos médicos, prestadores","industria_orig":"Consumer","desc_industria_orig":"Pharmaceuticals"},{"nombre":"NOVO NORDISK A/S","ticker":"NVO","cod_caja_cedear":"8740","ratio":"7:1","mercado_origen":"NYSE","pais":"Dinamarca","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Salud y Farma","sector_desc":"Farma, biotech, equipos médicos, prestadores","industria_orig":"Consumer, Non-cyclical","desc_industria_orig":"Pharmaceuticals"},{"nombre":"PFIZER INC","ticker":"PFE","cod_caja_cedear":"8147","ratio":"4:1","mercado_origen":"NYSE","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Salud y Farma","sector_desc":"Farma, biotech, equipos médicos, prestadores","industria_orig":"Consumer","desc_industria_orig":"Pharmaceuticals"},{"nombre":"THERMO FISHER SCIENTIFIC INC.","ticker":"TMO","cod_caja_cedear":"8476","ratio":"22 : 1","mercado_origen":"NYSE","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Salud y Farma","sector_desc":"Farma, biotech, equipos médicos, prestadores","industria_orig":"Consumer","desc_industria_orig":"Life Sciences Tools & Services"},{"nombre":"UNITEDHEALTH GROUP INC","ticker":"UNH","cod_caja_cedear":"8541","ratio":"33:1","mercado_origen":"NYSE","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Salud y Farma","sector_desc":"Farma, biotech, equipos médicos, prestadores","industria_orig":"Consumer","desc_industria_orig":"Health Care Providers & Servic"},{"nombre":"ACCENTURE PLC","ticker":"ACN","cod_caja_cedear":"8635","ratio":"75:1","mercado_origen":"NYSE","pais":"Irlanda","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Tecnología","sector_desc":"Software, semis, internet, e-commerce, hardware","industria_orig":"Technology","desc_industria_orig":"Technology"},{"nombre":"ADOBE SYSTEMS INCORPORATED","ticker":"ADBE","cod_caja_cedear":"8470","ratio":"44:1","mercado_origen":"NASDAQ GS","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Tecnología","sector_desc":"Software, semis, internet, e-commerce, hardware","industria_orig":"Technology","desc_industria_orig":"Software"},{"nombre":"ADVANCED MICRO DEVICES, INC.","ticker":"AMD","cod_caja_cedear":"8481","ratio":"10:1","mercado_origen":"NASDAQ GS","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Tecnología","sector_desc":"Software, semis, internet, e-commerce, hardware","industria_orig":"Technology","desc_industria_orig":"Semiconductors & Semiconductor"},{"nombre":"ALIBABA GROUP HOLDING LIMITED*","ticker":"BABA","cod_caja_cedear":"8523","ratio":"9 : 1","mercado_origen":"NYSE","pais":"China","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Tecnología","sector_desc":"Software, semis, internet, e-commerce, hardware","industria_orig":"Communications","desc_industria_orig":"Internet & Direct Marketing Re"},{"nombre":"ALTABA INC***","ticker":"AABA","cod_caja_cedear":"8110","ratio":"3:1","mercado_origen":"N/D","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Tecnología","sector_desc":"Software, semis, internet, e-commerce, hardware","industria_orig":"Financial","desc_industria_orig":"Closed-end Funds"},{"nombre":"AMAZON.COM, INC.","ticker":"AMZN","cod_caja_cedear":"8468","ratio":"144 : 1","mercado_origen":"NASDAQ GS","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Tecnología","sector_desc":"Software, semis, internet, e-commerce, hardware","industria_orig":"Communications","desc_industria_orig":"Internet & Direct Marketing Re"},{"nombre":"ANALOG DEVICES INC.","ticker":"ADI","cod_caja_cedear":"8066","ratio":"15:1","mercado_origen":"NASDAQ GS","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Tecnología","sector_desc":"Software, semis, internet, e-commerce, hardware","industria_orig":"Technology","desc_industria_orig":"Semiconductors & Semiconductor"},{"nombre":"APPLE INC.","ticker":"AAPL","cod_caja_cedear":"8445","ratio":"20:1","mercado_origen":"NASDAQ GS","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Tecnología","sector_desc":"Software, semis, internet, e-commerce, hardware","industria_orig":"Technology","desc_industria_orig":"Technology Hardware, Storage &"},{"nombre":"APPLIED MATERIALS INC.","ticker":"AMAT","cod_caja_cedear":"8070","ratio":"5:1","mercado_origen":"NASDAQ GS","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Tecnología","sector_desc":"Software, semis, internet, e-commerce, hardware","industria_orig":"Technology","desc_industria_orig":"Semiconductors & Semiconductor"},{"nombre":"ARM HOLDINGS PLC","ticker":"ARM","cod_caja_cedear":"8656","ratio":"27:1","mercado_origen":"NASDAQ GS","pais":"Reino Unido","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Tecnología","sector_desc":"Software, semis, internet, e-commerce, hardware","industria_orig":"Technology","desc_industria_orig":"Software"},{"nombre":"ASML HOLDING NV","ticker":"ASML","cod_caja_cedear":"8677","ratio":"146:1","mercado_origen":"NASDAQ GS","pais":"Países Bajos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Tecnología","sector_desc":"Software, semis, internet, e-commerce, hardware","industria_orig":"Technology","desc_industria_orig":"Technology"},{"nombre":"ASTERA LABS INC","ticker":"ALAB","cod_caja_cedear":"8713","ratio":"44:1","mercado_origen":"NASDAQ GS","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Tecnología","sector_desc":"Software, semis, internet, e-commerce, hardware","industria_orig":"Technology","desc_industria_orig":"Technology"},{"nombre":"ATLASSIAN CORPORATION","ticker":"TEAM","cod_caja_cedear":"8678","ratio":"47:1","mercado_origen":"NASDAQ GS","pais":"Australia","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Tecnología","sector_desc":"Software, semis, internet, e-commerce, hardware","industria_orig":"Technology","desc_industria_orig":"Technology"},{"nombre":"AUTOMATIC DATA PROCESSING INC","ticker":"ADP","cod_caja_cedear":"8073","ratio":"6:1","mercado_origen":"NASDAQ GS","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Tecnología","sector_desc":"Software, semis, internet, e-commerce, hardware","industria_orig":"Consumer","desc_industria_orig":"IT Services"},{"nombre":"BLACKBERRY LIMITED","ticker":"BB","cod_caja_cedear":"8441","ratio":"3:1","mercado_origen":"NYSE","pais":"Canadá","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Tecnología","sector_desc":"Software, semis, internet, e-commerce, hardware","industria_orig":"Technology","desc_industria_orig":"Software"},{"nombre":"BLOCK, INC","ticker":"XYZ","cod_caja_cedear":"8545","ratio":"20:1","mercado_origen":"NYSE","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Tecnología","sector_desc":"Software, semis, internet, e-commerce, hardware","industria_orig":"Consumer","desc_industria_orig":"IT Services"},{"nombre":"BROADCOM INC","ticker":"AVGO","cod_caja_cedear":"8531","ratio":"39:1","mercado_origen":"NASDAQ GS","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Tecnología","sector_desc":"Software, semis, internet, e-commerce, hardware","industria_orig":"Technology","desc_industria_orig":"Semiconductors & Semiconductor"},{"nombre":"C3.AI INC","ticker":"AI","cod_caja_cedear":"8679","ratio":"5:1","mercado_origen":"NYSE","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Tecnología","sector_desc":"Software, semis, internet, e-commerce, hardware","industria_orig":"Technology","desc_industria_orig":"Technology"},{"nombre":"COREWEAVE INC","ticker":"CRWV","cod_caja_cedear":"8710","ratio":"27:1","mercado_origen":"NASDAQ GS","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Tecnología","sector_desc":"Software, semis, internet, e-commerce, hardware","industria_orig":"Technology","desc_industria_orig":"Technology"},{"nombre":"CORNING INCORPORATED","ticker":"GLW","cod_caja_cedear":"8105","ratio":"4:1","mercado_origen":"NYSE","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Tecnología","sector_desc":"Software, semis, internet, e-commerce, hardware","industria_orig":"Communications","desc_industria_orig":"Electronic Equipment, Instrume"},{"nombre":"CROWDSTRIKE HOLDINGS, INC.","ticker":"CRWD","cod_caja_cedear":"8727","ratio":"79:1","mercado_origen":"NASDAQ GS","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Tecnología","sector_desc":"Software, semis, internet, e-commerce, hardware","industria_orig":"Technology","desc_industria_orig":"Software"},{"nombre":"DOCUSIGN INC","ticker":"DOCU","cod_caja_cedear":"8533","ratio":"22:1","mercado_origen":"NASDAQ GS","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Tecnología","sector_desc":"Software, semis, internet, e-commerce, hardware","industria_orig":"Technology","desc_industria_orig":"Software"},{"nombre":"EBAY INC.","ticker":"EBAY","cod_caja_cedear":"8443","ratio":"2:1","mercado_origen":"NASDAQ GS","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Tecnología","sector_desc":"Software, semis, internet, e-commerce, hardware","industria_orig":"Communications","desc_industria_orig":"Internet & Direct Marketing Re"},{"nombre":"ETSY INC","ticker":"ETSY","cod_caja_cedear":"8534","ratio":"16:1","mercado_origen":"NASDAQ GS","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Tecnología","sector_desc":"Software, semis, internet, e-commerce, hardware","industria_orig":"Communications","desc_industria_orig":"Internet & Direct Marketing Re"},{"nombre":"FIRST SOLAR INC.","ticker":"FSLR","cod_caja_cedear":"8439","ratio":"18:1","mercado_origen":"NASDAQ GS","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Tecnología","sector_desc":"Software, semis, internet, e-commerce, hardware","industria_orig":"Energy","desc_industria_orig":"Semiconductors & Semiconductor"},{"nombre":"FISERV, INC.","ticker":"FISV","cod_caja_cedear":"8739","ratio":"11:1","mercado_origen":"NASDAQ GS","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Tecnología","sector_desc":"Software, semis, internet, e-commerce, hardware","industria_orig":"Technology","desc_industria_orig":"Financial Services"},{"nombre":"GLOBANT S.A.","ticker":"GLOB","cod_caja_cedear":"8499","ratio":"18:1","mercado_origen":"NYSE","pais":"Uruguay","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Tecnología","sector_desc":"Software, semis, internet, e-commerce, hardware","industria_orig":"Technology","desc_industria_orig":"IT Services"},{"nombre":"HON HAI PRECISION INDUSTRY CO. LTD.","ticker":"HHPD LI","cod_caja_cedear":"8412","ratio":"2:1","mercado_origen":"OTC US","pais":"Taiwán","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Tecnología","sector_desc":"Software, semis, internet, e-commerce, hardware","industria_orig":"Industrial","desc_industria_orig":"Electronic Equipment, Instrume"},{"nombre":"HP Inc","ticker":"HPQ","cod_caja_cedear":"8023","ratio":"1:1","mercado_origen":"NYSE","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Tecnología","sector_desc":"Software, semis, internet, e-commerce, hardware","industria_orig":"Technology","desc_industria_orig":"Technology Hardware, Storage &"},{"nombre":"IBM Corp.","ticker":"IBM","cod_caja_cedear":"8024","ratio":"15:1","mercado_origen":"NYSE","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Tecnología","sector_desc":"Software, semis, internet, e-commerce, hardware","industria_orig":"Technology","desc_industria_orig":"IT Services"},{"nombre":"INFOSYS LIMITED","ticker":"INFY","cod_caja_cedear":"8360","ratio":"1:1","mercado_origen":"NYSE","pais":"India","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Tecnología","sector_desc":"Software, semis, internet, e-commerce, hardware","industria_orig":"Technology","desc_industria_orig":"IT Services"},{"nombre":"INTEL  Corporation","ticker":"INTC","cod_caja_cedear":"8025","ratio":"5:1","mercado_origen":"NASDAQ GS","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Tecnología","sector_desc":"Software, semis, internet, e-commerce, hardware","industria_orig":"Technology","desc_industria_orig":"Semiconductors & Semiconductor"},{"nombre":"JD.COM, INC.","ticker":"JD","cod_caja_cedear":"8505","ratio":"4:1","mercado_origen":"NASDAQ GS","pais":"China","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Tecnología","sector_desc":"Software, semis, internet, e-commerce, hardware","industria_orig":"Communications","desc_industria_orig":"Internet & Direct Marketing Re"},{"nombre":"JUMIA TECHNOLOGIES AG","ticker":"JMIA","cod_caja_cedear":"8586","ratio":"1:1","mercado_origen":"NYSE","pais":"N/D","tipo":"Acción","fuente":"Caja de Valores","sector_propio":"Tecnología","sector_desc":"Software, semis, internet, e-commerce, hardware","industria_orig":"","desc_industria_orig":""},{"nombre":"LAM RESEARCH CORP","ticker":"LRCX","cod_caja_cedear":"8565","ratio":"56:1","mercado_origen":"NASDAQ GS","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Tecnología","sector_desc":"Software, semis, internet, e-commerce, hardware","industria_orig":"Technology","desc_industria_orig":"Semiconductors & Semiconductor"},{"nombre":"LITHIUM AMERICAS CORP","ticker":"LAC","cod_caja_cedear":"8593","ratio":"1:1","mercado_origen":"NYSE","pais":"Canadá","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Tecnología","sector_desc":"Software, semis, internet, e-commerce, hardware","industria_orig":"Technology","desc_industria_orig":"Technology"},{"nombre":"MASTERCARD INC","ticker":"MA","cod_caja_cedear":"8537","ratio":"33:1","mercado_origen":"NYSE","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Tecnología","sector_desc":"Software, semis, internet, e-commerce, hardware","industria_orig":"Financial","desc_industria_orig":"IT Services"},{"nombre":"MERCADOLIBRE INC.","ticker":"MELI","cod_caja_cedear":"8444","ratio":"120:1","mercado_origen":"NASDAQ GS","pais":"Uruguay","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Tecnología","sector_desc":"Software, semis, internet, e-commerce, hardware","industria_orig":"Communications","desc_industria_orig":"Internet & Direct Marketing Re"},{"nombre":"MICRON TECHNOLOGY INC","ticker":"MU","cod_caja_cedear":"8575","ratio":"5:1","mercado_origen":"NASDAQ GS","pais":"N/D","tipo":"Acción","fuente":"Caja de Valores","sector_propio":"Tecnología","sector_desc":"Software, semis, internet, e-commerce, hardware","industria_orig":"","desc_industria_orig":""},{"nombre":"MICROSOFT CORPORATION","ticker":"MSFT","cod_caja_cedear":"8032","ratio":"30:1","mercado_origen":"NASDAQ GS","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Tecnología","sector_desc":"Software, semis, internet, e-commerce, hardware","industria_orig":"Technology","desc_industria_orig":"Software"},{"nombre":"MICROSTRATEGY INC CL A NEW","ticker":"MSTR","cod_caja_cedear":"8581","ratio":"20:1","mercado_origen":"NASDAQ GS","pais":"N/D","tipo":"Acción","fuente":"Caja de Valores","sector_propio":"Tecnología","sector_desc":"Software, semis, internet, e-commerce, hardware","industria_orig":"","desc_industria_orig":""},{"nombre":"NEBIUS GROUP N.V.","ticker":"NBIS","cod_caja_cedear":"8732","ratio":"27:1","mercado_origen":"NASDAQ GS","pais":"Países Bajos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Tecnología","sector_desc":"Software, semis, internet, e-commerce, hardware","industria_orig":"Technology","desc_industria_orig":"Software"},{"nombre":"NEC CORPORATION","ticker":"NEC1 GR","cod_caja_cedear":"8304","ratio":"1:3","mercado_origen":"OTC US","pais":"Japón","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Tecnología","sector_desc":"Software, semis, internet, e-commerce, hardware","industria_orig":"Technology","desc_industria_orig":"IT Services"},{"nombre":"NVIDIA CORPORATION","ticker":"NVDA","cod_caja_cedear":"8469","ratio":"24 : 1","mercado_origen":"NASDAQ GS","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Tecnología","sector_desc":"Software, semis, internet, e-commerce, hardware","industria_orig":"Technology","desc_industria_orig":"Semiconductors & Semiconductor"},{"nombre":"ORACLE CORPORATION","ticker":"ORCL","cod_caja_cedear":"8142","ratio":"3.1","mercado_origen":"NYSE","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Tecnología","sector_desc":"Software, semis, internet, e-commerce, hardware","industria_orig":"Technology","desc_industria_orig":"Software"},{"nombre":"PAGSEGURO DIGITAL LTD","ticker":"PAGS","cod_caja_cedear":"8597","ratio":"3:1","mercado_origen":"NYSE","pais":"Reino Unido","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Tecnología","sector_desc":"Software, semis, internet, e-commerce, hardware","industria_orig":"Technology","desc_industria_orig":"Technology"},{"nombre":"PALANTIR TECHNOLOGIES INC","ticker":"PLTR","cod_caja_cedear":"8598","ratio":"3:1","mercado_origen":"NASDAQ GS","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Tecnología","sector_desc":"Software, semis, internet, e-commerce, hardware","industria_orig":"Technology","desc_industria_orig":"Technology"},{"nombre":"PALO ALTO NETWORKS INC","ticker":"PANW","cod_caja_cedear":"8579","ratio":"50:1","mercado_origen":"NASDAQ GS","pais":"N/D","tipo":"Acción","fuente":"Caja de Valores","sector_propio":"Tecnología","sector_desc":"Software, semis, internet, e-commerce, hardware","industria_orig":"","desc_industria_orig":""},{"nombre":"PAYPAL HOLDINGS, INC.","ticker":"PYPL","cod_caja_cedear":"8477","ratio":"8 : 1","mercado_origen":"NASDAQ GS","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Tecnología","sector_desc":"Software, semis, internet, e-commerce, hardware","industria_orig":"Consumer","desc_industria_orig":"IT Services"},{"nombre":"QUALCOMM INCORPORATED","ticker":"QCOM","cod_caja_cedear":"8151","ratio":"11:1","mercado_origen":"NASDAQ GS","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Tecnología","sector_desc":"Software, semis, internet, e-commerce, hardware","industria_orig":"Technology","desc_industria_orig":"Semiconductors & Semiconductor"},{"nombre":"RIGETTI COMPUTING INC","ticker":"RGTI","cod_caja_cedear":"8683","ratio":"2:1","mercado_origen":"NASDAQ CM","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Tecnología","sector_desc":"Software, semis, internet, e-commerce, hardware","industria_orig":"Technology","desc_industria_orig":"Technology"},{"nombre":"ROBLOX CORP.","ticker":"RBLX","cod_caja_cedear":"8572","ratio":"2:1","mercado_origen":"NYSE","pais":"N/D","tipo":"Acción","fuente":"Caja de Valores","sector_propio":"Tecnología","sector_desc":"Software, semis, internet, e-commerce, hardware","industria_orig":"","desc_industria_orig":""},{"nombre":"SALESFORCE INC.","ticker":"CRM","cod_caja_cedear":"8478","ratio":"18:1","mercado_origen":"NYSE","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Tecnología","sector_desc":"Software, semis, internet, e-commerce, hardware","industria_orig":"Technology","desc_industria_orig":"Software"},{"nombre":"SAMSUNG ELECTRONICS CO. LTD.","ticker":"SMSN LI","cod_caja_cedear":"8413","ratio":"14:1","mercado_origen":"OTC US","pais":"Corea del Sur","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Tecnología","sector_desc":"Software, semis, internet, e-commerce, hardware","industria_orig":"Technology","desc_industria_orig":"Technology Hardware, Storage &"},{"nombre":"SANDISK CORPORATION","ticker":"SNDK","cod_caja_cedear":"8731","ratio":"170:1","mercado_origen":"NASDAQ GS","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Tecnología","sector_desc":"Software, semis, internet, e-commerce, hardware","industria_orig":"Technology","desc_industria_orig":"Technology Hardware, Storage &"},{"nombre":"SAP SE","ticker":"SAP","cod_caja_cedear":"8209","ratio":"6:1","mercado_origen":"NYSE","pais":"Alemania","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Tecnología","sector_desc":"Software, semis, internet, e-commerce, hardware","industria_orig":"Technology","desc_industria_orig":"Software"},{"nombre":"SERVICENOW INC","ticker":"NOW","cod_caja_cedear":"8684","ratio":"172:1","mercado_origen":"NYSE","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Tecnología","sector_desc":"Software, semis, internet, e-commerce, hardware","industria_orig":"Technology","desc_industria_orig":"Technology"},{"nombre":"SHOPIFY INC","ticker":"SHOP","cod_caja_cedear":"8546","ratio":"107:1","mercado_origen":"NYSE","pais":"Canadá","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Tecnología","sector_desc":"Software, semis, internet, e-commerce, hardware","industria_orig":"Communications","desc_industria_orig":"IT Services"},{"nombre":"SKYWORKS SOLUTIONS INC.","ticker":"SWKS","cod_caja_cedear":"8645","ratio":"21:1","mercado_origen":"NASDAQ GS","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Tecnología","sector_desc":"Software, semis, internet, e-commerce, hardware","industria_orig":"Technology","desc_industria_orig":"Technology"},{"nombre":"SNOWFLAKE INC","ticker":"SNOW","cod_caja_cedear":"8548","ratio":"30:1","mercado_origen":"NYSE","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Tecnología","sector_desc":"Software, semis, internet, e-commerce, hardware","industria_orig":"Technology","desc_industria_orig":"IT Services"},{"nombre":"TAIWAN SEMICONDUCTOR MANUFACTURING","ticker":"TSM","cod_caja_cedear":"8297","ratio":"9:1","mercado_origen":"NYSE","pais":"Taiwán","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Tecnología","sector_desc":"Software, semis, internet, e-commerce, hardware","industria_orig":"Technology","desc_industria_orig":"Semiconductors & Semiconductor"},{"nombre":"TEMPUS AI INC","ticker":"TEM","cod_caja_cedear":"8685","ratio":"12:1","mercado_origen":"NASDAQ GS","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Tecnología","sector_desc":"Software, semis, internet, e-commerce, hardware","industria_orig":"Technology","desc_industria_orig":"Technology"},{"nombre":"TEXAS INSTRUMENTS INCORPORATED","ticker":"TXN","cod_caja_cedear":"8168","ratio":"5:1","mercado_origen":"NASDAQ GS","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Tecnología","sector_desc":"Software, semis, internet, e-commerce, hardware","industria_orig":"Technology","desc_industria_orig":"Semiconductors & Semiconductor"},{"nombre":"TRIP.COM Group Ltd.","ticker":"TCOM","cod_caja_cedear":"8507","ratio":"2 : 1","mercado_origen":"NASDAQ GS","pais":"China","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Tecnología","sector_desc":"Software, semis, internet, e-commerce, hardware","industria_orig":"Communications","desc_industria_orig":"Internet & Direct Marketing Re"},{"nombre":"TWILIO INC","ticker":"TWLO","cod_caja_cedear":"8561","ratio":"36:1","mercado_origen":"NYSE","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Tecnología","sector_desc":"Software, semis, internet, e-commerce, hardware","industria_orig":"Technology","desc_industria_orig":"IT Services"},{"nombre":"UBER TECHNOLOGIES INC.","ticker":"UBER","cod_caja_cedear":"8577","ratio":"2:1","mercado_origen":"NYSE","pais":"N/D","tipo":"Acción","fuente":"Caja de Valores","sector_propio":"Tecnología","sector_desc":"Software, semis, internet, e-commerce, hardware","industria_orig":"","desc_industria_orig":""},{"nombre":"UIPATH INC","ticker":"PATH","cod_caja_cedear":"8686","ratio":"2:1","mercado_origen":"NYSE","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Tecnología","sector_desc":"Software, semis, internet, e-commerce, hardware","industria_orig":"Technology","desc_industria_orig":"Technology"},{"nombre":"VERISIGN, INC.","ticker":"VRSN","cod_caja_cedear":"8489","ratio":"6 : 1","mercado_origen":"NASDAQ GS","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Tecnología","sector_desc":"Software, semis, internet, e-commerce, hardware","industria_orig":"Communications","desc_industria_orig":"IT Services"},{"nombre":"VISA INC","ticker":"V","cod_caja_cedear":"8495","ratio":"18:1","mercado_origen":"NYSE","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Tecnología","sector_desc":"Software, semis, internet, e-commerce, hardware","industria_orig":"Financial","desc_industria_orig":"IT Services"},{"nombre":"XEROX HOLDING CORPORATION","ticker":"XRX","cod_caja_cedear":"8490","ratio":"1 : 1","mercado_origen":"NASDAQ GS","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Tecnología","sector_desc":"Software, semis, internet, e-commerce, hardware","industria_orig":"Technology","desc_industria_orig":"Technology Hardware, Storage &"},{"nombre":"ZOOM COMMUNICATIONS, INC.","ticker":"ZM","cod_caja_cedear":"8543","ratio":"47:1","mercado_origen":"NASDAQ GS","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Tecnología","sector_desc":"Software, semis, internet, e-commerce, hardware","industria_orig":"Technology","desc_industria_orig":"Software"},{"nombre":"CENTRAIS ELÉTRICAS BRASILEIRAS S.A. - ELETROBRÁS","ticker":"AXIA","cod_caja_cedear":"8519","ratio":"1 :4","mercado_origen":"NYSE","pais":"Brasil","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Utilities","sector_desc":"Electricidad, gas, agua, servicios públicos","industria_orig":"Utilities","desc_industria_orig":"Electric Utilities"},{"nombre":"CIA SANEAMENTO BASICO DE SP","ticker":"SBSP3","cod_caja_cedear":"8623","ratio":"1:1","mercado_origen":"B3 (Brasil)","pais":"N/D","tipo":"Acción","fuente":"Caja de Valores","sector_propio":"Utilities","sector_desc":"Electricidad, gas, agua, servicios públicos","industria_orig":"","desc_industria_orig":""},{"nombre":"COMPANHIA DE SANEAMENTO BÁSICO DO ESTADO DE SÃO PAULO–SABESP","ticker":"SBS","cod_caja_cedear":"8512","ratio":"1 :2","mercado_origen":"NYSE","pais":"Brasil","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Utilities","sector_desc":"Electricidad, gas, agua, servicios públicos","industria_orig":"Utilities","desc_industria_orig":"Water Utilities"},{"nombre":"COMPANHIA PARANAENSE DE ENERGIA-COPEL - PREF","ticker":"ELPC","cod_caja_cedear":"8520","ratio":"1 :3","mercado_origen":"NYSE","pais":"Brasil","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Utilities","sector_desc":"Electricidad, gas, agua, servicios públicos","industria_orig":"Utilities","desc_industria_orig":"Electric Utilities"},{"nombre":"CONSTELLATION ENERGY CORPORATION","ticker":"CEG","cod_caja_cedear":"8681","ratio":"45:1","mercado_origen":"NASDAQ GS","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Utilities","sector_desc":"Electricidad, gas, agua, servicios públicos","industria_orig":"Utilities","desc_industria_orig":"Utilities"},{"nombre":"E.ON SE","ticker":"EOAN GR","cod_caja_cedear":"8216","ratio":"6:1","mercado_origen":"OTC US","pais":"Alemania","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Utilities","sector_desc":"Electricidad, gas, agua, servicios públicos","industria_orig":"Utilities","desc_industria_orig":"Multi-Utilities"},{"nombre":"HOME DEPOT INC.","ticker":"HD","cod_caja_cedear":"8176","ratio":"32:1","mercado_origen":"NYSE","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Utilities","sector_desc":"Electricidad, gas, agua, servicios públicos","industria_orig":"Consumer, Cyclical","desc_industria_orig":"Electric Utilities"},{"nombre":"KOREA ELECTRIC POWER CORP.","ticker":"KEP","cod_caja_cedear":"8409","ratio":"1:1","mercado_origen":"NYSE","pais":"Corea del Sur","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Utilities","sector_desc":"Electricidad, gas, agua, servicios públicos","industria_orig":"Utilities","desc_industria_orig":"Electric Utilities"},{"nombre":"NATIONAL GRID PLC-SP  ADR","ticker":"NGG","cod_caja_cedear":"8266","ratio":"2:1","mercado_origen":"NYSE","pais":"Reino Unido","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Utilities","sector_desc":"Electricidad, gas, agua, servicios públicos","industria_orig":"Utilities","desc_industria_orig":"Multi-Utilities"},{"nombre":"NEXTERA ENERGY, INC.","ticker":"NEE","cod_caja_cedear":"8736","ratio":"19:1","mercado_origen":"NYSE","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Utilities","sector_desc":"Electricidad, gas, agua, servicios públicos","industria_orig":"Utilities","desc_industria_orig":"Electric Utilities"},{"nombre":"OKLO INC","ticker":"OKLO","cod_caja_cedear":"8711","ratio":"28:1","mercado_origen":"NYSE","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Utilities","sector_desc":"Electricidad, gas, agua, servicios públicos","industria_orig":"Utilities","desc_industria_orig":"Utilities"},{"nombre":"VISTRA CORPORATION","ticker":"VST","cod_caja_cedear":"8687","ratio":"26:1","mercado_origen":"NYSE","pais":"Estados Unidos","tipo":"Acción","fuente":"Banco Comafi","sector_propio":"Utilities","sector_desc":"Electricidad, gas, agua, servicios públicos","industria_orig":"Utilities","desc_industria_orig":"Utilities"}];
+
+const SECTORS_ORDER = ['Tecnología','Comunicaciones y Medios','Salud y Farma','Bancos y Finanzas','Real Estate (REITs)','Energía','Materiales y Minería','Utilities','Industria y Defensa','Consumo Masivo','Consumo Discrecional','Índices y Estrategias Amplias'];
+
+// Estado
+const state = {
+  search: '',
+  tipo: 'all',
+  sector: new Set(),
+  mercado: new Set(),
+  pais: new Set(),
+  fuente: new Set(),
+  view: 'grouped', // 'grouped' | 'flat'
+  sort: { col: 'nombre', dir: 'asc' }
+};
+
+const $ = (s) => document.querySelector(s);
+const $$ = (s) => document.querySelectorAll(s);
+
+// ============ STATS ============
+function renderStats() {
+  const total = DATA.length;
+  const acc = DATA.filter(d => d.tipo === 'Acción').length;
+  const etf = DATA.filter(d => d.tipo === 'ETF').length;
+  const sectors = new Set(DATA.map(d => d.sector_propio)).size;
+  const paises = new Set(DATA.filter(d => d.pais && d.pais !== 'N/D').map(d => d.pais)).size;
+  $('#stats').innerHTML = `
+    <div class="stat"><div class="stat-label">Total CEDEARs</div><div class="stat-value accent">${total}</div><div class="stat-detail">Fuentes unificadas</div></div>
+    <div class="stat"><div class="stat-label">CEDEARs de Acciones</div><div class="stat-value">${acc}</div><div class="stat-detail">${((acc/total)*100).toFixed(0)}% del total</div></div>
+    <div class="stat"><div class="stat-label">CEDEARs de ETFs</div><div class="stat-value">${etf}</div><div class="stat-detail">${((etf/total)*100).toFixed(0)}% del total</div></div>
+    <div class="stat"><div class="stat-label">Sectores</div><div class="stat-value">${sectors}</div><div class="stat-detail">Clasificación Leiva</div></div>
+    <div class="stat"><div class="stat-label">Países representados</div><div class="stat-value">${paises}</div><div class="stat-detail">Diversificación global</div></div>
+  `;
+  $('#ct-all').textContent = total;
+  $('#ct-acc').textContent = acc;
+  $('#ct-etf').textContent = etf;
+}
+
+// ============ CHIPS DINÁMICOS ============
+function buildChips(containerSel, key, items, searchInputSel) {
+  const c = $(containerSel);
+  function render(filter = '') {
+    const f = filter.toLowerCase();
+    c.innerHTML = items
+      .filter(([name]) => !f || name.toLowerCase().includes(f))
+      .map(([name, count]) => {
+        const active = state[key].has(name);
+        return `<button class="chip ${active ? 'active' : ''}" data-val="${escapeHtml(name)}"><span>${escapeHtml(name)}</span><span class="ct">${count}</span></button>`;
+      }).join('');
+    c.querySelectorAll('.chip').forEach(ch => {
+      ch.addEventListener('click', () => {
+        const v = ch.getAttribute('data-val');
+        if (state[key].has(v)) state[key].delete(v);
+        else state[key].add(v);
+        render(searchInputSel ? $(searchInputSel).value : '');
+        update();
+      });
+    });
+  }
+  if (searchInputSel) {
+    $(searchInputSel).addEventListener('input', e => render(e.target.value));
+  }
+  render();
+}
+
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+function setupFilters() {
+  // Sector - mantener orden custom
+  const sectorCounts = {};
+  DATA.forEach(d => { sectorCounts[d.sector_propio] = (sectorCounts[d.sector_propio]||0) + 1; });
+  const sectorItems = SECTORS_ORDER.filter(s => sectorCounts[s]).map(s => [s, sectorCounts[s]]);
+  buildChips('#chipsSector', 'sector', sectorItems, '#searchSector');
+
+  // Mercado
+  const mercadoCounts = {};
+  DATA.forEach(d => { if (d.mercado_origen) mercadoCounts[d.mercado_origen] = (mercadoCounts[d.mercado_origen]||0) + 1; });
+  const mercadoItems = Object.entries(mercadoCounts).sort((a,b) => b[1] - a[1]);
+  buildChips('#chipsMercado', 'mercado', mercadoItems, '#searchMercado');
+
+  // País
+  const paisCounts = {};
+  DATA.forEach(d => { if (d.pais && d.pais !== 'N/D') paisCounts[d.pais] = (paisCounts[d.pais]||0) + 1; });
+  const paisItems = Object.entries(paisCounts).sort((a,b) => b[1] - a[1]);
+  buildChips('#chipsPais', 'pais', paisItems, '#searchPais');
+
+  // Fuente
+  const fuenteCounts = {};
+  DATA.forEach(d => { fuenteCounts[d.fuente] = (fuenteCounts[d.fuente]||0) + 1; });
+  buildChips('#chipsFuente', 'fuente', Object.entries(fuenteCounts), null);
+}
+
+// ============ FILTRADO ============
+function filterData() {
+  const q = state.search.trim().toLowerCase();
+  return DATA.filter(d => {
+    if (state.tipo !== 'all' && d.tipo !== state.tipo) return false;
+    if (state.sector.size && !state.sector.has(d.sector_propio)) return false;
+    if (state.mercado.size && !state.mercado.has(d.mercado_origen)) return false;
+    if (state.pais.size && !state.pais.has(d.pais)) return false;
+    if (state.fuente.size && !state.fuente.has(d.fuente)) return false;
+    if (q) {
+      const hay = [d.nombre, d.ticker, d.cod_caja_cedear, d.sector_propio, d.mercado_origen, d.pais]
+        .join(' ').toLowerCase();
+      if (!hay.includes(q)) return false;
+    }
+    return true;
+  });
+}
+
+function sortData(arr) {
+  const { col, dir } = state.sort;
+  const mul = dir === 'asc' ? 1 : -1;
+  return [...arr].sort((a, b) => {
+    let va = (a[col] || '').toString();
+    let vb = (b[col] || '').toString();
+    if (col === 'cod_caja_cedear') {
+      return (parseInt(va) || 0 - parseInt(vb) || 0) * mul;
+    }
+    return va.localeCompare(vb, 'es', { numeric: true }) * mul;
+  });
+}
+
+// ============ RENDER ============
+function rowHtml(d) {
+  return `<tr>
+    <td class="ticker">${escapeHtml(d.ticker)}</td>
+    <td class="nombre">${escapeHtml(d.nombre)}</td>
+    <td><span class="badge-tipo tipo-${d.tipo === 'ETF' ? 'ETF' : 'Acción'}">${d.tipo}</span></td>
+    <td><span class="tag-sector" data-sec="${escapeHtml(d.sector_propio)}">${escapeHtml(d.sector_propio)}</span></td>
+    <td class="cod">${escapeHtml(d.cod_caja_cedear)}</td>
+    <td class="ratio">${escapeHtml(d.ratio)}</td>
+    <td class="mercado">${escapeHtml(d.mercado_origen)}</td>
+    <td class="mercado">${escapeHtml(d.pais || '')}</td>
+  </tr>`;
+}
+
+function tableHeader() {
+  const sortCol = state.sort.col;
+  const sortDir = state.sort.dir;
+  const cols = [
+    ['ticker','Ticker'],
+    ['nombre','Empresa / Subyacente'],
+    ['tipo','Tipo'],
+    ['sector_propio','Sector'],
+    ['cod_caja_cedear','Cód. Caja'],
+    ['ratio','Ratio'],
+    ['mercado_origen','Mercado'],
+    ['pais','País'],
+  ];
+  return `<thead><tr>${cols.map(([k,l]) => {
+    const cls = (k === sortCol) ? (sortDir === 'asc' ? 'sort-asc' : 'sort-desc') : '';
+    return `<th class="${cls}" data-sort="${k}">${l}</th>`;
+  }).join('')}</tr></thead>`;
+}
+
+function attachSortHandlers(scope) {
+  scope.querySelectorAll('thead th[data-sort]').forEach(th => {
+    th.addEventListener('click', () => {
+      const k = th.getAttribute('data-sort');
+      if (state.sort.col === k) state.sort.dir = state.sort.dir === 'asc' ? 'desc' : 'asc';
+      else { state.sort.col = k; state.sort.dir = 'asc'; }
+      update();
+    });
+  });
+}
+
+function renderFlat(items) {
+  const r = $('#results');
+  if (!items.length) { r.innerHTML = emptyHtml(); return; }
+  const html = `<div class="results-table-wrap"><table>${tableHeader()}<tbody>${items.map(rowHtml).join('')}</tbody></table></div>`;
+  r.innerHTML = html;
+  attachSortHandlers(r);
+}
+
+function renderGrouped(items) {
+  const r = $('#results');
+  if (!items.length) { r.innerHTML = emptyHtml(); return; }
+  const groups = {};
+  items.forEach(d => { (groups[d.sector_propio] ||= []).push(d); });
+  const SECTOR_COLOR = {
+    'Tecnología':'var(--c-tec)','Comunicaciones y Medios':'var(--c-com)','Salud y Farma':'var(--c-sal)',
+    'Bancos y Finanzas':'var(--c-fin)','Real Estate (REITs)':'var(--c-rea)','Energía':'var(--c-ene)',
+    'Materiales y Minería':'var(--c-mat)','Utilities':'var(--c-uti)','Industria y Defensa':'var(--c-ind)',
+    'Consumo Masivo':'var(--c-cm)','Consumo Discrecional':'var(--c-cd)','Índices y Estrategias Amplias':'var(--c-etf)'
+  };
+  const order = SECTORS_ORDER.filter(s => groups[s]);
+  r.innerHTML = order.map(sec => {
+    const g = groups[sec];
+    const acc = g.filter(d => d.tipo === 'Acción').length;
+    const etf = g.filter(d => d.tipo === 'ETF').length;
+    const desc = g[0].sector_desc;
+    return `
+      <div class="group open" data-sec="${escapeHtml(sec)}">
+        <div class="group-header">
+          <div class="group-color" style="background:${SECTOR_COLOR[sec]||'#888'}"></div>
+          <div class="group-title">
+            <div class="group-name">${escapeHtml(sec)}</div>
+            <div class="group-desc">${escapeHtml(desc)}</div>
+          </div>
+          <div class="group-counts">
+            <span class="group-count-pill">${g.length} total</span>
+            ${acc ? `<span class="group-count-pill acc">${acc} acc</span>` : ''}
+            ${etf ? `<span class="group-count-pill etf">${etf} ETF</span>` : ''}
+          </div>
+          <div class="group-arrow">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m6 9 6 6 6-6"/></svg>
+          </div>
+        </div>
+        <div class="group-body">
+          <table>${tableHeader()}<tbody>${g.map(rowHtml).join('')}</tbody></table>
+        </div>
+      </div>
+    `;
+  }).join('');
+  // Toggle groups
+  r.querySelectorAll('.group-header').forEach(h => {
+    h.addEventListener('click', (e) => {
+      // No togglear si fue click en header de tabla interna
+      if (e.target.closest('thead')) return;
+      h.parentElement.classList.toggle('open');
+    });
+  });
+  attachSortHandlers(r);
+}
+
+function emptyHtml() {
+  return `<div class="empty-state"><h3>Sin resultados</h3><p>No se encontraron CEDEARs con los filtros seleccionados. Probá ajustar la búsqueda o limpiar filtros.</p></div>`;
+}
+
+// ============ SUMMARY ============
+function renderSummary() {
+  const parts = [];
+  if (state.tipo !== 'all') parts.push(`Tipo: <b>${state.tipo}</b>`);
+  if (state.sector.size) parts.push(`Sectores: <b>${[...state.sector].join(', ')}</b>`);
+  if (state.mercado.size) parts.push(`Mercados: <b>${[...state.mercado].join(', ')}</b>`);
+  if (state.pais.size) parts.push(`Países: <b>${[...state.pais].join(', ')}</b>`);
+  if (state.fuente.size) parts.push(`Fuente: <b>${[...state.fuente].join(', ')}</b>`);
+  if (state.search) parts.push(`Búsqueda: <b>"${escapeHtml(state.search)}"</b>`);
+  const sum = $('#filtersSummary');
+  if (parts.length) {
+    $('#filtersSummaryText').innerHTML = parts.join(' · ');
+    sum.classList.add('show');
+  } else {
+    sum.classList.remove('show');
+  }
+}
+
+// ============ UPDATE ============
+function update() {
+  let items = filterData();
+  items = sortData(items);
+  if (state.view === 'grouped') renderGrouped(items);
+  else renderFlat(items);
+  renderSummary();
+}
+
+// ============ EVENTS ============
+$('#search').addEventListener('input', e => { state.search = e.target.value; update(); });
+
+$$('#tabTipo .tab').forEach(t => t.addEventListener('click', () => {
+  $$('#tabTipo .tab').forEach(x => x.classList.remove('active'));
+  t.classList.add('active');
+  state.tipo = t.getAttribute('data-tipo');
+  update();
+}));
+
+$('#btnFilters').addEventListener('click', () => {
+  $('#filtersBar').classList.toggle('open');
+  $('#btnFilters').classList.toggle('active');
+});
+
+$('#btnView').addEventListener('click', () => {
+  state.view = state.view === 'grouped' ? 'flat' : 'grouped';
+  $('#viewLabel').textContent = state.view === 'grouped' ? 'Agrupado por sector' : 'Vista lista';
+  update();
+});
+
+$('#clearFilters').addEventListener('click', () => {
+  state.search = '';
+  state.tipo = 'all';
+  state.sector.clear();
+  state.mercado.clear();
+  state.pais.clear();
+  state.fuente.clear();
+  $('#search').value = '';
+  $$('#tabTipo .tab').forEach(t => t.classList.toggle('active', t.getAttribute('data-tipo') === 'all'));
+  setupFilters();
+  update();
+});
+
+// ============ INIT ============
+renderStats();
+setupFilters();
+update();
+</script>
+
+</body>
+</html>
