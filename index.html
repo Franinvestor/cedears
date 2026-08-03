@@ -486,6 +486,153 @@ tbody tr.row-detail td {
 .detail-meta span { display: inline-flex; align-items: center; gap: 5px; }
 .detail-meta b { color: var(--ink-soft); font-weight: 600; }
 
+/* Bloque de precios */
+.price-block {
+  margin-top: 14px;
+  padding: 14px 16px;
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  min-height: 60px;
+  transition: all 0.15s;
+}
+.price-block[data-price-status="idle"] {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.price-block .price-idle-text {
+  font-size: 12px;
+  color: var(--ink-muted);
+}
+.price-block .price-load-btn {
+  padding: 7px 14px;
+  background: var(--white);
+  border: 1.5px solid var(--leiva-red);
+  color: var(--leiva-red);
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+.price-block .price-load-btn:hover {
+  background: var(--leiva-red);
+  color: var(--white);
+}
+.price-block[data-price-status="loading"] {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--ink-muted);
+  font-size: 12px;
+}
+.price-block[data-price-status="loading"]::before {
+  content: '';
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border: 2px solid var(--line);
+  border-top-color: var(--leiva-red);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+.price-block[data-price-status="error"] {
+  background: #FEF2F2;
+  border-color: #FECACA;
+  font-size: 12px;
+  color: #991B1B;
+}
+.price-block[data-price-status="unsupported"] {
+  background: var(--bg);
+  border-style: dashed;
+  font-size: 12px;
+  color: var(--ink-muted);
+}
+.price-block[data-price-status="ok"] {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 16px;
+  align-items: center;
+}
+.price-current {
+  display: flex;
+  flex-direction: column;
+  padding-right: 16px;
+  border-right: 1px solid var(--line);
+}
+.price-current-label {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  color: var(--ink-muted);
+  font-weight: 700;
+  margin-bottom: 2px;
+}
+.price-current-value {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--ink);
+  letter-spacing: -0.6px;
+  line-height: 1.1;
+}
+.price-current-date {
+  font-size: 10.5px;
+  color: var(--ink-muted);
+  margin-top: 3px;
+}
+.price-variations {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+.price-var {
+  display: flex;
+  flex-direction: column;
+}
+.price-var-label {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  color: var(--ink-muted);
+  font-weight: 700;
+  margin-bottom: 2px;
+}
+.price-var-value {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+}
+.price-var-value.pos { color: #15803d; }
+.price-var-value.neg { color: var(--leiva-red-dark); }
+.price-var-value.na { color: var(--ink-muted); font-weight: 500; font-size: 13px; }
+.price-source {
+  font-size: 10px;
+  color: var(--ink-muted);
+  margin-top: 8px;
+  grid-column: 1 / -1;
+  padding-top: 8px;
+  border-top: 1px dashed var(--line);
+}
+.price-source a {
+  color: var(--leiva-red);
+  text-decoration: none;
+  font-weight: 600;
+}
+.price-source a:hover { text-decoration: underline; }
+@media (max-width: 700px) {
+  .price-block[data-price-status="ok"] { grid-template-columns: 1fr; }
+  .price-current { border-right: none; border-bottom: 1px solid var(--line); padding-right: 0; padding-bottom: 12px; }
+}
+
 /* Badge Tipo */
 .badge-tipo {
   display: inline-block;
@@ -1360,6 +1507,7 @@ function rowHtml(d) {
       <div class="detail-content">
         <div class="detail-label">${escapeHtml(d.nombre)} · ${escapeHtml(d.ticker)}</div>
         ${descHtml}
+        <div class="price-block" data-price-ticker="${escapeHtml(d.ticker)}" data-price-status="idle"></div>
         <div class="detail-meta">
           ${fuenteHtml}
           ${indOrig}
@@ -1406,9 +1554,287 @@ function attachExpandHandlers(scope) {
       const tk = row.getAttribute('data-ticker');
       const detail = row.parentElement.querySelector(`tr.row-detail[data-ticker-detail="${CSS.escape(tk)}"]`);
       row.classList.toggle('expanded');
-      if (detail) detail.classList.toggle('show');
+      if (detail) {
+        const isNowVisible = detail.classList.toggle('show');
+        if (isNowVisible) {
+          const priceBlock = detail.querySelector('.price-block');
+          if (priceBlock) renderPriceBlock(priceBlock, tk);
+        }
+      }
     });
   });
+}
+
+// ============ MODULO PRECIOS (Stooq) ============
+// Cache en memoria de precios ya consultados (duración: sesión)
+const PRICES_CACHE = {};
+
+// Mapeo manual de casos especiales donde el ticker del CEDEAR no matchea con Stooq
+const TICKER_STOOQ_OVERRIDES = {
+  // ADRs con formato "XXX GR/LI" que sí tienen ticker OTC en Stooq
+  'DTEA GR': 'dtegy.us',  // Deutsche Telekom ADR
+  'BAYN GR': 'bayry.us',  // Bayer ADR
+  'BAS GR':  'basfy.us',  // BASF ADR
+  'BSN GR':  'danoy.us',  // Danone ADR (BN.PA)
+  'MBG GR':  'mbgyy.us',  // Mercedes-Benz ADR
+  'EOAN GR': 'eonr.us',   // E.ON ADR
+  'NEC1 GR': 'nipnf.us',  // NEC ADR
+  'HHPD LI': 'hnhpf.us',  // Hon Hai / Foxconn
+  'SMSN LI': 'ssnlf.us',  // Samsung
+  'NLMK LI': null,        // Sancionado
+};
+
+// Mercados NO soportados por Stooq desde el navegador de forma confiable
+function esSoportado(cedear) {
+  const merc = cedear.mercado_origen || '';
+  const tk = cedear.ticker;
+
+  // Override manual: si está en el mapa como null, no soportado
+  if (tk in TICKER_STOOQ_OVERRIDES && TICKER_STOOQ_OVERRIDES[tk] === null) return false;
+  // Si está en el mapa con símbolo → soportado
+  if (tk in TICKER_STOOQ_OVERRIDES) return true;
+
+  // Los tickers con formato "XXX GR" o "XXX LI" (ADRs OTC no mapeados) → no soportado
+  if (/^[A-Z0-9.\-]+\s+[A-Z]{2}$/.test(tk)) return false;
+
+  // Todo lo demás: mercados NYSE/NASDAQ/OTC US son soportados
+  if (merc.startsWith('NYSE') || merc.startsWith('NASDAQ') || merc === 'OTC US' || merc === 'CBOE BZX' || merc === 'NYSE American') return true;
+  if (merc === 'B3 (Brasil)') return true;
+  return false;
+}
+
+// Mapea el ticker de la lista al símbolo que usa Stooq
+function tickerToStooq(cedear) {
+  let tk = cedear.ticker;
+  const merc = cedear.mercado_origen || '';
+
+  // Override manual
+  if (tk in TICKER_STOOQ_OVERRIDES && TICKER_STOOQ_OVERRIDES[tk]) {
+    return TICKER_STOOQ_OVERRIDES[tk];
+  }
+
+  // Brasileros: agregar .br
+  if (merc === 'B3 (Brasil)') return tk.toLowerCase() + '.br';
+
+  // Normalización de caracteres especiales: / → -, . → -
+  tk = tk.replace(/\//g, '-').replace(/\./g, '-');
+
+  return tk.toLowerCase() + '.us';
+}
+
+// Parsea CSV de Stooq histórico. Formato:
+// Date,Open,High,Low,Close,Volume
+// 2025-08-04,224.83,225.10,224.10,224.62,54321000
+function parsearCSVStooq(csv) {
+  const lineas = csv.trim().split('\n');
+  if (lineas.length < 2) return [];
+  const header = lineas[0].toLowerCase();
+  // Verificar que tiene el formato esperado
+  if (!header.includes('date') || !header.includes('close')) return [];
+  const idxDate = header.split(',').indexOf('date');
+  const idxClose = header.split(',').indexOf('close');
+  if (idxDate < 0 || idxClose < 0) return [];
+  const filas = [];
+  for (let i = 1; i < lineas.length; i++) {
+    const cols = lineas[i].split(',');
+    if (cols.length < Math.max(idxDate, idxClose) + 1) continue;
+    const fecha = cols[idxDate];
+    const close = parseFloat(cols[idxClose]);
+    if (!fecha || isNaN(close)) continue;
+    filas.push({ fecha, close });
+  }
+  return filas.sort((a, b) => a.fecha.localeCompare(b.fecha));
+}
+
+// Formato YYYYMMDD para Stooq
+function fechaStooq(d) {
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, '0');
+  const dd = String(d.getDate()).padStart(2, '0');
+  return `${y}${m}${dd}`;
+}
+
+// Descarga histórico de Stooq (13 meses hacia atrás, suficiente para YTD, 1M, 12M)
+async function fetchStooqHistorico(stooqSymbol) {
+  const hoy = new Date();
+  const desde = new Date();
+  desde.setFullYear(desde.getFullYear() - 1);
+  desde.setMonth(desde.getMonth() - 2);  // 14 meses para tener margen
+  const url = `https://stooq.com/q/d/l/?s=${stooqSymbol}&d1=${fechaStooq(desde)}&d2=${fechaStooq(hoy)}&i=d`;
+
+  // Intentar directo primero, luego proxies
+  const PROXIES = [
+    (u) => 'https://corsproxy.io/?' + encodeURIComponent(u),
+    (u) => 'https://api.allorigins.win/raw?url=' + encodeURIComponent(u),
+    (u) => u,
+  ];
+
+  for (const proxy of PROXIES) {
+    try {
+      const res = await fetch(proxy(url));
+      if (!res.ok) continue;
+      const txt = await res.text();
+      // Verificar que no sea la página HTML de "no data"
+      if (txt.length < 30 || txt.toLowerCase().includes('<html') || txt.toLowerCase().includes('no data')) continue;
+      const filas = parsearCSVStooq(txt);
+      if (filas.length > 5) return filas;
+    } catch(e) { /* try next */ }
+  }
+  return null;
+}
+
+// Encuentra el precio de cierre "más cercano" a una fecha objetivo (última fila con fecha <= objetivo)
+function precioEnFecha(filas, fechaObjetivo) {
+  const fStr = fechaStooq(fechaObjetivo).slice(0,4) + '-' + fechaStooq(fechaObjetivo).slice(4,6) + '-' + fechaStooq(fechaObjetivo).slice(6,8);
+  let mejor = null;
+  for (const f of filas) {
+    if (f.fecha <= fStr) mejor = f;
+    else break;
+  }
+  return mejor;
+}
+
+// Calcula variaciones YTD, 1M, 12M
+function calcularVariaciones(filas) {
+  if (!filas || filas.length < 2) return null;
+  const ultimo = filas[filas.length - 1];
+  const hoy = new Date();
+
+  // YTD: primer día hábil del año actual
+  const inicioAnio = new Date(hoy.getFullYear(), 0, 1);
+  // 1 mes atrás
+  const hace1M = new Date(hoy); hace1M.setMonth(hace1M.getMonth() - 1);
+  // 12 meses atrás
+  const hace12M = new Date(hoy); hace12M.setFullYear(hace12M.getFullYear() - 1);
+
+  const ytdRef = precioEnFecha(filas, inicioAnio);
+  const m1Ref = precioEnFecha(filas, hace1M);
+  const m12Ref = precioEnFecha(filas, hace12M);
+
+  const varPct = (ref) => (ref && ref.close > 0) ? (ultimo.close / ref.close - 1) : null;
+
+  return {
+    precio: ultimo.close,
+    fecha: ultimo.fecha,
+    ytd: varPct(ytdRef),
+    m1: varPct(m1Ref),
+    m12: varPct(m12Ref),
+  };
+}
+
+// Renderiza el bloque de precios en el DOM (idle → loading → ok/error)
+async function renderPriceBlock(block, ticker) {
+  // Si ya está cargado, no volver a hacer nada
+  const status = block.getAttribute('data-price-status');
+  if (status === 'ok' || status === 'loading') return;
+
+  const cedear = DATA.find(d => d.ticker === ticker);
+  if (!cedear) return;
+
+  // Estado inicial: mostrar botón "Cargar precio"
+  if (status === 'idle') {
+    // Verificar si el mercado está soportado
+    if (!esSoportado(cedear)) {
+      block.setAttribute('data-price-status', 'unsupported');
+      block.innerHTML = `<span>Cotización no disponible: el mercado <b>${escapeHtml(cedear.mercado_origen)}</b> no es soportado desde el navegador. Consultar en la fuente oficial.</span>`;
+      return;
+    }
+    block.innerHTML = `
+      <span class="price-idle-text">Ver precio actual y variaciones YTD · 1 mes · 12 meses</span>
+      <button class="price-load-btn" type="button">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg>
+        Cargar precio
+      </button>
+    `;
+    const btn = block.querySelector('.price-load-btn');
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      cargarPrecio(block, cedear);
+    });
+    // Guardar el ticker en el atributo
+    block.setAttribute('data-price-status', 'ready');
+    return;
+  }
+
+  // Si es 'ready' o 'error', al re-expandir mostramos el botón otra vez (por si quiere reintentar)
+  // Pero si tiene cache, mostrar directo
+  if (PRICES_CACHE[ticker]) {
+    mostrarPrecio(block, cedear, PRICES_CACHE[ticker]);
+    return;
+  }
+}
+
+async function cargarPrecio(block, cedear) {
+  block.setAttribute('data-price-status', 'loading');
+  block.innerHTML = `Consultando cotización de <b>${escapeHtml(cedear.ticker)}</b> en Stooq...`;
+
+  const stooqSym = tickerToStooq(cedear);
+  const filas = await fetchStooqHistorico(stooqSym);
+
+  if (!filas) {
+    block.setAttribute('data-price-status', 'error');
+    block.innerHTML = `
+      <div>
+        <b>No se pudo obtener la cotización</b> de <code>${escapeHtml(stooqSym)}</code>.
+        Puede ser un problema del proxy CORS, límite diario de Stooq, o que el ticker no exista en Stooq.
+        <button class="price-load-btn" style="margin-top:8px;" type="button">Reintentar</button>
+      </div>
+    `;
+    const btn = block.querySelector('.price-load-btn');
+    btn.addEventListener('click', (e) => { e.stopPropagation(); cargarPrecio(block, cedear); });
+    return;
+  }
+
+  const variaciones = calcularVariaciones(filas);
+  if (!variaciones) {
+    block.setAttribute('data-price-status', 'error');
+    block.innerHTML = 'Datos históricos insuficientes para calcular variaciones.';
+    return;
+  }
+
+  PRICES_CACHE[cedear.ticker] = { variaciones, stooqSym };
+  mostrarPrecio(block, cedear, PRICES_CACHE[cedear.ticker]);
+}
+
+function mostrarPrecio(block, cedear, cacheEntry) {
+  const v = cacheEntry.variaciones;
+  const stooqSym = cacheEntry.stooqSym;
+  const fmtVar = (x) => {
+    if (x == null || isNaN(x)) return `<span class="price-var-value na">n/d</span>`;
+    const pct = x * 100;
+    const cls = pct > 0 ? 'pos' : (pct < 0 ? 'neg' : '');
+    const sign = pct > 0 ? '+' : '';
+    return `<span class="price-var-value ${cls}">${sign}${pct.toFixed(2)}%</span>`;
+  };
+  // Formatear precio con moneda estimada (EEUU en USD, Brasil en BRL)
+  const moneda = cedear.mercado_origen === 'B3 (Brasil)' ? 'R$' : 'US$';
+  const precioFmt = v.precio.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+  block.setAttribute('data-price-status', 'ok');
+  block.innerHTML = `
+    <div class="price-current">
+      <div class="price-current-label">Precio actual</div>
+      <div class="price-current-value">${moneda} ${precioFmt}</div>
+      <div class="price-current-date">Cierre ${v.fecha}</div>
+    </div>
+    <div class="price-variations">
+      <div class="price-var">
+        <div class="price-var-label">Variación YTD</div>
+        ${fmtVar(v.ytd)}
+      </div>
+      <div class="price-var">
+        <div class="price-var-label">Variación 1 mes</div>
+        ${fmtVar(v.m1)}
+      </div>
+      <div class="price-var">
+        <div class="price-var-label">Variación 12 meses</div>
+        ${fmtVar(v.m12)}
+      </div>
+    </div>
+    <div class="price-source">
+      Fuente: <a href="https://stooq.com/q/?s=${stooqSym}" target="_blank" rel="noopener">Stooq (${stooqSym})</a> · Los precios son EOD, con desfase de 24 hs.
+    </div>
+  `;
 }
 
 function renderFlat(items) {
