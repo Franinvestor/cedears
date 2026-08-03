@@ -2019,6 +2019,40 @@ function update() {
   renderSummary();
 }
 
+// ============ EVENTOS CEDEARS ============
+$('#search').addEventListener('input', e => { state.search = e.target.value; update(); });
+
+$$('#tabTipo .tab').forEach(t => t.addEventListener('click', () => {
+  $$('#tabTipo .tab').forEach(x => x.classList.remove('active'));
+  t.classList.add('active');
+  state.tipo = t.getAttribute('data-tipo');
+  update();
+}));
+
+$('#btnFilters').addEventListener('click', () => {
+  $('#filtersBar').classList.toggle('open');
+  $('#btnFilters').classList.toggle('active');
+});
+
+$('#btnView').addEventListener('click', () => {
+  state.view = state.view === 'grouped' ? 'flat' : 'grouped';
+  $('#viewLabel').textContent = state.view === 'grouped' ? 'Agrupado por sector' : 'Vista lista';
+  update();
+});
+
+$('#clearFilters').addEventListener('click', () => {
+  state.search = '';
+  state.tipo = 'all';
+  state.sector.clear();
+  state.mercado.clear();
+  state.pais.clear();
+  state.fuente.clear();
+  $('#search').value = '';
+  $$('#tabTipo .tab').forEach(t => t.classList.toggle('active', t.getAttribute('data-tipo') === 'all'));
+  setupFilters();
+  update();
+});
+
 
 // ============ MODULO BONOS ============
 const BONOS_INITIAL = {"bonos":[{"ticker":"AL29D","precio":55.04,"valor_tecnico":70.35,"paridad":0.7823738450604123,"ppv":1.742833742833743,"dm":1.6487521822351698,"duration":1.6990497220559695,"convexidad":4.71154419822999,"tir_na":0.06101285610140961,"tir":0.06194349825382234,"info":{"nombre":"Bonar 2029","ley":"Argentina","vencimiento":"9/7/2029"}},{"ticker":"AL30D","precio":55.86,"valor_tecnico":72.27,"paridad":0.7729348277293483,"ppv":2.2415048543689315,"dm":2.064154010967633,"duration":2.14345998010885,"convexidad":6.911005868248084,"tir_na":0.07684113561278316,"tir":0.07831727564334871,"info":{"nombre":"Bonar 2030","ley":"Argentina","vencimiento":"9/7/2030"}},{"ticker":"AL35D","precio":79.88,"valor_tecnico":102.06250000000001,"paridad":0.7826576852418861,"ppv":6.042648444863336,"dm":5.415500644384879,"duration":5.654981433411714,"convexidad":35.64096227297316,"tir_na":0.08844271462700037,"tir":0.09039824306964876,"info":{"nombre":"Bonar 2035","ley":"Argentina","vencimiento":"9/7/2035"}},{"ticker":"AE38D","precio":82.43,"valor_tecnico":97.68846109376807,"paridad":0.8438048780487805,"ppv":5.757142857142857,"dm":4.682557167440442,"duration":4.891653987487864,"convexidad":30.618476883624634,"tir_na":0.08930881677274538,"tir":0.09130283296108245,"info":{"nombre":"Bonar 2038","ley":"Argentina","vencimiento":"9/1/2038"}},{"ticker":"AL41D","precio":77.15,"valor_tecnico":101.06878460151924,"paridad":0.7633415233415234,"ppv":7.588701749787012,"dm":6.057374989955082,"duration":6.307520319713985,"convexidad":51.883310246530435,"tir_na":0.08259199081242885,"tir":0.08429735004901888,"info":{"nombre":"Bonar 2041","ley":"Argentina","vencimiento":"9/7/2041"}},{"ticker":"GD29D","precio":55.48,"valor_tecnico":70.35,"paridad":0.7886282871357498,"ppv":1.742833742833743,"dm":1.6559153650363334,"duration":1.7024494550255267,"convexidad":4.769363422490426,"tir_na":0.05620346422496336,"tir":0.056993171572685256,"info":{"nombre":"Global 2029","ley":"Nueva York","vencimiento":"9/7/2029"}},{"ticker":"GD30D","precio":57.38,"valor_tecnico":72.27,"paridad":0.7939670679396708,"ppv":2.2415048543689315,"dm":2.092704290557148,"duration":2.1596140471564187,"convexidad":7.162324334907417,"tir_na":0.06394573461829811,"tir":0.06496799886226653,"info":{"nombre":"Global 2030","ley":"Nueva York","vencimiento":"9/7/2030"}},{"ticker":"GD35D","precio":82.91,"valor_tecnico":102.06250000000001,"paridad":0.8123453766074709,"ppv":6.042648444863336,"dm":5.462922256475996,"duration":5.68582296834225,"convexidad":36.404277566010485,"tir_na":0.08160493647956191,"tir":0.0832697778940201,"info":{"nombre":"Global 2035","ley":"Nueva York","vencimiento":"9/7/2035"}},{"ticker":"GD38D","precio":86.49,"valor_tecnico":102.49999999999999,"paridad":0.8438048780487805,"ppv":5.757142857142857,"dm":4.794164505605781,"duration":4.98394573068825,"convexidad":33.726901001915564,"tir_na":0.0791717617785368,"tir":0.08073880374431612,"info":{"nombre":"Global 2038","ley":"Nueva York","vencimiento":"9/1/2038"}},{"ticker":"GD41D","precio":77.67,"valor_tecnico":101.75,"paridad":0.7633415233415234,"ppv":7.588701749787012,"dm":6.057374989955082,"duration":6.307520319713985,"convexidad":51.883310246530435,"tir_na":0.08259199081242885,"tir":0.08429735004901888,"info":{"nombre":"Global 2041","ley":"Nueva York","vencimiento":"9/7/2041"}},{"ticker":"GD46D","precio":72.08,"valor_tecnico":95.1036931818181,"paridad":0.7579095783609403,"ppv":9.226404869101216,"dm":6.642155800995052,"duration":6.910709762100029,"convexidad":68.79968065161306,"tir_na":0.08086349346540311,"tir":0.08249821960926056,"info":{"nombre":"Global 2046","ley":"Nueva York","vencimiento":"9/7/2046"}}],"cartera":[{"ticker":"GD29D","precio_vn":0.5548,"monto_emision":2635028710,"porcentaje":0.03096862598060641},{"ticker":"GD30D","precio_vn":0.5738,"monto_emision":16090612053,"porcentaje":0.19558396271283415},{"ticker":"GD35D","precio_vn":0.8291,"monto_emision":20501717797,"porcentaje":0.36007859014417104},{"ticker":"GD38D","precio_vn":0.8649,"monto_emision":11405065267,"porcentaje":0.20896031061075382},{"ticker":"GD41D","precio_vn":0.7767000000000001,"monto_emision":10482111279,"porcentaje":0.17246548901895678},{"ticker":"GD46D","precio_vn":0.7208,"monto_emision":2091997124,"porcentaje":0.03194302153267774}],"us_treasury":0.0363};
