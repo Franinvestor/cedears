@@ -2062,93 +2062,126 @@ function mostrarPrecio(block, cedear, cacheEntry) {
   `;
 }
 
-// ============ MODULO INDICADORES (Yahoo quoteSummary) ============
+// ============ MODULO INDICADORES (Financial Modeling Prep) ============
+// Fuente: FMP (financialmodelingprep.com). Endpoint free tier: 250 requests/día.
+// La API key va acá — reemplazarla por la que se genera al registrarse en FMP.
+const FMP_API_KEY = 'dDGebrwqwnHzRMl3vRf0DaKlxwqUM15m';
+
 const STATS_CACHE = {};
 
-// Fetch a Yahoo Finance v10 quoteSummary con módulos financieros
-async function fetchYahooStats(yahooSymbol) {
-  const modulos = 'summaryDetail,defaultKeyStatistics,financialData,price';
-  // Yahoo balancea entre query1 y query2 - probamos ambos
-  const URLS = [
-    `https://query1.finance.yahoo.com/v10/finance/quoteSummary/${encodeURIComponent(yahooSymbol)}?modules=${modulos}`,
-    `https://query2.finance.yahoo.com/v10/finance/quoteSummary/${encodeURIComponent(yahooSymbol)}?modules=${modulos}`,
-  ];
-
-  const PROXIES = [
-    { name: 'corsproxy.io', fn: (u) => 'https://corsproxy.io/?' + encodeURIComponent(u) },
-    { name: 'allorigins', fn: (u) => 'https://api.allorigins.win/raw?url=' + encodeURIComponent(u) },
-    { name: 'codetabs', fn: (u) => 'https://api.codetabs.com/v1/proxy?quest=' + encodeURIComponent(u) },
-  ];
-
-  const errores = [];
-  for (const url of URLS) {
-    for (const proxy of PROXIES) {
-      try {
-        const res = await fetch(proxy.fn(url), { method: 'GET' });
-        if (!res.ok) { errores.push(`${proxy.name}: HTTP ${res.status}`); continue; }
-        const txt = await res.text();
-        let data;
-        try { data = JSON.parse(txt); }
-        catch(e) { errores.push(`${proxy.name}: JSON inválido`); continue; }
-
-        if (data && data.quoteSummary && data.quoteSummary.error) {
-          return { ok: false, error: `Yahoo: ${data.quoteSummary.error.description || data.quoteSummary.error.code}` };
-        }
-        if (!data || !data.quoteSummary || !data.quoteSummary.result || !data.quoteSummary.result[0]) {
-          errores.push(`${proxy.name}: sin datos`);
-          continue;
-        }
-        return { ok: true, data: data.quoteSummary.result[0], proxyUsado: proxy.name };
-      } catch(e) {
-        errores.push(`${proxy.name}: ${e.message.substring(0,30)}`);
-      }
-    }
+// Consulta FMP: 2 endpoints combinados (ratios-ttm + key-metrics-ttm)
+// ratios-ttm: P/E, PEG, P/B, P/S, márgenes, ROE, dividendYield
+// key-metrics-ttm: marketCap, enterpriseValue, EV/Revenue, EV/EBITDA, beta
+async function fetchFMPStats(fmpSymbol) {
+  if (!FMP_API_KEY || FMP_API_KEY === 'REEMPLAZAR_CON_TU_API_KEY_DE_FMP') {
+    return { ok: false, error: 'API key de FMP no configurada. Editar el archivo y reemplazar la constante FMP_API_KEY con la clave generada en financialmodelingprep.com' };
   }
-  return { ok: false, error: 'Todos los proxies fallaron: ' + errores.slice(0,4).join(' | ') };
+
+  const urlRatios = `https://financialmodelingprep.com/api/v3/ratios-ttm/${encodeURIComponent(fmpSymbol)}?apikey=${FMP_API_KEY}`;
+  const urlMetrics = `https://financialmodelingprep.com/api/v3/key-metrics-ttm/${encodeURIComponent(fmpSymbol)}?apikey=${FMP_API_KEY}`;
+
+  try {
+    // Fetch paralelo de los 2 endpoints (FMP tiene CORS habilitado - sin proxy)
+    const [resRatios, resMetrics] = await Promise.all([fetch(urlRatios), fetch(urlMetrics)]);
+
+    if (!resRatios.ok) {
+      if (resRatios.status === 401 || resRatios.status === 403) {
+        return { ok: false, error: `API key inválida o cuota agotada (HTTP ${resRatios.status}). Verificar la key o esperar al próximo día.` };
+      }
+      if (resRatios.status === 429) {
+        return { ok: false, error: 'Cuota diaria de FMP agotada (250 requests). Esperar al reset de mañana.' };
+      }
+      return { ok: false, error: `FMP ratios-ttm: HTTP ${resRatios.status}` };
+    }
+    if (!resMetrics.ok) {
+      return { ok: false, error: `FMP key-metrics-ttm: HTTP ${resMetrics.status}` };
+    }
+
+    const ratiosArr = await resRatios.json();
+    const metricsArr = await resMetrics.json();
+
+    // FMP devuelve un array: si está vacío, el ticker no existe/no tiene datos
+    if (!Array.isArray(ratiosArr) || ratiosArr.length === 0) {
+      return { ok: false, error: `Sin datos financieros para ${fmpSymbol} en FMP. Puede no estar cubierto en el free tier.` };
+    }
+
+    // Debug: dejar la respuesta en window para inspección si es necesario
+    if (typeof window !== 'undefined') {
+      window._lastFMPResponse = { ratios: ratiosArr[0], metrics: metricsArr };
+    }
+
+    return {
+      ok: true,
+      ratios: ratiosArr[0] || {},
+      metrics: Array.isArray(metricsArr) && metricsArr.length > 0 ? metricsArr[0] : {},
+    };
+  } catch(e) {
+    return { ok: false, error: `Error de red: ${e.message.substring(0,80)}` };
+  }
 }
 
-// Extrae los ratios relevantes del resultado de Yahoo
-function extraerRatios(result) {
-  const sd = result.summaryDetail || {};
-  const ks = result.defaultKeyStatistics || {};
-  const fd = result.financialData || {};
-  const pr = result.price || {};
+// Formatea un número grande con sufijo B/M/K (como hace Yahoo)
+function fmtBig(n) {
+  if (n == null || isNaN(n)) return null;
+  const abs = Math.abs(n);
+  if (abs >= 1e12) return (n/1e12).toFixed(2) + 'T';
+  if (abs >= 1e9)  return (n/1e9).toFixed(2) + 'B';
+  if (abs >= 1e6)  return (n/1e6).toFixed(2) + 'M';
+  if (abs >= 1e3)  return (n/1e3).toFixed(2) + 'K';
+  return n.toFixed(2);
+}
 
-  // Función helper para obtener el .fmt (string formateado) o construirlo del .raw
-  const getFmt = (obj) => {
-    if (!obj || obj.fmt == null) return null;
-    return obj.fmt;
-  };
-  const getRaw = (obj) => {
-    if (!obj || obj.raw == null || isNaN(obj.raw)) return null;
-    return obj.raw;
-  };
+// Formatea un ratio decimal (32.33)
+function fmtRatio(n, digits = 2) {
+  if (n == null || isNaN(n)) return null;
+  return Number(n).toFixed(digits);
+}
 
+// Formatea porcentaje (0.152 → "15.20%")
+function fmtPct(n, digits = 2) {
+  if (n == null || isNaN(n)) return null;
+  return (Number(n) * 100).toFixed(digits) + '%';
+}
+
+// Extrae los ratios de la respuesta combinada de FMP y los formatea al estilo Yahoo
+function extraerRatios(resp) {
+  const r = resp.ratios || {};
+  const m = resp.metrics || {};
   return {
-    // Marketcap / EV (formateados por Yahoo con B/M/T)
-    marketCap:        getFmt(pr.marketCap) || getFmt(sd.marketCap),
-    enterpriseValue:  getFmt(ks.enterpriseValue),
-    // P/E
-    trailingPE:       getFmt(sd.trailingPE),
-    forwardPE:        getFmt(sd.forwardPE),
-    // PEG
-    pegRatio:         getFmt(ks.pegRatio),
-    // Price ratios
-    priceToSales:     getFmt(sd.priceToSalesTrailing12Months),
-    priceToBook:      getFmt(ks.priceToBook),
-    // EV ratios
-    enterpriseToRevenue: getFmt(ks.enterpriseToRevenue),
-    enterpriseToEbitda:  getFmt(ks.enterpriseToEbitda),
-    // Extras interesantes (opcional mostrar)
-    profitMargin:     getFmt(fd.profitMargins),
-    returnOnEquity:   getFmt(fd.returnOnEquity),
-    dividendYield:    getFmt(sd.dividendYield),
-    beta:             getFmt(sd.beta),
-    // Raws por si queremos hacer algo con ellos
-    _quoteType: pr.quoteType,
+    marketCap:           fmtBig(m.marketCapTTM),
+    enterpriseValue:     fmtBig(m.enterpriseValueTTM),
+    trailingPE:          fmtRatio(r.peRatioTTM),
+    forwardPE:           null,  // FMP no lo tiene directamente en el free tier
+    pegRatio:            fmtRatio(r.pegRatioTTM ?? r.priceEarningsToGrowthRatioTTM),
+    priceToSales:        fmtRatio(r.priceToSalesRatioTTM),
+    priceToBook:         fmtRatio(r.priceToBookRatioTTM ?? r.pbRatioTTM),
+    enterpriseToRevenue: fmtRatio(m.evToSalesTTM ?? m.enterpriseValueOverSalesTTM),
+    enterpriseToEbitda:  fmtRatio(m.enterpriseValueOverEBITDATTM ?? m.evToOperatingCashFlowTTM),
+    profitMargin:        fmtPct(r.netProfitMarginTTM),
+    returnOnEquity:      fmtPct(r.returnOnEquityTTM ?? r.roeTTM),
+    dividendYield:       fmtPct(r.dividendYieldTTM ?? r.dividendYielPercentageTTM),
+    beta:                fmtRatio(m.betaTTM ?? m.beta),
   };
 }
 
+// Mapea CEDEAR → símbolo FMP (usa mismo mapeo que Yahoo con ajustes menores)
+function tickerToFMP(cedear) {
+  // Los brasileros van con .SA en FMP igual que Yahoo
+  if (cedear.mercado_origen === 'B3 (Brasil)') return cedear.ticker + '.SA';
+  // Overrides puntuales
+  const overrides = {
+    'BRK/B': 'BRK-B',
+    'AKO.B': 'AKO-B',
+    // ADRs OTC (FMP los tiene con el ticker OTC de EEUU)
+    'DTEA GR': 'DTEGY', 'BAYN GR': 'BAYRY', 'BAS GR': 'BASFY',
+    'BSN GR': 'DANOY', 'MBG GR': 'MBGYY', 'EOAN GR': 'EONGY',
+    'NEC1 GR': 'NIPNF', 'HHPD LI': 'HNHPF', 'SMSN LI': 'SSNLF',
+  };
+  if (cedear.ticker in overrides) return overrides[cedear.ticker];
+  return cedear.ticker;
+}
+
+// Renderiza el bloque en el DOM: primero muestra el botón "Cargar indicadores"
 async function renderStatsBlock(block, ticker) {
   const status = block.getAttribute('data-stats-status');
   if (status === 'ok' || status === 'loading') return;
@@ -2186,18 +2219,17 @@ async function renderStatsBlock(block, ticker) {
 
 async function cargarIndicadores(block, cedear) {
   block.setAttribute('data-stats-status', 'loading');
-  block.innerHTML = `Consultando indicadores financieros de <b>${escapeHtml(cedear.ticker)}</b>...`;
+  block.innerHTML = `Consultando indicadores financieros de <b>${escapeHtml(cedear.ticker)}</b> en Financial Modeling Prep...`;
 
-  const yahooSym = tickerToYahoo(cedear);
-  const resp = await fetchYahooStats(yahooSym);
+  const fmpSym = tickerToFMP(cedear);
+  const resp = await fetchFMPStats(fmpSym);
 
   if (!resp.ok) {
     block.setAttribute('data-stats-status', 'error');
     block.innerHTML = `
       <div>
-        <b>No se pudieron obtener los indicadores</b> de <code>${escapeHtml(yahooSym)}</code>.
+        <b>No se pudieron obtener los indicadores</b> de <code>${escapeHtml(fmpSym)}</code>.
         <div style="font-size:11px; margin-top:6px; color:var(--ink-muted); word-break:break-word;">${escapeHtml(resp.error || 'Error desconocido')}</div>
-        <div style="font-size:11px; margin-top:6px;">El endpoint de indicadores de Yahoo es más frágil que el de precios; a veces requiere reintentar unos minutos después.</div>
         <button class="stats-load-btn" style="margin-top:10px;" type="button">Reintentar</button>
       </div>
     `;
@@ -2206,16 +2238,15 @@ async function cargarIndicadores(block, cedear) {
     return;
   }
 
-  const ratios = extraerRatios(resp.data);
-  STATS_CACHE[cedear.ticker] = { ratios, yahooSym };
+  const ratios = extraerRatios(resp);
+  STATS_CACHE[cedear.ticker] = { ratios, fmpSym };
   mostrarIndicadores(block, cedear, STATS_CACHE[cedear.ticker]);
 }
 
 function mostrarIndicadores(block, cedear, cacheEntry) {
   const r = cacheEntry.ratios;
-  const yahooSym = cacheEntry.yahooSym;
+  const fmpSym = cacheEntry.fmpSym;
 
-  // Helper para renderizar un item; si el valor es null muestra n/d
   const item = (label, val, highlight = false) => {
     const cls = 'stats-item' + (highlight ? ' highlight' : '');
     const valHtml = val ? `<span class="stats-item-value">${escapeHtml(val)}</span>` : `<span class="stats-item-value na">n/d</span>`;
@@ -2225,14 +2256,13 @@ function mostrarIndicadores(block, cedear, cacheEntry) {
   block.setAttribute('data-stats-status', 'ok');
   block.innerHTML = `
     <div class="stats-title">
-      <span>Indicadores financieros</span>
-      <span class="stats-title-source"><a href="https://finance.yahoo.com/quote/${encodeURIComponent(yahooSym)}/key-statistics" target="_blank" rel="noopener">Ver más en Yahoo (${yahooSym})</a></span>
+      <span>Indicadores financieros (TTM)</span>
+      <span class="stats-title-source">Fuente: <a href="https://financialmodelingprep.com/financial-summary/${encodeURIComponent(fmpSym)}" target="_blank" rel="noopener">Financial Modeling Prep (${fmpSym})</a></span>
     </div>
     <div class="stats-grid">
       ${item('Market Cap', r.marketCap, true)}
       ${item('Enterprise Value', r.enterpriseValue)}
       ${item('Trailing P/E', r.trailingPE)}
-      ${item('Forward P/E', r.forwardPE)}
       ${item('PEG Ratio', r.pegRatio)}
       ${item('Price / Sales', r.priceToSales)}
       ${item('Price / Book', r.priceToBook)}
