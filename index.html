@@ -2070,6 +2070,7 @@ const FMP_API_KEY = 'dDGebrwqwnHzRMl3vRf0DaKlxwqUM15m';
 const STATS_CACHE = {};
 
 // Consulta FMP: 2 endpoints combinados (ratios-ttm + key-metrics-ttm)
+// Nueva API "stable" (los endpoints /api/v3/ legacy fueron discontinuados el 31 ago 2025)
 // ratios-ttm: P/E, PEG, P/B, P/S, márgenes, ROE, dividendYield
 // key-metrics-ttm: marketCap, enterpriseValue, EV/Revenue, EV/EBITDA, beta
 async function fetchFMPStats(fmpSymbol) {
@@ -2077,8 +2078,8 @@ async function fetchFMPStats(fmpSymbol) {
     return { ok: false, error: 'API key de FMP no configurada. Editar el archivo y reemplazar la constante FMP_API_KEY con la clave generada en financialmodelingprep.com' };
   }
 
-  const urlRatios = `https://financialmodelingprep.com/api/v3/ratios-ttm/${encodeURIComponent(fmpSymbol)}?apikey=${FMP_API_KEY}`;
-  const urlMetrics = `https://financialmodelingprep.com/api/v3/key-metrics-ttm/${encodeURIComponent(fmpSymbol)}?apikey=${FMP_API_KEY}`;
+  const urlRatios = `https://financialmodelingprep.com/stable/ratios-ttm?symbol=${encodeURIComponent(fmpSymbol)}&apikey=${FMP_API_KEY}`;
+  const urlMetrics = `https://financialmodelingprep.com/stable/key-metrics-ttm?symbol=${encodeURIComponent(fmpSymbol)}&apikey=${FMP_API_KEY}`;
 
   try {
     // Fetch paralelo de los 2 endpoints (FMP tiene CORS habilitado - sin proxy)
@@ -2086,7 +2087,7 @@ async function fetchFMPStats(fmpSymbol) {
 
     if (!resRatios.ok) {
       if (resRatios.status === 401 || resRatios.status === 403) {
-        return { ok: false, error: `API key inválida o cuota agotada (HTTP ${resRatios.status}). Verificar la key o esperar al próximo día.` };
+        return { ok: false, error: `API key inválida o endpoint no permitido (HTTP ${resRatios.status}). Verificar la key en el dashboard de FMP.` };
       }
       if (resRatios.status === 429) {
         return { ok: false, error: 'Cuota diaria de FMP agotada (250 requests). Esperar al reset de mañana.' };
@@ -2144,23 +2145,44 @@ function fmtPct(n, digits = 2) {
 }
 
 // Extrae los ratios de la respuesta combinada de FMP y los formatea al estilo Yahoo
+// Nombres de campos confirmados contra respuestas reales de /stable/ratios-ttm
+// y /stable/key-metrics-ttm en nov 2026
 function extraerRatios(resp) {
   const r = resp.ratios || {};
   const m = resp.metrics || {};
+  // Helper: devuelve el primer valor no null/undefined de una lista de keys, buscando en múltiples objetos
+  const first = (objs, ...keys) => {
+    const list = Array.isArray(objs) ? objs : [objs];
+    for (const obj of list) {
+      if (!obj) continue;
+      for (const k of keys) {
+        if (obj[k] != null && !Number.isNaN(obj[k])) return obj[k];
+      }
+    }
+    return null;
+  };
   return {
-    marketCap:           fmtBig(m.marketCapTTM),
-    enterpriseValue:     fmtBig(m.enterpriseValueTTM),
-    trailingPE:          fmtRatio(r.peRatioTTM),
-    forwardPE:           null,  // FMP no lo tiene directamente en el free tier
-    pegRatio:            fmtRatio(r.pegRatioTTM ?? r.priceEarningsToGrowthRatioTTM),
-    priceToSales:        fmtRatio(r.priceToSalesRatioTTM),
-    priceToBook:         fmtRatio(r.priceToBookRatioTTM ?? r.pbRatioTTM),
-    enterpriseToRevenue: fmtRatio(m.evToSalesTTM ?? m.enterpriseValueOverSalesTTM),
-    enterpriseToEbitda:  fmtRatio(m.enterpriseValueOverEBITDATTM ?? m.evToOperatingCashFlowTTM),
-    profitMargin:        fmtPct(r.netProfitMarginTTM),
-    returnOnEquity:      fmtPct(r.returnOnEquityTTM ?? r.roeTTM),
-    dividendYield:       fmtPct(r.dividendYieldTTM ?? r.dividendYielPercentageTTM),
-    beta:                fmtRatio(m.betaTTM ?? m.beta),
+    // Market Cap: en key-metrics-ttm como 'marketCap' (sin TTM)
+    marketCap:           fmtBig(first([m], 'marketCap', 'marketCapTTM')),
+    // Enterprise Value: en key-metrics-ttm es 'enterpriseValueTTM', en ratios-ttm también
+    enterpriseValue:     fmtBig(first([m, r], 'enterpriseValueTTM', 'enterpriseValue')),
+    // P/E: en ratios-ttm es priceToEarningsRatioTTM (confirmado)
+    trailingPE:          fmtRatio(first([r], 'priceToEarningsRatioTTM', 'peRatioTTM', 'priceEarningsRatioTTM')),
+    forwardPE:           null,  // No disponible en free tier
+    pegRatio:            fmtRatio(first([r], 'priceToEarningsGrowthRatioTTM', 'pegRatioTTM', 'priceEarningsToGrowthRatioTTM')),
+    priceToSales:        fmtRatio(first([r], 'priceToSalesRatioTTM', 'psRatioTTM')),
+    priceToBook:         fmtRatio(first([r], 'priceToBookRatioTTM', 'pbRatioTTM')),
+    // EV/Revenue: en key-metrics-ttm es 'evToSalesTTM' (confirmado)
+    enterpriseToRevenue: fmtRatio(first([m], 'evToSalesTTM', 'evToSales', 'enterpriseValueOverSalesTTM', 'enterpriseValueToRevenueTTM')),
+    // EV/EBITDA: en key-metrics-ttm es 'evToEBITDATTM' (confirmado); en ratios-ttm es 'enterpriseValueMultipleTTM'
+    enterpriseToEbitda:  fmtRatio(first([m, r], 'evToEBITDATTM', 'evToEBITDA', 'enterpriseValueOverEBITDATTM', 'enterpriseValueMultipleTTM')),
+    profitMargin:        fmtPct(first([r], 'netProfitMarginTTM', 'bottomLineProfitMarginTTM', 'netIncomeMarginTTM')),
+    // ROE: en key-metrics-ttm es 'returnOnEquityTTM' (confirmado)
+    returnOnEquity:      fmtPct(first([m, r], 'returnOnEquityTTM', 'returnOnEquity', 'roeTTM')),
+    dividendYield:       fmtPct(first([r], 'dividendYieldTTM', 'dividendYielPercentageTTM')),
+    // Beta: NO viene en key-metrics-ttm ni ratios-ttm de la API stable. Requeriría otro endpoint (/stable/profile).
+    // Por ahora queda n/d — evaluar si vale la pena el request extra.
+    beta:                fmtRatio(first([m], 'beta', 'betaTTM')),
   };
 }
 
