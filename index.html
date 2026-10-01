@@ -1755,10 +1755,19 @@ async function fetchYahooHistorico(yahooSymbol) {
   const desde = hoy - (86400 * 400);  // 400 días atrás (>1 año con margen)
   const url = `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(yahooSymbol)}?period1=${desde}&period2=${hoy}&interval=1d`;
 
+  // Lista de proxies CORS actualizada (nov 2026)
+  // - cors.sh: gratuito, sin API key, sin rate limit (proyecto Grida)
+  // - allorigins: gratuito, sin API key (puede ser lento)
+  // - corsproxy.dev: 100 req/día sin registro
+  // - codetabs: gratuito, sin API key (puede fallar en payloads grandes)
+  // - corsproxy.io: desde 2025 requiere API key; si tenés key, agregala en CORSPROXY_IO_KEY
+  const CORSPROXY_IO_KEY = '';  // Opcional: registrarse en corsproxy.io/pricing (10K req/mes gratis)
   const PROXIES = [
-    { name: 'corsproxy.io', fn: (u) => 'https://corsproxy.io/?' + encodeURIComponent(u) },
+    { name: 'cors.sh', fn: (u) => 'https://proxy.cors.sh/' + u },
     { name: 'allorigins', fn: (u) => 'https://api.allorigins.win/raw?url=' + encodeURIComponent(u) },
+    { name: 'corsproxy.dev', fn: (u) => 'https://corsproxy.dev/?url=' + encodeURIComponent(u) },
     { name: 'codetabs', fn: (u) => 'https://api.codetabs.com/v1/proxy?quest=' + encodeURIComponent(u) },
+    ...(CORSPROXY_IO_KEY ? [{ name: 'corsproxy.io', fn: (u) => `https://corsproxy.io/?key=${CORSPROXY_IO_KEY}&url=` + encodeURIComponent(u) }] : []),
   ];
 
   const errores = [];
@@ -1804,9 +1813,11 @@ async function fetchStooqHistorico(stooqSym) {
   const fmtDate = (d) => `${d.getFullYear()}${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}`;
   const url = `https://stooq.com/q/d/l/?s=${stooqSym}&d1=${fmtDate(desde)}&d2=${fmtDate(hoy)}&i=d`;
 
+  // Misma lista de proxies que Yahoo (ver fetchYahooHistorico)
   const PROXIES = [
-    { name: 'corsproxy.io', fn: (u) => 'https://corsproxy.io/?' + encodeURIComponent(u) },
+    { name: 'cors.sh', fn: (u) => 'https://proxy.cors.sh/' + u },
     { name: 'allorigins', fn: (u) => 'https://api.allorigins.win/raw?url=' + encodeURIComponent(u) },
+    { name: 'corsproxy.dev', fn: (u) => 'https://corsproxy.dev/?url=' + encodeURIComponent(u) },
     { name: 'codetabs', fn: (u) => 'https://api.codetabs.com/v1/proxy?quest=' + encodeURIComponent(u) },
   ];
 
@@ -2762,9 +2773,10 @@ async function actualizarPrecios() {
   const errores = [];
 
   const PROXIES = [
-    (url) => 'https://corsproxy.io/?' + encodeURIComponent(url),
+    (url) => 'https://proxy.cors.sh/' + url,
     (url) => 'https://api.allorigins.win/raw?url=' + encodeURIComponent(url),
-    (url) => url,
+    (url) => 'https://corsproxy.dev/?url=' + encodeURIComponent(url),
+    (url) => 'https://api.codetabs.com/v1/proxy?quest=' + encodeURIComponent(url),
   ];
   let proxyIdx = null;
 
