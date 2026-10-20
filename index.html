@@ -1311,6 +1311,218 @@ tbody tr.row-detail td {
   color: var(--ink);
   border: 1px solid var(--line);
 }
+
+/* ============ ESTILOS SIMULADOR DE CARTERA BONOS ============ */
+.block-tools { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+
+/* Cartera nueva (dropdown + input) */
+.cartera-wrap { overflow-x: auto; }
+.cartera-nueva { width: 100%; border-collapse: collapse; font-size: 13px; }
+.cartera-nueva thead th {
+  background: var(--ink); color: var(--white);
+  text-transform: uppercase; letter-spacing: 1px; font-size: 10.5px; font-weight: 700;
+  padding: 10px 12px; text-align: center; white-space: nowrap;
+}
+.cartera-nueva thead th.txt-left { text-align: left; }
+.cartera-nueva tbody td {
+  padding: 10px 12px; border-bottom: 1px solid var(--line); text-align: center;
+  font-family: 'JetBrains Mono', monospace; font-size: 13px;
+}
+.cartera-nueva tbody td.ticker-cell { text-align: left; font-weight: 700; color: var(--leiva-red-dark); }
+.cartera-nueva tbody tr:hover { background: var(--bg); }
+.cartera-nueva tbody tr.cartera-total { font-weight: 700; background: var(--bg); }
+.cartera-nueva tbody tr.cartera-total td { border-top: 2px solid var(--ink); border-bottom: none; }
+
+.cartera-nueva .bono-select {
+  padding: 6px 10px; border: 1.5px solid var(--line); border-radius: 5px;
+  font-family: 'Manrope', sans-serif; font-size: 12.5px; font-weight: 600;
+  background: var(--white); color: var(--ink); min-width: 160px;
+}
+.cartera-nueva .bono-select:focus { outline: none; border-color: var(--leiva-red); box-shadow: 0 0 0 3px rgba(218,15,44,0.15); }
+
+.cartera-nueva .vn-input, .cartera-nueva .precio-input {
+  width: 100px; padding: 6px 8px;
+  border: 1.5px solid #38BDF8; background: #E0F2FE;
+  border-radius: 4px; font-family: 'JetBrains Mono', monospace;
+  font-size: 13px; font-weight: 600; text-align: right; color: var(--ink);
+}
+.cartera-nueva .vn-input:focus, .cartera-nueva .precio-input:focus {
+  outline: none; box-shadow: 0 0 0 3px rgba(56,189,248,0.25); border-color: #0EA5E9;
+}
+.cartera-nueva .vn-input { width: 120px; }
+
+.cartera-nueva .btn-remove {
+  background: transparent; border: none; cursor: pointer; color: var(--ink-muted);
+  padding: 4px 6px; border-radius: 4px; transition: all 0.15s;
+  display: inline-flex; align-items: center; justify-content: center;
+}
+.cartera-nueva .btn-remove:hover { background: #FEE2E2; color: var(--leiva-red); }
+
+.cartera-nueva .ley-ar, .cartera-nueva .ley-ny {
+  padding: 2px 7px; border-radius: 3px; font-size: 10px; font-weight: 700;
+  letter-spacing: 0.5px; display: inline-block;
+}
+.cartera-nueva .ley-ar { background: #EEF2FF; color: #4338CA; }
+.cartera-nueva .ley-ny { background: #FEF3C7; color: #92400E; }
+
+.cartera-footer {
+  padding: 14px 20px; border-top: 1px solid var(--line); background: var(--bg);
+  display: flex; justify-content: flex-start;
+}
+.btn-add {
+  padding: 8px 16px; background: var(--white); border: 1.5px dashed var(--leiva-red);
+  color: var(--leiva-red); border-radius: 6px;
+  font-family: 'Manrope', sans-serif; font-size: 12.5px; font-weight: 700;
+  cursor: pointer; display: inline-flex; align-items: center; gap: 7px;
+  transition: all 0.15s;
+}
+.btn-add:hover { background: var(--leiva-red); color: var(--white); border-style: solid; }
+
+/* Controles de simulación */
+.sim-controls {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px; padding: 20px; border-bottom: 1px solid var(--line); background: var(--bg);
+}
+.sim-control { display: flex; flex-direction: column; gap: 6px; }
+.sim-control label {
+  font-size: 11px; font-weight: 700; color: var(--ink-muted);
+  text-transform: uppercase; letter-spacing: 0.8px;
+}
+.hint-inline { font-weight: 500; text-transform: none; letter-spacing: 0; color: var(--ink-muted); font-size: 10px; }
+.date-input, .num-input {
+  padding: 8px 10px; border: 1.5px solid var(--line); background: var(--white);
+  border-radius: 5px; font-family: 'JetBrains Mono', monospace;
+  font-size: 14px; font-weight: 600; color: var(--ink);
+}
+.date-input:focus, .num-input:focus { outline: none; border-color: var(--leiva-red); box-shadow: 0 0 0 3px rgba(218,15,44,0.15); }
+.num-display {
+  padding: 8px 10px; background: var(--white); border: 1.5px solid var(--line); border-radius: 5px;
+  font-family: 'JetBrains Mono', monospace; font-size: 14px; font-weight: 700; color: var(--ink);
+}
+
+.toggle-wrap { display: flex; border: 1.5px solid var(--line); border-radius: 6px; overflow: hidden; }
+.toggle-btn {
+  flex: 1; padding: 8px 12px; background: var(--white); border: none;
+  font-family: 'Manrope', sans-serif; font-size: 12px; font-weight: 700;
+  cursor: pointer; color: var(--ink-muted); transition: all 0.15s;
+  display: flex; flex-direction: column; align-items: center; gap: 2px;
+}
+.toggle-btn.active { background: var(--leiva-red); color: var(--white); }
+.toggle-btn:not(.active):hover { background: var(--bg); color: var(--ink); }
+.toggle-hint { font-size: 9px; font-weight: 500; opacity: 0.85; text-transform: uppercase; letter-spacing: 0.5px; }
+
+/* Grid de escenarios */
+.escenarios-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 14px; padding: 20px;
+}
+.escenario-card {
+  background: var(--white); border: 1.5px solid var(--line); border-radius: 8px;
+  overflow: hidden; display: flex; flex-direction: column;
+}
+.escenario-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 10px 14px; border-bottom: 1px solid var(--line); background: var(--bg);
+  gap: 8px;
+}
+.escenario-header input.esc-nombre {
+  flex: 1; padding: 4px 8px; background: transparent; border: 1px solid transparent;
+  font-family: 'Manrope', sans-serif; font-size: 13px; font-weight: 700;
+  color: var(--ink); border-radius: 4px;
+}
+.escenario-header input.esc-nombre:hover { border-color: var(--line); }
+.escenario-header input.esc-nombre:focus { outline: none; border-color: var(--leiva-red); background: var(--white); }
+.escenario-body { padding: 14px; }
+.escenario-body .embi-input-wrap {
+  display: flex; flex-direction: column; gap: 6px;
+}
+.escenario-body .embi-input-wrap label {
+  font-size: 11px; font-weight: 700; color: var(--ink-muted);
+  text-transform: uppercase; letter-spacing: 0.6px;
+}
+.escenario-body .embi-input {
+  padding: 10px 12px; border: 1.5px solid #38BDF8; background: #E0F2FE;
+  border-radius: 5px; font-family: 'JetBrains Mono', monospace;
+  font-size: 18px; font-weight: 700; color: var(--ink); text-align: center;
+}
+.escenario-body .embi-input:focus { outline: none; box-shadow: 0 0 0 3px rgba(56,189,248,0.25); }
+.escenario-body .embi-delta { font-size: 11px; color: var(--ink-muted); text-align: center; }
+.escenario-body .embi-delta.pos { color: var(--leiva-red-dark); }
+.escenario-body .embi-delta.neg { color: #15803d; }
+
+.escenario-body .tir-list { display: flex; flex-direction: column; gap: 6px; max-height: 240px; overflow-y: auto; padding-right: 4px; }
+.escenario-body .tir-row { display: flex; align-items: center; gap: 8px; }
+.escenario-body .tir-row span.tir-ticker {
+  font-family: 'JetBrains Mono', monospace; font-size: 11.5px; font-weight: 700;
+  color: var(--leiva-red-dark); width: 54px;
+}
+.escenario-body .tir-row input {
+  flex: 1; padding: 5px 8px; border: 1.5px solid #38BDF8; background: #E0F2FE;
+  border-radius: 4px; font-family: 'JetBrains Mono', monospace;
+  font-size: 12px; font-weight: 600; color: var(--ink); text-align: right;
+}
+.escenario-body .tir-row input:focus { outline: none; box-shadow: 0 0 0 2px rgba(56,189,248,0.25); }
+.escenario-body .tir-row span.unit { font-size: 11px; color: var(--ink-muted); }
+
+.escenario-card .btn-remove-esc {
+  background: transparent; border: none; cursor: pointer; color: var(--ink-muted);
+  padding: 4px 6px; border-radius: 4px; transition: all 0.15s;
+}
+.escenario-card .btn-remove-esc:hover { background: #FEE2E2; color: var(--leiva-red); }
+
+.escenarios-footer {
+  padding: 14px 20px; border-top: 1px solid var(--line); background: var(--bg);
+  display: flex; align-items: center; gap: 16px;
+}
+.escenarios-nota { font-size: 11.5px; color: var(--ink-muted); }
+
+/* Tabla de resultados */
+.resultados-wrap { overflow-x: auto; }
+.resultados-tabla { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+.resultados-tabla thead th {
+  padding: 10px 10px; font-weight: 700; text-transform: uppercase;
+  font-size: 10px; letter-spacing: 0.6px; white-space: nowrap;
+}
+.resultados-tabla thead th.sticky-col { position: sticky; left: 0; z-index: 2; }
+.resultados-tabla thead tr.header-escenarios th {
+  background: var(--ink); color: var(--white); border-bottom: 1px solid var(--line);
+  text-align: center; font-size: 11.5px;
+}
+.resultados-tabla thead tr.header-sub th {
+  background: #2a2a2a; color: var(--white); font-size: 10px;
+}
+.resultados-tabla thead tr.header-escenarios th.ticker-h { background: var(--ink); text-align: left; }
+.resultados-tabla thead tr.header-sub th.ticker-h { background: #2a2a2a; }
+.resultados-tabla tbody td {
+  padding: 8px 10px; border-bottom: 1px solid var(--line);
+  font-family: 'JetBrains Mono', monospace; text-align: right;
+}
+.resultados-tabla tbody td.ticker-cell { text-align: left; font-weight: 700; color: var(--leiva-red-dark); white-space: nowrap; }
+.resultados-tabla tbody tr:hover { background: var(--bg); }
+.resultados-tabla tbody tr.total-row { background: var(--bg); font-weight: 700; }
+.resultados-tabla tbody tr.total-row td { border-top: 2px solid var(--ink); border-bottom: none; padding: 10px; }
+.resultados-tabla .ret-pos { color: #15803d; font-weight: 700; }
+.resultados-tabla .ret-neg { color: var(--leiva-red-dark); font-weight: 700; }
+.resultados-tabla .col-sep { border-left: 2px solid var(--line); }
+.resultados-tabla .col-escenario { background: rgba(0,0,0,0.015); }
+
+.resultados-stats {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 14px; padding: 20px; border-top: 1px solid var(--line); background: var(--bg);
+}
+.resultado-stat {
+  background: var(--white); border: 1px solid var(--line); border-radius: 6px;
+  padding: 12px 14px;
+}
+.resultado-stat .resultado-stat-name { font-size: 11px; font-weight: 700; color: var(--ink-muted); text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 6px; }
+.resultado-stat .resultado-stat-value { font-family: 'JetBrains Mono', monospace; font-size: 22px; font-weight: 700; letter-spacing: -0.5px; }
+.resultado-stat .resultado-stat-value.pos { color: #15803d; }
+.resultado-stat .resultado-stat-value.neg { color: var(--leiva-red-dark); }
+.resultado-stat .resultado-stat-detail { font-size: 11px; color: var(--ink-muted); margin-top: 3px; }
+.empty-state-sim {
+  padding: 40px 20px; text-align: center; color: var(--ink-muted); font-size: 13px;
+}
+
 </style>
 </head>
 <body>
@@ -1403,73 +1615,86 @@ tbody tr.row-detail td {
 <div class="tab-panel" id="tab-bonos">
 
   <section class="hero">
-    <h1>Curva de <span class="accent">bonos soberanos</span> en dólares</h1>
-    <p>Precios, TIR, duration y sensibilidad para los bonos Bonar (Ley Argentina) y Global (Ley NY). Los campos editables permiten simular escenarios sobre la cartera.</p>
+    <h1>Simulador de <span class="accent">cartera de bonos</span> en dólares</h1>
+    <p>Armá tu cartera con Bonares (Ley Argentina) y Globales (Ley NY), definí escenarios futuros de riesgo país o TIR por bono, y visualizá el retorno esperado a una fecha dada.</p>
   </section>
 
-  <section class="bonos-toolbar">
-    <button class="btn-primary" id="btnUpdatePrices">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg>
-      <span id="btnUpdateLabel">Actualizar precios desde bonistas.com</span>
-    </button>
-    <div class="update-status" id="updateStatus"></div>
-    <div class="update-spacer"></div>
-    <button class="btn-secondary" id="btnResetSensibilidad">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M3 6l3-3M3 6l3 3M3 6h13a5 5 0 1 1 0 10h-4"/></svg>
-      Resetear sensibilidad
-    </button>
-  </section>
-
-  <section class="bonos-stats" id="bonosStats"></section>
-
+  <!-- ============== SECCIÓN 1: ARMADO DE CARTERA ============== -->
   <section class="bonos-block">
     <div class="block-header">
-      <h2>Curva y sensibilidad</h2>
-      <div class="block-legend">
-        <span class="legend-item"><span class="dot dot-editable"></span>Editable</span>
-        <span class="legend-item"><span class="dot dot-calc"></span>Calculado</span>
+      <h2>1 · Armado de cartera</h2>
+      <div class="block-tools">
+        <button class="btn-primary" id="btnUpdatePrices">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg>
+          <span id="btnUpdateLabel">Actualizar precios desde bonistas.com</span>
+        </button>
+        <div class="update-status" id="updateStatus"></div>
       </div>
     </div>
-    <div class="curva-tabla-wrap">
-      <table class="curva-tabla" id="curvaTabla"></table>
+    <div class="cartera-wrap">
+      <table class="cartera-nueva" id="carteraTabla"></table>
     </div>
+    <div class="cartera-footer">
+      <button class="btn-add" id="btnAddBono">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+        Agregar bono a la cartera
+      </button>
+    </div>
+  </section>
+
+  <!-- ============== SECCIÓN 2: ESCENARIOS ============== -->
+  <section class="bonos-block">
+    <div class="block-header">
+      <h2>2 · Escenarios de simulación</h2>
+    </div>
+
+    <div class="sim-controls">
+      <div class="sim-control">
+        <label>Fecha de simulación</label>
+        <input type="date" id="inputFechaSim" class="date-input">
+      </div>
+      <div class="sim-control">
+        <label>US Treasury spot <span class="hint-inline">(decimal)</span></label>
+        <input type="number" id="inputUSTreasury" step="0.0001" min="0" max="0.5" class="num-input">
+      </div>
+      <div class="sim-control">
+        <label>EMBI+ actual <span class="hint-inline">(auto)</span></label>
+        <div class="num-display" id="displayEMBIActual">— bps</div>
+      </div>
+      <div class="sim-control sim-toggle-group">
+        <label>Modo de simulación</label>
+        <div class="toggle-wrap">
+          <button class="toggle-btn active" data-modo="embi" id="btnModoEMBI">Riesgo País <span class="toggle-hint">rápido</span></button>
+          <button class="toggle-btn" data-modo="tir" id="btnModoTIR">TIR por bono <span class="toggle-hint">preciso</span></button>
+        </div>
+      </div>
+    </div>
+
+    <div class="escenarios-grid" id="escenariosGrid"></div>
+
+    <div class="escenarios-footer">
+      <button class="btn-add" id="btnAddEscenario">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+        Agregar escenario
+      </button>
+      <div class="escenarios-nota" id="escenariosNota"></div>
+    </div>
+  </section>
+
+  <!-- ============== SECCIÓN 3: RESULTADOS ============== -->
+  <section class="bonos-block">
+    <div class="block-header">
+      <h2>3 · Resultados por escenario</h2>
+    </div>
+    <div class="resultados-wrap">
+      <table class="resultados-tabla" id="resultadosTabla"></table>
+    </div>
+    <div class="resultados-stats" id="resultadosStats"></div>
     <div class="curva-nota">
-      La sensibilidad usa la fórmula <code>Δ% Precio = −DM · ΔTIR + ½ · Convexidad · ΔTIR²</code>. DM y Convexidad se mantienen fijos al valor de mercado actual; para cambios grandes de TIR es una aproximación de primer/segundo orden.
-    </div>
-  </section>
-
-  <section class="bonos-block">
-    <div class="block-header">
-      <h2>Cartera y estadísticas</h2>
-    </div>
-    <div class="cartera-grid">
-      <div class="cartera-col">
-        <table class="cartera-tabla" id="carteraTabla"></table>
-      </div>
-      <div class="stats-col">
-        <div class="stat-card">
-          <div class="stat-card-label">Duration cartera</div>
-          <div class="stat-card-value" id="statDuracionCartera">–</div>
-          <div class="stat-card-hint">Promedio ponderado por participación</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-card-label">TIR cartera <span class="badge-approx">aprox.</span></div>
-          <div class="stat-card-value" id="statTIRCartera">–</div>
-          <div class="stat-card-hint">Promedio ponderado por participación</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-card-label">US Treasury spot rate <span class="badge-edit">editable</span></div>
-          <div class="stat-card-value">
-            <input type="number" id="inputUSTreasury" step="0.0001" min="0" max="0.5" class="stat-input">
-          </div>
-          <div class="stat-card-hint">Ingresar en decimal (ej: 0.0363 = 3.63%)</div>
-        </div>
-        <div class="stat-card stat-highlight">
-          <div class="stat-card-label">Argentina EMBI+ <span class="badge-approx">estimación</span></div>
-          <div class="stat-card-value" id="statEMBI">–</div>
-          <div class="stat-card-hint">TIR cartera − US Treasury (en bps)</div>
-        </div>
-      </div>
+      <strong>Metodología:</strong> El <em>precio futuro</em> se calcula descontando los flujos restantes desde la fecha de simulación a la nueva TIR (modelo DCF puro).
+      Los <em>cupones</em> son la suma simple de pagos recibidos entre hoy y la fecha de simulación (no se asume reinversión).
+      El <em>retorno %</em> es (Precio futuro + Cupones) / Precio actual − 1.
+      En modo Riesgo País se aplica un <em>shift paralelo</em>: Δ TIR por bono = (EMBI nuevo − EMBI actual) / 10000.
     </div>
   </section>
 
@@ -2473,35 +2698,87 @@ $('#clearFilters').addEventListener('click', () => {
 });
 
 
-// ============ MODULO BONOS ============
-const BONOS_INITIAL = {"bonos":[{"ticker":"AL29D","precio":55.04,"valor_tecnico":70.35,"paridad":0.7823738450604123,"ppv":1.742833742833743,"dm":1.6487521822351698,"duration":1.6990497220559695,"convexidad":4.71154419822999,"tir_na":0.06101285610140961,"tir":0.06194349825382234,"info":{"nombre":"Bonar 2029","ley":"Argentina","vencimiento":"9/7/2029"}},{"ticker":"AL30D","precio":55.86,"valor_tecnico":72.27,"paridad":0.7729348277293483,"ppv":2.2415048543689315,"dm":2.064154010967633,"duration":2.14345998010885,"convexidad":6.911005868248084,"tir_na":0.07684113561278316,"tir":0.07831727564334871,"info":{"nombre":"Bonar 2030","ley":"Argentina","vencimiento":"9/7/2030"}},{"ticker":"AL35D","precio":79.88,"valor_tecnico":102.06250000000001,"paridad":0.7826576852418861,"ppv":6.042648444863336,"dm":5.415500644384879,"duration":5.654981433411714,"convexidad":35.64096227297316,"tir_na":0.08844271462700037,"tir":0.09039824306964876,"info":{"nombre":"Bonar 2035","ley":"Argentina","vencimiento":"9/7/2035"}},{"ticker":"AE38D","precio":82.43,"valor_tecnico":97.68846109376807,"paridad":0.8438048780487805,"ppv":5.757142857142857,"dm":4.682557167440442,"duration":4.891653987487864,"convexidad":30.618476883624634,"tir_na":0.08930881677274538,"tir":0.09130283296108245,"info":{"nombre":"Bonar 2038","ley":"Argentina","vencimiento":"9/1/2038"}},{"ticker":"AL41D","precio":77.15,"valor_tecnico":101.06878460151924,"paridad":0.7633415233415234,"ppv":7.588701749787012,"dm":6.057374989955082,"duration":6.307520319713985,"convexidad":51.883310246530435,"tir_na":0.08259199081242885,"tir":0.08429735004901888,"info":{"nombre":"Bonar 2041","ley":"Argentina","vencimiento":"9/7/2041"}},{"ticker":"GD29D","precio":55.48,"valor_tecnico":70.35,"paridad":0.7886282871357498,"ppv":1.742833742833743,"dm":1.6559153650363334,"duration":1.7024494550255267,"convexidad":4.769363422490426,"tir_na":0.05620346422496336,"tir":0.056993171572685256,"info":{"nombre":"Global 2029","ley":"Nueva York","vencimiento":"9/7/2029"}},{"ticker":"GD30D","precio":57.38,"valor_tecnico":72.27,"paridad":0.7939670679396708,"ppv":2.2415048543689315,"dm":2.092704290557148,"duration":2.1596140471564187,"convexidad":7.162324334907417,"tir_na":0.06394573461829811,"tir":0.06496799886226653,"info":{"nombre":"Global 2030","ley":"Nueva York","vencimiento":"9/7/2030"}},{"ticker":"GD35D","precio":82.91,"valor_tecnico":102.06250000000001,"paridad":0.8123453766074709,"ppv":6.042648444863336,"dm":5.462922256475996,"duration":5.68582296834225,"convexidad":36.404277566010485,"tir_na":0.08160493647956191,"tir":0.0832697778940201,"info":{"nombre":"Global 2035","ley":"Nueva York","vencimiento":"9/7/2035"}},{"ticker":"GD38D","precio":86.49,"valor_tecnico":102.49999999999999,"paridad":0.8438048780487805,"ppv":5.757142857142857,"dm":4.794164505605781,"duration":4.98394573068825,"convexidad":33.726901001915564,"tir_na":0.0791717617785368,"tir":0.08073880374431612,"info":{"nombre":"Global 2038","ley":"Nueva York","vencimiento":"9/1/2038"}},{"ticker":"GD41D","precio":77.67,"valor_tecnico":101.75,"paridad":0.7633415233415234,"ppv":7.588701749787012,"dm":6.057374989955082,"duration":6.307520319713985,"convexidad":51.883310246530435,"tir_na":0.08259199081242885,"tir":0.08429735004901888,"info":{"nombre":"Global 2041","ley":"Nueva York","vencimiento":"9/7/2041"}},{"ticker":"GD46D","precio":72.08,"valor_tecnico":95.1036931818181,"paridad":0.7579095783609403,"ppv":9.226404869101216,"dm":6.642155800995052,"duration":6.910709762100029,"convexidad":68.79968065161306,"tir_na":0.08086349346540311,"tir":0.08249821960926056,"info":{"nombre":"Global 2046","ley":"Nueva York","vencimiento":"9/7/2046"}}],"cartera":[{"ticker":"GD29D","precio_vn":0.5548,"monto_emision":2635028710,"porcentaje":0.03096862598060641},{"ticker":"GD30D","precio_vn":0.5738,"monto_emision":16090612053,"porcentaje":0.19558396271283415},{"ticker":"GD35D","precio_vn":0.8291,"monto_emision":20501717797,"porcentaje":0.36007859014417104},{"ticker":"GD38D","precio_vn":0.8649,"monto_emision":11405065267,"porcentaje":0.20896031061075382},{"ticker":"GD41D","precio_vn":0.7767000000000001,"monto_emision":10482111279,"porcentaje":0.17246548901895678},{"ticker":"GD46D","precio_vn":0.7208,"monto_emision":2091997124,"porcentaje":0.03194302153267774}],"us_treasury":0.0363};
-const FLUJOS_BONOS = {"AL29D":[{"t":0.5,"ff":10.3},{"t":1,"ff":10.25},{"t":1.5,"ff":10.2},{"t":2,"ff":10.15},{"t":2.5,"ff":10.1},{"t":3,"ff":10.05}],"AL30D":[{"t":0.5,"ff":8.24},{"t":1,"ff":8.21},{"t":1.5,"ff":8.42},{"t":2,"ff":8.35},{"t":2.5,"ff":8.28},{"t":3,"ff":8.21},{"t":3.5,"ff":8.14},{"t":4,"ff":8.07}],"AL35D":[{"t":0.5,"ff":2.0625},{"t":1,"ff":2.0625},{"t":1.5,"ff":2.375},{"t":2,"ff":2.375},{"t":2.5,"ff":2.5},{"t":3,"ff":2.5},{"t":3.5,"ff":2.5},{"t":4,"ff":2.5},{"t":4.5,"ff":12.5},{"t":5,"ff":12.25},{"t":5.5,"ff":12},{"t":6,"ff":11.75},{"t":6.5,"ff":11.5},{"t":7,"ff":11.25},{"t":7.5,"ff":11},{"t":8,"ff":10.75},{"t":8.5,"ff":10.5},{"t":9,"ff":10.25}],"AE38D":[{"t":0.5,"ff":2.5},{"t":1,"ff":7.045455},{"t":1.5,"ff":6.931818},{"t":2,"ff":6.818182},{"t":2.5,"ff":6.704545},{"t":3,"ff":6.590909},{"t":3.5,"ff":6.477273},{"t":4,"ff":6.363636},{"t":4.5,"ff":6.25},{"t":5,"ff":6.136364},{"t":5.5,"ff":6.022727},{"t":6,"ff":5.909091},{"t":6.5,"ff":5.795455},{"t":7,"ff":5.681818},{"t":7.5,"ff":5.568182},{"t":8,"ff":5.454545},{"t":8.5,"ff":5.340909},{"t":9,"ff":5.227273},{"t":9.5,"ff":5.113636},{"t":10,"ff":5},{"t":10.5,"ff":4.886364},{"t":11,"ff":4.772727},{"t":11.5,"ff":4.659091}],"AL41D":[{"t":0.5,"ff":1.75},{"t":1,"ff":1.75},{"t":1.5,"ff":5.321429},{"t":2,"ff":5.258929},{"t":2.5,"ff":5.196429},{"t":3,"ff":5.133929},{"t":3.5,"ff":5.660714},{"t":4,"ff":5.573661},{"t":4.5,"ff":5.486607},{"t":5,"ff":5.399554},{"t":5.5,"ff":5.3125},{"t":6,"ff":5.225446},{"t":6.5,"ff":5.138393},{"t":7,"ff":5.051339},{"t":7.5,"ff":4.964286},{"t":8,"ff":4.877232},{"t":8.5,"ff":4.790179},{"t":9,"ff":4.703125},{"t":9.5,"ff":4.616071},{"t":10,"ff":4.529018},{"t":10.5,"ff":4.441964},{"t":11,"ff":4.354911},{"t":11.5,"ff":4.267857},{"t":12,"ff":4.180804},{"t":12.5,"ff":4.09375},{"t":13,"ff":4.006696},{"t":13.5,"ff":3.919643},{"t":14,"ff":3.832589},{"t":14.5,"ff":3.745536},{"t":15,"ff":3.658482}],"GD29D":[{"t":0.5,"ff":10.3},{"t":1,"ff":10.25},{"t":1.5,"ff":10.2},{"t":2,"ff":10.15},{"t":2.5,"ff":10.1},{"t":3,"ff":10.05}],"GD30D":[{"t":0.5,"ff":8.24},{"t":1,"ff":8.21},{"t":1.5,"ff":8.42},{"t":2,"ff":8.35},{"t":2.5,"ff":8.28},{"t":3,"ff":8.21},{"t":3.5,"ff":8.14},{"t":4,"ff":8.07}],"GD35D":[{"t":0.5,"ff":2.0625},{"t":1,"ff":2.0625},{"t":1.5,"ff":2.375},{"t":2,"ff":2.375},{"t":2.5,"ff":2.5},{"t":3,"ff":2.5},{"t":3.5,"ff":2.5},{"t":4,"ff":2.5},{"t":4.5,"ff":12.5},{"t":5,"ff":12.25},{"t":5.5,"ff":12},{"t":6,"ff":11.75},{"t":6.5,"ff":11.5},{"t":7,"ff":11.25},{"t":7.5,"ff":11},{"t":8,"ff":10.75},{"t":8.5,"ff":10.5},{"t":9,"ff":10.25}],"GD38D":[{"t":0.5,"ff":2.5},{"t":1,"ff":7.045455},{"t":1.5,"ff":6.931818},{"t":2,"ff":6.818182},{"t":2.5,"ff":6.704545},{"t":3,"ff":6.590909},{"t":3.5,"ff":6.477273},{"t":4,"ff":6.363636},{"t":4.5,"ff":6.25},{"t":5,"ff":6.136364},{"t":5.5,"ff":6.022727},{"t":6,"ff":5.909091},{"t":6.5,"ff":5.795455},{"t":7,"ff":5.681818},{"t":7.5,"ff":5.568182},{"t":8,"ff":5.454545},{"t":8.5,"ff":5.340909},{"t":9,"ff":5.227273},{"t":9.5,"ff":5.113636},{"t":10,"ff":5},{"t":10.5,"ff":4.886364},{"t":11,"ff":4.772727},{"t":11.5,"ff":4.659091}],"GD41D":[{"t":0.5,"ff":1.75},{"t":1,"ff":1.75},{"t":1.5,"ff":5.321429},{"t":2,"ff":5.258929},{"t":2.5,"ff":5.196429},{"t":3,"ff":5.133929},{"t":3.5,"ff":5.660714},{"t":4,"ff":5.573661},{"t":4.5,"ff":5.486607},{"t":5,"ff":5.399554},{"t":5.5,"ff":5.3125},{"t":6,"ff":5.225446},{"t":6.5,"ff":5.138393},{"t":7,"ff":5.051339},{"t":7.5,"ff":4.964286},{"t":8,"ff":4.877232},{"t":8.5,"ff":4.790179},{"t":9,"ff":4.703125},{"t":9.5,"ff":4.616071},{"t":10,"ff":4.529018},{"t":10.5,"ff":4.441964},{"t":11,"ff":4.354911},{"t":11.5,"ff":4.267857},{"t":12,"ff":4.180804},{"t":12.5,"ff":4.09375},{"t":13,"ff":4.006696},{"t":13.5,"ff":3.919643},{"t":14,"ff":3.832589},{"t":14.5,"ff":3.745536},{"t":15,"ff":3.658482}],"GD46D":[{"t":0.5,"ff":4.147727},{"t":1,"ff":4.100852},{"t":1.5,"ff":4.161932},{"t":2,"ff":4.112216},{"t":2.5,"ff":4.318182},{"t":3,"ff":4.261364},{"t":3.5,"ff":4.204545},{"t":4,"ff":4.147727},{"t":4.5,"ff":4.090909},{"t":5,"ff":4.034091},{"t":5.5,"ff":3.977273},{"t":6,"ff":3.920455},{"t":6.5,"ff":3.863636},{"t":7,"ff":3.806818},{"t":7.5,"ff":3.75},{"t":8,"ff":3.693182},{"t":8.5,"ff":3.636364},{"t":9,"ff":3.579545},{"t":9.5,"ff":3.636364},{"t":10,"ff":3.465909},{"t":10.5,"ff":3.409091},{"t":11,"ff":3.352273},{"t":11.5,"ff":3.295455},{"t":12,"ff":3.238636},{"t":12.5,"ff":3.181818},{"t":13,"ff":3.125},{"t":13.5,"ff":3.068182},{"t":14,"ff":3.011364},{"t":14.5,"ff":2.954545},{"t":15,"ff":2.897727},{"t":15.5,"ff":2.840909},{"t":16,"ff":2.784091},{"t":16.5,"ff":2.727273},{"t":17,"ff":2.670455},{"t":17.5,"ff":2.613636},{"t":18,"ff":2.556818},{"t":18.5,"ff":2.5},{"t":19,"ff":2.443182},{"t":19.5,"ff":2.386364},{"t":20,"ff":2.329545}]};
+// ============ MODULO BONOS (Simulador de cartera) ============
+const BONOS_DB = {"fecha_ref":"2026-10-07","us_treasury":0.0465,"embi_actual":493,"bonos":{"AO27D":{"ticker":"AO27D","info":{"nombre":"Bonar 2027 Dólar","ley":"Argentina","vencimiento":"15/10/2027"},"precio_inicial":102.65,"valor_tecnico":100.1167,"valor_residual":100,"interes_corrido":0.1167,"tir_actual":0.036411,"tir_na_actual":0.036086,"dm_actual":1.0118,"duration_actual":1.03,"convex_actual":1.9658,"paridad_actual":1.0253},"AL29D":{"ticker":"AL29D","info":{"nombre":"Bonar 2029","ley":"Argentina","vencimiento":"9/7/2029"},"precio_inicial":54.65,"valor_tecnico":60.1467,"valor_residual":60,"interes_corrido":0.1467,"tir_actual":0.078123,"tir_na_actual":0.076654,"dm_actual":1.3903,"duration_actual":1.4436,"convex_actual":3.6601,"paridad_actual":0.9086},"GD29D":{"ticker":"GD29D","info":{"nombre":"Global 2029","ley":"Nueva York","vencimiento":"9/7/2029"},"precio_inicial":55.83,"valor_tecnico":60.1467,"valor_residual":60,"interes_corrido":0.1467,"tir_actual":0.062358,"tir_na_actual":0.061415,"dm_actual":1.411,"duration_actual":1.4543,"convex_actual":3.8072,"paridad_actual":0.9282},"AN29D":{"ticker":"AN29D","info":{"nombre":"Bonar 2029 Capitalizable","ley":"Argentina","vencimiento":"30/11/2029"},"precio_inicial":88.59,"valor_tecnico":102.275,"valor_residual":100,"interes_corrido":2.275,"tir_actual":0.121623,"tir_na_actual":0.118134,"dm_actual":2.6463,"duration_actual":2.8026,"convex_actual":8.9869,"paridad_actual":0.8662},"AO28D":{"ticker":"AO28D","info":{"nombre":"Bonar 2028 Dólar","ley":"Argentina","vencimiento":"15/10/2028"},"precio_inicial":93.1,"valor_tecnico":100.1167,"valor_residual":100,"interes_corrido":0.1167,"tir_actual":0.102208,"tir_na_actual":0.099722,"dm_actual":1.8484,"duration_actual":1.9406,"convex_actual":4.8277,"paridad_actual":0.9299},"AO29D":{"ticker":"AO29D","info":{"nombre":"Bonar 2029 Dólar","ley":"Argentina","vencimiento":"15/10/2029"},"precio_inicial":86.7,"valor_tecnico":100.1167,"valor_residual":100,"interes_corrido":0.1167,"tir_actual":0.119419,"tir_na_actual":0.116052,"dm_actual":2.5564,"duration_actual":2.7047,"convex_actual":8.374,"paridad_actual":0.866},"AL30D":{"ticker":"AL30D","info":{"nombre":"Bonar 2030","ley":"Argentina","vencimiento":"9/7/2030"},"precio_inicial":55.89,"valor_tecnico":64.1173,"valor_residual":64,"interes_corrido":0.1173,"tir_actual":0.088644,"tir_na_actual":0.086762,"dm_actual":1.8082,"duration_actual":1.8867,"convex_actual":5.688,"paridad_actual":0.8717},"GD30D":{"ticker":"GD30D","info":{"nombre":"Global 2030","ley":"Nueva York","vencimiento":"9/7/2030"},"precio_inicial":57.55,"valor_tecnico":64.1173,"valor_residual":64,"interes_corrido":0.1173,"tir_actual":0.071987,"tir_na_actual":0.070736,"dm_actual":1.8415,"duration_actual":1.9066,"convex_actual":5.9517,"paridad_actual":0.8976},"AL35D":{"ticker":"AL35D","info":{"nombre":"Bonar 2035","ley":"Argentina","vencimiento":"9/7/2035"},"precio_inicial":71.78,"valor_tecnico":101.0083,"valor_residual":100,"interes_corrido":1.0083,"tir_actual":0.116819,"tir_na_actual":0.113594,"dm_actual":5.0114,"duration_actual":5.296,"convex_actual":30.6324,"paridad_actual":0.7106},"GD35D":{"ticker":"GD35D","info":{"nombre":"Global 2035","ley":"Nueva York","vencimiento":"9/7/2035"},"precio_inicial":76.23,"valor_tecnico":101.0083,"valor_residual":100,"interes_corrido":1.0083,"tir_actual":0.104279,"tir_na_actual":0.101694,"dm_actual":5.0915,"duration_actual":5.3504,"convex_actual":31.8017,"paridad_actual":0.7547},"AE38D":{"ticker":"AE38D","info":{"nombre":"Bonar 2038","ley":"Argentina","vencimiento":"9/1/2038"},"precio_inicial":74.7,"valor_tecnico":101.2222,"valor_residual":100,"interes_corrido":1.2222,"tir_actual":0.120623,"tir_na_actual":0.11719,"dm_actual":4.1588,"duration_actual":4.4024,"convex_actual":26.1424,"paridad_actual":0.738},"GD38D":{"ticker":"GD38D","info":{"nombre":"Global 2038","ley":"Nueva York","vencimiento":"9/1/2038"},"precio_inicial":80.51,"valor_tecnico":101.2222,"valor_residual":100,"interes_corrido":1.2222,"tir_actual":0.102048,"tir_na_actual":0.09957,"dm_actual":4.3395,"duration_actual":4.5556,"convex_actual":28.4923,"paridad_actual":0.7954},"AL41D":{"ticker":"AL41D","info":{"nombre":"Bonar 2041","ley":"Argentina","vencimiento":"9/7/2041"},"precio_inicial":66.65,"valor_tecnico":100.8556,"valor_residual":100,"interes_corrido":0.8556,"tir_actual":0.11683,"tir_na_actual":0.113603,"dm_actual":5.3339,"duration_actual":5.6368,"convex_actual":41.1911,"paridad_actual":0.6608},"GD41D":{"ticker":"GD41D","info":{"nombre":"Global 2041","ley":"Nueva York","vencimiento":"9/7/2041"},"precio_inicial":70.64,"valor_tecnico":100.8556,"valor_residual":100,"interes_corrido":0.8556,"tir_actual":0.105519,"tir_na_actual":0.102873,"dm_actual":5.4977,"duration_actual":5.7805,"convex_actual":43.7701,"paridad_actual":0.7004},"GD46D":{"ticker":"GD46D","info":{"nombre":"Global 2046","ley":"Nueva York","vencimiento":"9/7/2046"},"precio_inicial":65.47,"valor_tecnico":91.8258,"valor_residual":90.90909090909085,"interes_corrido":0.9167,"tir_actual":0.102121,"tir_na_actual":0.099639,"dm_actual":5.9217,"duration_actual":6.2167,"convex_actual":56.8302,"paridad_actual":0.713}}};
+const FLUJOS_BONOS = {"AO27D":[{"fecha":"2026-10-30","ff":0.5},{"fecha":"2026-11-30","ff":0.5},{"fecha":"2026-12-31","ff":0.5},{"fecha":"2027-01-29","ff":0.483333},{"fecha":"2027-02-26","ff":0.45},{"fecha":"2027-03-31","ff":0.583333},{"fecha":"2027-04-30","ff":0.5},{"fecha":"2027-05-31","ff":0.5},{"fecha":"2027-06-30","ff":0.5},{"fecha":"2027-07-31","ff":0.5},{"fecha":"2027-08-31","ff":0.5},{"fecha":"2027-09-30","ff":0.5},{"fecha":"2027-10-29","ff":100.483333}],"AL29D":[{"fecha":"2027-01-09","ff":10.3},{"fecha":"2027-07-09","ff":10.25},{"fecha":"2028-01-09","ff":10.2},{"fecha":"2028-07-09","ff":10.15},{"fecha":"2029-01-09","ff":10.1},{"fecha":"2029-07-09","ff":10.05}],"GD29D":[{"fecha":"2027-01-09","ff":10.3},{"fecha":"2027-07-09","ff":10.25},{"fecha":"2028-01-09","ff":10.2},{"fecha":"2028-07-09","ff":10.15},{"fecha":"2029-01-09","ff":10.1},{"fecha":"2029-07-09","ff":10.05}],"AN29D":[{"fecha":"2026-11-30","ff":3.231944},{"fecha":"2027-05-31","ff":3.25},{"fecha":"2027-11-30","ff":3.25},{"fecha":"2028-05-30","ff":3.25},{"fecha":"2028-11-30","ff":3.25},{"fecha":"2029-05-30","ff":3.25},{"fecha":"2029-11-30","ff":103.25}],"AO28D":[{"fecha":"2026-11-02","ff":0.533333},{"fecha":"2026-11-30","ff":0.466667},{"fecha":"2026-12-31","ff":0.5},{"fecha":"2027-02-01","ff":0.516667},{"fecha":"2027-03-01","ff":0.5},{"fecha":"2027-03-31","ff":0.5},{"fecha":"2027-04-30","ff":0.5},{"fecha":"2027-05-31","ff":0.5},{"fecha":"2027-06-30","ff":0.5},{"fecha":"2027-08-02","ff":0.533333},{"fecha":"2027-08-31","ff":0.483333},{"fecha":"2027-09-30","ff":0.5},{"fecha":"2027-11-01","ff":0.516667},{"fecha":"2027-11-30","ff":0.483333},{"fecha":"2027-12-31","ff":0.5},{"fecha":"2028-01-31","ff":0.5},{"fecha":"2028-02-29","ff":0.483333},{"fecha":"2028-03-31","ff":0.5},{"fecha":"2028-05-02","ff":0.533333},{"fecha":"2028-05-31","ff":0.483333},{"fecha":"2028-06-30","ff":0.5},{"fecha":"2028-07-31","ff":0.5},{"fecha":"2028-08-31","ff":0.5},{"fecha":"2028-10-02","ff":0.533333},{"fecha":"2028-10-31","ff":100.483333}],"AO29D":[{"fecha":"2026-10-30","ff":0.5},{"fecha":"2026-11-30","ff":0.5},{"fecha":"2026-12-30","ff":0.5},{"fecha":"2027-01-29","ff":0.483333},{"fecha":"2027-02-26","ff":0.45},{"fecha":"2027-03-31","ff":0.583333},{"fecha":"2027-04-30","ff":0.5},{"fecha":"2027-05-31","ff":0.5},{"fecha":"2027-06-30","ff":0.5},{"fecha":"2027-07-30","ff":0.5},{"fecha":"2027-08-31","ff":0.5},{"fecha":"2027-09-30","ff":0.5},{"fecha":"2027-10-29","ff":0.483333},{"fecha":"2027-11-30","ff":0.516667},{"fecha":"2027-12-31","ff":0.5},{"fecha":"2028-01-31","ff":0.5},{"fecha":"2028-02-29","ff":0.483333},{"fecha":"2028-03-31","ff":0.5},{"fecha":"2028-04-28","ff":0.466667},{"fecha":"2028-05-31","ff":0.55},{"fecha":"2028-06-30","ff":0.5},{"fecha":"2028-07-31","ff":0.5},{"fecha":"2028-08-31","ff":0.5},{"fecha":"2028-09-29","ff":0.483333},{"fecha":"2028-10-31","ff":0.533333},{"fecha":"2028-11-30","ff":0.5},{"fecha":"2028-12-29","ff":0.483333},{"fecha":"2029-01-31","ff":0.533333},{"fecha":"2029-02-28","ff":0.466667},{"fecha":"2029-03-28","ff":0.466667},{"fecha":"2029-04-30","ff":0.533333},{"fecha":"2029-05-31","ff":0.5},{"fecha":"2029-06-29","ff":0.483333},{"fecha":"2029-07-31","ff":0.533333},{"fecha":"2029-08-31","ff":0.5},{"fecha":"2029-09-28","ff":100.466667}],"AL30D":[{"fecha":"2027-01-09","ff":8.24},{"fecha":"2027-07-09","ff":8.21},{"fecha":"2028-01-09","ff":8.42},{"fecha":"2028-07-09","ff":8.35},{"fecha":"2029-01-09","ff":8.28},{"fecha":"2029-07-09","ff":8.21},{"fecha":"2030-01-09","ff":8.14},{"fecha":"2030-07-09","ff":8.07}],"GD30D":[{"fecha":"2027-01-09","ff":8.24},{"fecha":"2027-07-09","ff":8.21},{"fecha":"2028-01-09","ff":8.42},{"fecha":"2028-07-09","ff":8.35},{"fecha":"2029-01-09","ff":8.28},{"fecha":"2029-07-09","ff":8.21},{"fecha":"2030-01-09","ff":8.14},{"fecha":"2030-07-09","ff":8.07}],"AL35D":[{"fecha":"2027-01-09","ff":2.0625},{"fecha":"2027-07-09","ff":2.0625},{"fecha":"2028-01-09","ff":2.375},{"fecha":"2028-07-09","ff":2.375},{"fecha":"2029-01-09","ff":2.5},{"fecha":"2029-07-09","ff":2.5},{"fecha":"2030-01-09","ff":2.5},{"fecha":"2030-07-09","ff":2.5},{"fecha":"2031-01-09","ff":12.5},{"fecha":"2031-07-09","ff":12.25},{"fecha":"2032-01-09","ff":12},{"fecha":"2032-07-09","ff":11.75},{"fecha":"2033-01-09","ff":11.5},{"fecha":"2033-07-09","ff":11.25},{"fecha":"2034-01-09","ff":11},{"fecha":"2034-07-09","ff":10.75},{"fecha":"2035-01-09","ff":10.5},{"fecha":"2035-07-09","ff":10.25}],"GD35D":[{"fecha":"2027-01-09","ff":2.0625},{"fecha":"2027-07-09","ff":2.0625},{"fecha":"2028-01-09","ff":2.375},{"fecha":"2028-07-09","ff":2.375},{"fecha":"2029-01-09","ff":2.5},{"fecha":"2029-07-09","ff":2.5},{"fecha":"2030-01-09","ff":2.5},{"fecha":"2030-07-09","ff":2.5},{"fecha":"2031-01-09","ff":12.5},{"fecha":"2031-07-09","ff":12.25},{"fecha":"2032-01-09","ff":12},{"fecha":"2032-07-09","ff":11.75},{"fecha":"2033-01-09","ff":11.5},{"fecha":"2033-07-09","ff":11.25},{"fecha":"2034-01-09","ff":11},{"fecha":"2034-07-09","ff":10.75},{"fecha":"2035-01-09","ff":10.5},{"fecha":"2035-07-09","ff":10.25}],"AE38D":[{"fecha":"2027-01-09","ff":2.5},{"fecha":"2027-07-09","ff":7.045455},{"fecha":"2028-01-09","ff":6.931818},{"fecha":"2028-07-09","ff":6.818182},{"fecha":"2029-01-09","ff":6.704545},{"fecha":"2029-07-09","ff":6.590909},{"fecha":"2030-01-09","ff":6.477273},{"fecha":"2030-07-09","ff":6.363636},{"fecha":"2031-01-09","ff":6.25},{"fecha":"2031-07-09","ff":6.136364},{"fecha":"2032-01-09","ff":6.022727},{"fecha":"2032-07-09","ff":5.909091},{"fecha":"2033-01-09","ff":5.795455},{"fecha":"2033-07-09","ff":5.681818},{"fecha":"2034-01-09","ff":5.568182},{"fecha":"2034-07-09","ff":5.454545},{"fecha":"2035-01-09","ff":5.340909},{"fecha":"2035-07-09","ff":5.227273},{"fecha":"2036-01-09","ff":5.113636},{"fecha":"2036-07-09","ff":5},{"fecha":"2037-01-09","ff":4.886364},{"fecha":"2037-07-09","ff":4.772727},{"fecha":"2038-01-09","ff":4.659091}],"GD38D":[{"fecha":"2027-01-09","ff":2.5},{"fecha":"2027-07-09","ff":7.045455},{"fecha":"2028-01-09","ff":6.931818},{"fecha":"2028-07-09","ff":6.818182},{"fecha":"2029-01-09","ff":6.704545},{"fecha":"2029-07-09","ff":6.590909},{"fecha":"2030-01-09","ff":6.477273},{"fecha":"2030-07-09","ff":6.363636},{"fecha":"2031-01-09","ff":6.25},{"fecha":"2031-07-09","ff":6.136364},{"fecha":"2032-01-09","ff":6.022727},{"fecha":"2032-07-09","ff":5.909091},{"fecha":"2033-01-09","ff":5.795455},{"fecha":"2033-07-09","ff":5.681818},{"fecha":"2034-01-09","ff":5.568182},{"fecha":"2034-07-09","ff":5.454545},{"fecha":"2035-01-09","ff":5.340909},{"fecha":"2035-07-09","ff":5.227273},{"fecha":"2036-01-09","ff":5.113636},{"fecha":"2036-07-09","ff":5},{"fecha":"2037-01-09","ff":4.886364},{"fecha":"2037-07-09","ff":4.772727},{"fecha":"2038-01-09","ff":4.659091}],"AL41D":[{"fecha":"2027-01-09","ff":1.75},{"fecha":"2027-07-09","ff":1.75},{"fecha":"2028-01-09","ff":5.321429},{"fecha":"2028-07-09","ff":5.258929},{"fecha":"2029-01-09","ff":5.196429},{"fecha":"2029-07-09","ff":5.133929},{"fecha":"2030-01-09","ff":5.660714},{"fecha":"2030-07-09","ff":5.573661},{"fecha":"2031-01-09","ff":5.486607},{"fecha":"2031-07-09","ff":5.399554},{"fecha":"2032-01-09","ff":5.3125},{"fecha":"2032-07-09","ff":5.225446},{"fecha":"2033-01-09","ff":5.138393},{"fecha":"2033-07-09","ff":5.051339},{"fecha":"2034-01-09","ff":4.964286},{"fecha":"2034-07-09","ff":4.877232},{"fecha":"2035-01-09","ff":4.790179},{"fecha":"2035-07-09","ff":4.703125},{"fecha":"2036-01-09","ff":4.616071},{"fecha":"2036-07-09","ff":4.529018},{"fecha":"2037-01-09","ff":4.441964},{"fecha":"2037-07-09","ff":4.354911},{"fecha":"2038-01-09","ff":4.267857},{"fecha":"2038-07-09","ff":4.180804},{"fecha":"2039-01-09","ff":4.09375},{"fecha":"2039-07-09","ff":4.006696},{"fecha":"2040-01-09","ff":3.919643},{"fecha":"2040-07-09","ff":3.832589},{"fecha":"2041-01-09","ff":3.745536},{"fecha":"2041-07-09","ff":3.658482}],"GD41D":[{"fecha":"2027-01-09","ff":1.75},{"fecha":"2027-07-09","ff":1.75},{"fecha":"2028-01-09","ff":5.321429},{"fecha":"2028-07-09","ff":5.258929},{"fecha":"2029-01-09","ff":5.196429},{"fecha":"2029-07-09","ff":5.133929},{"fecha":"2030-01-09","ff":5.660714},{"fecha":"2030-07-09","ff":5.573661},{"fecha":"2031-01-09","ff":5.486607},{"fecha":"2031-07-09","ff":5.399554},{"fecha":"2032-01-09","ff":5.3125},{"fecha":"2032-07-09","ff":5.225446},{"fecha":"2033-01-09","ff":5.138393},{"fecha":"2033-07-09","ff":5.051339},{"fecha":"2034-01-09","ff":4.964286},{"fecha":"2034-07-09","ff":4.877232},{"fecha":"2035-01-09","ff":4.790179},{"fecha":"2035-07-09","ff":4.703125},{"fecha":"2036-01-09","ff":4.616071},{"fecha":"2036-07-09","ff":4.529018},{"fecha":"2037-01-09","ff":4.441964},{"fecha":"2037-07-09","ff":4.354911},{"fecha":"2038-01-09","ff":4.267857},{"fecha":"2038-07-09","ff":4.180804},{"fecha":"2039-01-09","ff":4.09375},{"fecha":"2039-07-09","ff":4.006696},{"fecha":"2040-01-09","ff":3.919643},{"fecha":"2040-07-09","ff":3.832589},{"fecha":"2041-01-09","ff":3.745536},{"fecha":"2041-07-09","ff":3.658482}],"GD46D":[{"fecha":"2027-01-09","ff":4.147727},{"fecha":"2027-07-09","ff":4.100852},{"fecha":"2028-01-09","ff":4.161932},{"fecha":"2028-07-09","ff":4.112216},{"fecha":"2029-01-09","ff":4.318182},{"fecha":"2029-07-09","ff":4.261364},{"fecha":"2030-01-09","ff":4.204545},{"fecha":"2030-07-09","ff":4.147727},{"fecha":"2031-01-09","ff":4.090909},{"fecha":"2031-07-09","ff":4.034091},{"fecha":"2032-01-09","ff":3.977273},{"fecha":"2032-07-09","ff":3.920455},{"fecha":"2033-01-09","ff":3.863636},{"fecha":"2033-07-09","ff":3.806818},{"fecha":"2034-01-09","ff":3.75},{"fecha":"2034-07-09","ff":3.693182},{"fecha":"2035-01-09","ff":3.636364},{"fecha":"2035-07-09","ff":3.579545},{"fecha":"2036-01-09","ff":3.636364},{"fecha":"2036-07-09","ff":3.465909},{"fecha":"2037-01-09","ff":3.409091},{"fecha":"2037-07-09","ff":3.352273},{"fecha":"2038-01-09","ff":3.295455},{"fecha":"2038-07-09","ff":3.238636},{"fecha":"2039-01-09","ff":3.181818},{"fecha":"2039-07-09","ff":3.125},{"fecha":"2040-01-09","ff":3.068182},{"fecha":"2040-07-09","ff":3.011364},{"fecha":"2041-01-09","ff":2.954545},{"fecha":"2041-07-09","ff":2.897727},{"fecha":"2042-01-09","ff":2.840909},{"fecha":"2042-07-09","ff":2.784091},{"fecha":"2043-01-09","ff":2.727273},{"fecha":"2043-07-09","ff":2.670455},{"fecha":"2044-01-09","ff":2.613636},{"fecha":"2044-07-09","ff":2.556818},{"fecha":"2045-01-09","ff":2.5},{"fecha":"2045-07-09","ff":2.443182},{"fecha":"2046-01-09","ff":2.386364},{"fecha":"2046-07-09","ff":2.329545}]};
 
-const bonosState = {
-  bonos: JSON.parse(JSON.stringify(BONOS_INITIAL.bonos)),
-  cartera: JSON.parse(JSON.stringify(BONOS_INITIAL.cartera)),
-  us_treasury: BONOS_INITIAL.us_treasury,
-  variaciones_tir: {},
+// Estado global del módulo
+const simState = {
+  cartera: [],           // [{id, ticker, vn, precio}]
+  escenarios: [],        // [{id, nombre, modo, embi, tirs:{ticker:valor}}]
+  modo: 'embi',          // 'embi' | 'tir'
+  fechaSim: null,        // Date
+  usTreasury: BONOS_DB.us_treasury,
+  embiActual: BONOS_DB.embi_actual,
+  _nextCarteraId: 1,
+  _nextEscenarioId: 1,
 };
 
-// Helpers de formato
-const fmt = {
-  price: v => v == null || isNaN(v) ? '—' : Number(v).toFixed(2),
-  pct: v => v == null || isNaN(v) ? '—' : (Number(v) * 100).toFixed(2) + '%',
-  num: v => v == null || isNaN(v) ? '—' : Number(v).toFixed(4),
-  moneyM: v => {
-    if (v == null || isNaN(v)) return '—';
-    const n = Number(v);
-    if (n >= 1e9) return (n/1e9).toFixed(2) + 'B';
-    if (n >= 1e6) return (n/1e6).toFixed(1) + 'M';
-    return n.toLocaleString('es-AR', { maximumFractionDigits: 0 });
-  },
-};
+// ============ UTILIDADES ============
+function parseFecha(s) {
+  if (s instanceof Date) return s;
+  if (!s) return null;
+  const parts = s.split('-');
+  return new Date(parseInt(parts[0]), parseInt(parts[1])-1, parseInt(parts[2]));
+}
+function fechaStr(d) {
+  const y = d.getFullYear(), m = String(d.getMonth()+1).padStart(2,'0'), dd = String(d.getDate()).padStart(2,'0');
+  return `${y}-${m}-${dd}`;
+}
+function diasEntre(a, b) {
+  return Math.round((b - a) / 86400000);
+}
+function aniosEntre(a, b) {
+  return (b - a) / (365 * 86400000);
+}
+function hoyFecha() {
+  const d = new Date();
+  return new Date(d.getFullYear(), d.getMonth(), d.getDate());
+}
+function fmtNum(v, d=2) {
+  if (v == null || isNaN(v)) return '—';
+  return Number(v).toLocaleString('es-AR', { minimumFractionDigits: d, maximumFractionDigits: d });
+}
+function fmtPct(v, d=2) {
+  if (v == null || isNaN(v)) return '—';
+  return (Number(v)*100).toFixed(d) + '%';
+}
+function fmtPctSigned(v, d=2) {
+  if (v == null || isNaN(v)) return '—';
+  const n = Number(v)*100;
+  return (n>=0?'+':'') + n.toFixed(d) + '%';
+}
+function fmtMoney(v, d=2) {
+  if (v == null || isNaN(v)) return '—';
+  return 'US$ ' + Number(v).toLocaleString('en-US', { minimumFractionDigits: d, maximumFractionDigits: d });
+}
 
-// ============ MOTOR DE CALCULO ============
-// Encuentra la TIR (efectiva anual) mediante bisección
-function calcularTIR(flujos, precio) {
-  const f = (r) => flujos.reduce((s, x) => s + x.ff / Math.pow(1+r, x.t), 0) - precio;
+// ============ MOTOR FINANCIERO ============
+// Precio DIRTY descontando todos los flujos futuros a la tir dada, valorado en fechaVal
+function calcularPrecio(flujos, tirEf, fechaVal) {
+  let total = 0;
+  for (const f of flujos) {
+    const fecha = parseFecha(f.fecha);
+    const t = aniosEntre(fechaVal, fecha);
+    if (t <= 0) continue;
+    total += f.ff / Math.pow(1 + tirEf, t);
+  }
+  return total;
+}
+
+// Suma de flujos entre dos fechas (exclusivo desde, inclusivo hasta)
+function cuponesEntre(flujos, desde, hasta) {
+  let total = 0;
+  for (const f of flujos) {
+    const fecha = parseFecha(f.fecha);
+    if (fecha > desde && fecha <= hasta) total += f.ff;
+  }
+  return total;
+}
+
+// TIR implícita en un precio (bisección)
+function calcularTIR(flujos, precioDirty, fechaVal) {
+  const f = (r) => calcularPrecio(flujos, r, fechaVal) - precioDirty;
   let lo = -0.5, hi = 5.0;
   let flo = f(lo), fhi = f(hi);
   if (flo * fhi > 0) return NaN;
@@ -2509,395 +2786,636 @@ function calcularTIR(flujos, precio) {
     const mid = (lo + hi) / 2;
     const fm = f(mid);
     if (Math.abs(fm) < 1e-9 || (hi-lo) < 1e-9) return mid;
-    if (flo * fm < 0) { hi = mid; fhi = fm; }
-    else { lo = mid; flo = fm; }
+    if (flo * fm < 0) { hi = mid; fhi = fm; } else { lo = mid; flo = fm; }
   }
-  return (lo + hi) / 2;
+  return (lo+hi)/2;
 }
 
-// Recalcula todas las métricas del bono a partir del precio
-function recalcularBono(bono) {
-  const flujos = FLUJOS_BONOS[bono.ticker];
-  if (!flujos || !flujos.length) return;
-  const precio = bono.precio;
-  const tir = calcularTIR(flujos, precio);
-  if (isNaN(tir)) return;
+// Dado un bono y escenario, devuelve: precio futuro, cupones, retorno %
+function simularBonoEnEscenario(ticker, precioHoy, escenario, fechaSim, hoy) {
+  const flujos = FLUJOS_BONOS[ticker] || [];
+  if (!flujos.length || !precioHoy || precioHoy <= 0) return null;
 
-  // VP de cada flujo
-  const vps = flujos.map(f => f.ff / Math.pow(1+tir, f.t));
-  const G = vps.reduce((a,b) => a+b, 0);
+  // Calcular TIR actual implícita a partir del precio hoy
+  const tirActual = calcularTIR(flujos, precioHoy, hoy);
+  if (isNaN(tirActual)) return null;
 
-  // Duration = SUMA(t * VP) / precio
-  const dur = flujos.reduce((s, f, i) => s + f.t * vps[i], 0) / G;
+  // Nueva TIR según modo del escenario
+  let tirNueva;
+  if (escenario.modo === 'embi') {
+    const delta = (escenario.embi - simState.embiActual) / 10000;
+    tirNueva = tirActual + delta;
+  } else {
+    tirNueva = escenario.tirs[ticker];
+    if (tirNueva == null || isNaN(tirNueva)) return null;
+  }
 
-  // TIR NA (nominal anual semianual)
-  const tir_na = (Math.sqrt(1+tir) - 1) * 2;
+  // Precio en fecha simulación con la nueva TIR
+  const precioFuturo = calcularPrecio(flujos, tirNueva, fechaSim);
+  // Cupones recibidos entre hoy y fecha simulación
+  const cupones = cuponesEntre(flujos, hoy, fechaSim);
+  // Retorno
+  const retornoAbs = precioFuturo + cupones - precioHoy;
+  const retornoPct = retornoAbs / precioHoy;
 
-  // DM = Dur / (1 + tir_na/2)
-  const dm = dur / (1 + tir_na/2);
-
-  // Convexidad estándar
-  const conv = flujos.reduce((s, f, i) => s + f.t*(1+f.t)*vps[i], 0) / (G * Math.pow(1+tir, 2));
-
-  // Paridad = precio / valor técnico
-  const paridad = precio / bono.valor_tecnico;
-
-  bono.tir = tir;
-  bono.tir_na = tir_na;
-  bono.duration = dur;
-  bono.dm = dm;
-  bono.convexidad = conv;
-  bono.paridad = paridad;
+  return {
+    tirActual, tirNueva,
+    precioFuturo, cupones,
+    retornoAbs, retornoPct,
+  };
 }
 
-// Sensibilidad para ΔTIR dado
-function calcularSensibilidad(bono, deltaTIR) {
-  const varPct = -bono.dm * deltaTIR + 0.5 * bono.convexidad * Math.pow(deltaTIR, 2);
-  const nuevaTIR = bono.tir + deltaTIR;
-  const nuevoPrecio = bono.precio * (1 + varPct);
-  return { varPct, nuevaTIR, nuevoPrecio };
-}
+// ============ RENDER CARTERA ============
+function renderCartera() {
+  const t = document.getElementById('carteraTabla');
+  const tickersUsados = simState.cartera.map(c => c.ticker);
+  const tickersDisponibles = Object.keys(BONOS_DB.bonos);
 
-// ============ RENDER CURVA (una sola vez) ============
-function renderCurvaTablaInicial() {
-  const tabla = document.getElementById('curvaTabla');
-  if (!tabla) return;
+  const thead = `<thead><tr>
+    <th class="txt-left">Especie</th>
+    <th>Ley</th>
+    <th>VN</th>
+    <th>Precio (c/100 VN)</th>
+    <th>Monto</th>
+    <th>% Cartera</th>
+    <th></th>
+  </tr></thead>`;
 
-  const thead = `<thead>
-    <tr>
-      <th class="txt-left">Especie</th>
-      <th class="txt-left">Ley</th>
-      <th>Precio</th>
-      <th>Valor Técnico</th>
-      <th>Paridad</th>
-      <th>PPV</th>
-      <th>DM</th>
-      <th>Duration</th>
-      <th>Convexidad</th>
-      <th class="grp-tir">TIR N.A.</th>
-      <th class="grp-tir">TIR</th>
-      <th class="grp-sens">Δ TIR</th>
-      <th class="grp-sens">Nueva TIR</th>
-      <th class="grp-sens">Var. % Precio</th>
-      <th class="grp-sens">Nuevo Precio</th>
-    </tr>
-  </thead>`;
+  if (!simState.cartera.length) {
+    t.innerHTML = thead + `<tbody><tr><td colspan="7" class="empty-state-sim">Agregá un bono para comenzar a armar tu cartera.</td></tr></tbody>`;
+    return;
+  }
 
-  const rows = bonosState.bonos.map((b) => {
-    const leyClass = b.info.ley === 'Argentina' ? 'ley-ar' : 'ley-ny';
-    const leyLabel = b.info.ley === 'Argentina' ? 'AR' : 'NY';
-    return `<tr data-ticker="${b.ticker}">
-      <td class="ticker-cell">${b.ticker}<div class="ticker-sub">${b.info.nombre || ''}</div></td>
-      <td class="ley-cell"><span class="ley-badge ${leyClass}">${leyLabel}</span></td>
-      <td><input type="number" step="0.01" min="0" class="cell-input narrow" data-field="precio" data-ticker="${b.ticker}"></td>
-      <td class="calc-cell subtle" data-cell="vt"></td>
-      <td class="calc-cell subtle" data-cell="paridad"></td>
-      <td class="calc-cell subtle" data-cell="ppv"></td>
-      <td class="calc-cell" data-cell="dm"></td>
-      <td class="calc-cell" data-cell="duration"></td>
-      <td class="calc-cell" data-cell="convexidad"></td>
-      <td class="calc-cell grp-tir-start" data-cell="tir_na"></td>
-      <td class="calc-cell tir-cell" data-cell="tir"></td>
-      <td class="grp-sens-start"><input type="number" step="0.001" class="cell-input narrow" data-field="dtir" data-ticker="${b.ticker}"> <span class="unit-pct">%</span></td>
-      <td class="calc-cell subtle" data-cell="nueva_tir_na"></td>
-      <td class="calc-cell" data-cell="var_pct"></td>
-      <td class="calc-cell" data-cell="nuevo_precio" style="font-weight:700"></td>
+  const montoTotal = simState.cartera.reduce((s, c) => {
+    const m = (c.vn * c.precio) / 100;
+    return s + (isNaN(m) ? 0 : m);
+  }, 0);
+
+  const rows = simState.cartera.map(c => {
+    const bono = BONOS_DB.bonos[c.ticker] || {};
+    const info = bono.info || {};
+    const leyClass = info.ley === 'Argentina' ? 'ley-ar' : 'ley-ny';
+    const leyLabel = info.ley === 'Argentina' ? 'AR' : 'NY';
+    const monto = (c.vn * c.precio) / 100;
+    const pct = montoTotal > 0 ? monto/montoTotal : 0;
+    // Opciones del dropdown: todos los tickers menos los otros ya elegidos
+    const otros = simState.cartera.filter(x => x.id !== c.id).map(x => x.ticker);
+    const opts = tickersDisponibles.map(tk => {
+      const sel = (tk === c.ticker) ? ' selected' : '';
+      const dis = otros.includes(tk) ? ' disabled' : '';
+      const nom = (BONOS_DB.bonos[tk].info || {}).nombre || tk;
+      return `<option value="${tk}"${sel}${dis}>${tk} — ${nom}</option>`;
+    }).join('');
+    return `<tr data-id="${c.id}">
+      <td class="ticker-cell">
+        <select class="bono-select" data-field="ticker" data-id="${c.id}">${opts}</select>
+      </td>
+      <td><span class="${leyClass}">${leyLabel}</span></td>
+      <td><input type="number" class="vn-input" data-field="vn" data-id="${c.id}" value="${c.vn}" step="1000" min="0"></td>
+      <td><input type="number" class="precio-input" data-field="precio" data-id="${c.id}" value="${c.precio}" step="0.01" min="0"></td>
+      <td>${fmtMoney(monto)}</td>
+      <td>${fmtPct(pct, 1)}</td>
+      <td><button class="btn-remove" data-id="${c.id}" title="Quitar">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button></td>
     </tr>`;
   }).join('');
 
-  tabla.innerHTML = thead + '<tbody>' + rows + '</tbody>';
+  const totalRow = `<tr class="cartera-total">
+    <td class="ticker-cell">TOTAL</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>${fmtMoney(montoTotal)}</td>
+    <td>100.0%</td>
+    <td></td>
+  </tr>`;
 
-  // Set valores iniciales en inputs
-  bonosState.bonos.forEach(b => {
-    const inpPrecio = tabla.querySelector(`input[data-field="precio"][data-ticker="${b.ticker}"]`);
-    if (inpPrecio) inpPrecio.value = b.precio.toFixed(2);
-    const inpDtir = tabla.querySelector(`input[data-field="dtir"][data-ticker="${b.ticker}"]`);
-    if (inpDtir) inpDtir.value = '0';
-  });
-
-  // Actualizar todas las celdas calculadas
-  bonosState.bonos.forEach(b => actualizarFilaCompleta(b.ticker));
+  t.innerHTML = thead + '<tbody>' + rows + totalRow + '</tbody>';
 
   // Handlers
-  tabla.querySelectorAll('.cell-input').forEach(inp => {
-    inp.addEventListener('input', (e) => {
-      const tk = inp.getAttribute('data-ticker');
-      const field = inp.getAttribute('data-field');
-      const bono = bonosState.bonos.find(x => x.ticker === tk);
-      if (!bono) return;
-      const val = parseFloat(inp.value);
-      if (field === 'precio') {
-        if (!isNaN(val) && val > 0) {
-          bono.precio = val;
-          recalcularBono(bono);
-          const cart = bonosState.cartera.find(c => c.ticker === tk);
-          if (cart) cart.precio_vn = val / 100;
-          actualizarFilaCompleta(tk);
-          renderCarteraYStats();
-        }
-      } else if (field === 'dtir') {
-        bonosState.variaciones_tir[tk] = isNaN(val) ? 0 : val / 100;
-        actualizarSensibilidad(tk);
+  t.querySelectorAll('.bono-select').forEach(sel => sel.addEventListener('change', (e) => {
+    const id = parseInt(e.target.getAttribute('data-id'));
+    const c = simState.cartera.find(x => x.id === id);
+    if (c) {
+      c.ticker = e.target.value;
+      // Autocargar precio del nuevo ticker si no hay precio o si es default
+      const b = BONOS_DB.bonos[c.ticker];
+      if (b) c.precio = b.precio_inicial;
+      renderCartera();
+      renderEscenarios();
+      renderResultados();
+    }
+  }));
+  t.querySelectorAll('.vn-input, .precio-input').forEach(inp => inp.addEventListener('input', (e) => {
+    const id = parseInt(e.target.getAttribute('data-id'));
+    const field = e.target.getAttribute('data-field');
+    const c = simState.cartera.find(x => x.id === id);
+    if (!c) return;
+    const val = parseFloat(e.target.value);
+    if (isNaN(val)) return;
+    c[field] = val;
+    // Actualización quirúrgica de monto/pct sin re-renderizar la tabla (preserva foco)
+    actualizarMontosCartera();
+    renderResultados();
+  }));
+  t.querySelectorAll('.btn-remove').forEach(btn => btn.addEventListener('click', (e) => {
+    const id = parseInt(e.currentTarget.getAttribute('data-id'));
+    simState.cartera = simState.cartera.filter(x => x.id !== id);
+    renderCartera();
+    renderEscenarios();
+    renderResultados();
+  }));
+}
+
+// Actualización quirúrgica: solo refresca celdas de monto/pct y la fila total
+function actualizarMontosCartera() {
+  const t = document.getElementById('carteraTabla');
+  const montoTotal = simState.cartera.reduce((s, c) => {
+    const m = (c.vn * c.precio) / 100;
+    return s + (isNaN(m) ? 0 : m);
+  }, 0);
+  simState.cartera.forEach(c => {
+    const tr = t.querySelector(`tr[data-id="${c.id}"]`);
+    if (!tr) return;
+    const monto = (c.vn * c.precio) / 100;
+    const pct = montoTotal > 0 ? monto/montoTotal : 0;
+    const tds = tr.querySelectorAll('td');
+    if (tds[4]) tds[4].textContent = fmtMoney(monto);
+    if (tds[5]) tds[5].textContent = fmtPct(pct, 1);
+  });
+  const totalRow = t.querySelector('tr.cartera-total');
+  if (totalRow) {
+    const tds = totalRow.querySelectorAll('td');
+    if (tds[4]) tds[4].textContent = fmtMoney(montoTotal);
+  }
+}
+
+// ============ ESCENARIOS ============
+function nuevoEscenario(nombre) {
+  const tirs = {};
+  simState.cartera.forEach(c => {
+    const b = BONOS_DB.bonos[c.ticker];
+    if (b) tirs[c.ticker] = b.tir_actual;
+  });
+  return {
+    id: simState._nextEscenarioId++,
+    nombre: nombre || `Escenario ${simState.escenarios.length + 1}`,
+    modo: simState.modo,
+    embi: simState.embiActual,
+    tirs,
+  };
+}
+
+function renderEscenarios() {
+  const g = document.getElementById('escenariosGrid');
+  const nota = document.getElementById('escenariosNota');
+  nota.textContent = `${simState.escenarios.length} escenario${simState.escenarios.length !== 1 ? 's' : ''} · Modo: ${simState.modo === 'embi' ? 'Riesgo País (shift paralelo)' : 'TIR individual por bono'}`;
+
+  if (!simState.escenarios.length) {
+    g.innerHTML = `<div class="empty-state-sim" style="grid-column: 1/-1;">Agregá al menos un escenario para simular.</div>`;
+    return;
+  }
+
+  g.innerHTML = simState.escenarios.map(e => {
+    let body = '';
+    if (simState.modo === 'embi') {
+      const delta = e.embi - simState.embiActual;
+      const deltaClass = delta > 0 ? 'pos' : (delta < 0 ? 'neg' : '');
+      body = `
+        <div class="embi-input-wrap">
+          <label>EMBI+ esperado (bps)</label>
+          <input type="number" class="embi-input" data-id="${e.id}" value="${e.embi}" step="10" min="0">
+          <div class="embi-delta ${deltaClass}">
+            ${delta === 0 ? 'Sin cambio vs actual' : (delta > 0 ? '+' : '') + delta + ' bps vs actual (' + simState.embiActual + ' bps)'}
+          </div>
+        </div>`;
+    } else {
+      if (!simState.cartera.length) {
+        body = `<div style="font-size:12px; color:var(--ink-muted); text-align:center; padding:10px;">Agregá bonos a la cartera para definir TIR por bono.</div>`;
+      } else {
+        body = `<div style="font-size:11px; color:var(--ink-muted); margin-bottom:8px;">TIR efectiva anual esperada por bono:</div><div class="tir-list">` +
+          simState.cartera.map(c => {
+            const b = BONOS_DB.bonos[c.ticker] || {};
+            const tirDefault = e.tirs[c.ticker] != null ? e.tirs[c.ticker] : b.tir_actual;
+            const tirPct = (tirDefault * 100).toFixed(2);
+            return `<div class="tir-row">
+              <span class="tir-ticker">${c.ticker}</span>
+              <input type="number" data-id="${e.id}" data-ticker="${c.ticker}" value="${tirPct}" step="0.1" min="-50" max="500">
+              <span class="unit">%</span>
+            </div>`;
+          }).join('') +
+          `</div>`;
       }
+    }
+    return `<div class="escenario-card" data-id="${e.id}">
+      <div class="escenario-header">
+        <input class="esc-nombre" data-id="${e.id}" value="${e.nombre.replace(/"/g,'&quot;')}">
+        <button class="btn-remove-esc" data-id="${e.id}" title="Quitar">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M18 6 6 18M6 6l12 12"/></svg>
+        </button>
+      </div>
+      <div class="escenario-body">${body}</div>
+    </div>`;
+  }).join('');
+
+  // Handlers
+  g.querySelectorAll('.esc-nombre').forEach(inp => inp.addEventListener('input', (e) => {
+    const id = parseInt(e.target.getAttribute('data-id'));
+    const esc = simState.escenarios.find(x => x.id === id);
+    if (esc) {
+      esc.nombre = e.target.value;
+      // Actualizar el header de la columna del escenario sin re-render completo
+      actualizarCabecerasResultados();
+    }
+  }));
+  g.querySelectorAll('.btn-remove-esc').forEach(btn => btn.addEventListener('click', (e) => {
+    const id = parseInt(e.currentTarget.getAttribute('data-id'));
+    simState.escenarios = simState.escenarios.filter(x => x.id !== id);
+    renderEscenarios();
+    renderResultados();
+  }));
+  g.querySelectorAll('.embi-input').forEach(inp => inp.addEventListener('input', (e) => {
+    const id = parseInt(e.target.getAttribute('data-id'));
+    const esc = simState.escenarios.find(x => x.id === id);
+    if (!esc) return;
+    const val = parseFloat(e.target.value);
+    if (!isNaN(val)) {
+      esc.embi = val;
+      // Actualizar nota delta
+      const delta = val - simState.embiActual;
+      const deltaDiv = e.target.parentElement.querySelector('.embi-delta');
+      if (deltaDiv) {
+        deltaDiv.className = 'embi-delta ' + (delta > 0 ? 'pos' : (delta < 0 ? 'neg' : ''));
+        deltaDiv.textContent = delta === 0 ? 'Sin cambio vs actual' : (delta > 0 ? '+' : '') + delta + ' bps vs actual (' + simState.embiActual + ' bps)';
+      }
+      renderResultados();
+    }
+  }));
+  g.querySelectorAll('.tir-list input').forEach(inp => inp.addEventListener('input', (e) => {
+    const id = parseInt(e.target.getAttribute('data-id'));
+    const tk = e.target.getAttribute('data-ticker');
+    const esc = simState.escenarios.find(x => x.id === id);
+    if (!esc) return;
+    const val = parseFloat(e.target.value);
+    if (!isNaN(val)) {
+      esc.tirs[tk] = val / 100;
+      renderResultados();
+    }
+  }));
+}
+
+// ============ RESULTADOS ============
+function renderResultados() {
+  const t = document.getElementById('resultadosTabla');
+  const statsDiv = document.getElementById('resultadosStats');
+
+  if (!simState.cartera.length) {
+    t.innerHTML = `<tbody><tr><td class="empty-state-sim">Agregá bonos a la cartera para ver los resultados.</td></tr></tbody>`;
+    statsDiv.innerHTML = '';
+    return;
+  }
+  if (!simState.escenarios.length) {
+    t.innerHTML = `<tbody><tr><td class="empty-state-sim">Agregá al menos un escenario para ver los resultados.</td></tr></tbody>`;
+    statsDiv.innerHTML = '';
+    return;
+  }
+
+  const hoy = hoyFecha();
+  const fechaSim = simState.fechaSim || hoy;
+  const diasHastaSim = diasEntre(hoy, fechaSim);
+
+  // Calcular todas las simulaciones
+  const sims = {}; // sims[tickerCarteraId][escenarioId] = resultado
+  simState.cartera.forEach(c => {
+    sims[c.id] = {};
+    simState.escenarios.forEach(e => {
+      sims[c.id][e.id] = simularBonoEnEscenario(c.ticker, c.precio, e, fechaSim, hoy);
     });
   });
-}
 
-// Actualiza celdas calculadas de una fila (sin tocar los inputs)
-function actualizarFilaCompleta(ticker) {
-  const bono = bonosState.bonos.find(b => b.ticker === ticker);
-  if (!bono) return;
-  const row = document.querySelector(`#curvaTabla tr[data-ticker="${ticker}"]`);
-  if (!row) return;
-  const set = (cell, val) => {
-    const td = row.querySelector(`[data-cell="${cell}"]`);
-    if (td) td.textContent = val;
-  };
-  // PPV: Precio Por Valor de precio_ideal. En Excel es N9 = K15 = SUMA(t*FF/precio)
-  // No la recalculamos porque no está clara la fórmula, la dejamos fija
-  set('vt', fmt.price(bono.valor_tecnico));
-  set('paridad', fmt.pct(bono.paridad));
-  set('ppv', fmt.num(bono.ppv));
-  set('dm', fmt.num(bono.dm));
-  set('duration', fmt.num(bono.duration));
-  set('convexidad', fmt.num(bono.convexidad));
-  set('tir_na', fmt.pct(bono.tir_na));
-  set('tir', fmt.pct(bono.tir));
-  // Y también actualizar la sensibilidad porque depende de dm/conv
-  actualizarSensibilidad(ticker);
-}
+  // Construir cabecera: una supercolumna por escenario con subcolumnas
+  const subCols = ['TIR nueva', 'Precio fut.', 'Cupones', 'Retorno %'];
+  const theadEsc = `<tr class="header-escenarios">
+    <th class="ticker-h sticky-col" rowspan="2">Especie</th>
+    <th rowspan="2">Precio hoy</th>
+    <th rowspan="2">Monto hoy</th>
+    ${simState.escenarios.map(e => `<th colspan="${subCols.length}" class="col-sep col-escenario" data-esc-id="${e.id}">${e.nombre.replace(/</g,'&lt;')}</th>`).join('')}
+  </tr>`;
+  const theadSub = `<tr class="header-sub">
+    ${simState.escenarios.map(e =>
+      subCols.map((c, i) => `<th class="${i === 0 ? 'col-sep col-escenario' : 'col-escenario'}">${c}</th>`).join('')
+    ).join('')}
+  </tr>`;
 
-function actualizarSensibilidad(ticker) {
-  const bono = bonosState.bonos.find(b => b.ticker === ticker);
-  if (!bono) return;
-  const row = document.querySelector(`#curvaTabla tr[data-ticker="${ticker}"]`);
-  if (!row) return;
-  const dTir = bonosState.variaciones_tir[ticker] || 0;
-  const sens = calcularSensibilidad(bono, dTir);
-  const cls = sens.varPct > 0 ? 'pos' : (sens.varPct < 0 ? 'neg' : '');
+  // Totales por escenario (ponderados por monto)
+  const montoTotalHoy = simState.cartera.reduce((s, c) => s + (c.vn * c.precio / 100), 0);
 
-  const set = (cell, val, extraClass) => {
-    const td = row.querySelector(`[data-cell="${cell}"]`);
-    if (td) {
-      td.textContent = val;
-      td.className = 'calc-cell' + (extraClass ? ' ' + extraClass : '');
-    }
-  };
-  set('nueva_tir_na', fmt.pct(sens.nuevaTIR), 'subtle');
-  const nuevaTd = row.querySelector('[data-cell="var_pct"]');
-  if (nuevaTd) { nuevaTd.textContent = fmt.pct(sens.varPct); nuevaTd.className = 'calc-cell ' + cls; }
-  const npTd = row.querySelector('[data-cell="nuevo_precio"]');
-  if (npTd) { npTd.textContent = fmt.price(sens.nuevoPrecio); npTd.className = 'calc-cell ' + cls; npTd.style.fontWeight='700'; }
-}
-
-// ============ CARTERA Y STATS ============
-function renderCarteraYStats() {
-  const cartera = bonosState.cartera;
-  const montoTotal = cartera.reduce((acc, c) => acc + (c.monto_emision * c.precio_vn), 0);
-  cartera.forEach(c => {
-    c.monto_valuado = c.monto_emision * c.precio_vn;
-    c.porcentaje = c.monto_valuado / montoTotal;
-  });
-
-  const tabla = document.getElementById('carteraTabla');
-  const thead = `<thead>
-    <tr>
-      <th class="txt-left">Especie</th>
-      <th>Precio C/1 V.N.</th>
-      <th>Monto Emisión (V.N.)</th>
-      <th>% Cartera</th>
-    </tr>
-  </thead>`;
-  const rows = cartera.map(c => {
-    const pctW = (c.porcentaje * 100).toFixed(0);
+  // Filas por bono
+  const bodyRows = simState.cartera.map(c => {
+    const bono = BONOS_DB.bonos[c.ticker] || {};
+    const montoHoy = (c.vn * c.precio) / 100;
+    const celdasEsc = simState.escenarios.map(e => {
+      const sim = sims[c.id][e.id];
+      if (!sim) {
+        return `<td class="col-sep col-escenario">—</td><td class="col-escenario">—</td><td class="col-escenario">—</td><td class="col-escenario">—</td>`;
+      }
+      const retClass = sim.retornoPct > 0 ? 'ret-pos' : (sim.retornoPct < 0 ? 'ret-neg' : '');
+      return `<td class="col-sep col-escenario">${fmtPct(sim.tirNueva)}</td>
+              <td class="col-escenario">${fmtNum(sim.precioFuturo)}</td>
+              <td class="col-escenario">${fmtNum(sim.cupones)}</td>
+              <td class="col-escenario ${retClass}">${fmtPctSigned(sim.retornoPct)}</td>`;
+    }).join('');
     return `<tr>
-      <td class="ticker-cell">${c.ticker}</td>
-      <td>${(c.precio_vn).toFixed(4)}</td>
-      <td>${fmt.moneyM(c.monto_emision)}</td>
-      <td><span class="pct-bar"><span class="pct-bar-fill" style="width:${pctW}%"></span></span>${(c.porcentaje*100).toFixed(2)}%</td>
+      <td class="ticker-cell sticky-col">${c.ticker}</td>
+      <td>${fmtNum(c.precio)}</td>
+      <td>${fmtMoney(montoHoy, 0)}</td>
+      ${celdasEsc}
     </tr>`;
   }).join('');
+
+  // Fila total (retorno ponderado por escenario)
+  const totalCeldas = simState.escenarios.map(e => {
+    let montoFuturoTotal = 0;
+    let valido = true;
+    simState.cartera.forEach(c => {
+      const sim = sims[c.id][e.id];
+      if (!sim) { valido = false; return; }
+      // Monto final: (precio futuro + cupones) * VN / 100
+      const montoFuturo = (sim.precioFuturo + sim.cupones) * c.vn / 100;
+      montoFuturoTotal += montoFuturo;
+    });
+    if (!valido || montoTotalHoy === 0) {
+      return `<td class="col-sep col-escenario">—</td><td class="col-escenario">—</td><td class="col-escenario">—</td><td class="col-escenario">—</td>`;
+    }
+    const retTotal = (montoFuturoTotal / montoTotalHoy) - 1;
+    const retClass = retTotal > 0 ? 'ret-pos' : (retTotal < 0 ? 'ret-neg' : '');
+    return `<td class="col-sep col-escenario">—</td>
+            <td class="col-escenario">—</td>
+            <td class="col-escenario">${fmtMoney(montoFuturoTotal - montoTotalHoy, 0)}</td>
+            <td class="col-escenario ${retClass}">${fmtPctSigned(retTotal)}</td>`;
+  }).join('');
+
   const totalRow = `<tr class="total-row">
-    <td class="ticker-cell">Total</td>
-    <td></td>
-    <td>${fmt.moneyM(montoTotal)}</td>
-    <td>100.00%</td>
+    <td class="ticker-cell sticky-col">CARTERA</td>
+    <td>—</td>
+    <td>${fmtMoney(montoTotalHoy, 0)}</td>
+    ${totalCeldas}
   </tr>`;
-  tabla.innerHTML = thead + '<tbody>' + rows + totalRow + '</tbody>';
 
-  let durCartera = 0;
-  let tirCartera = 0;
-  cartera.forEach(c => {
-    const bono = bonosState.bonos.find(b => b.ticker === c.ticker);
-    if (bono) {
-      durCartera += c.porcentaje * bono.duration;
-      tirCartera += c.porcentaje * bono.tir_na;
+  t.innerHTML = `<thead>${theadEsc}${theadSub}</thead><tbody>${bodyRows}${totalRow}</tbody>`;
+
+  // Stats por escenario
+  statsDiv.innerHTML = simState.escenarios.map(e => {
+    let montoFuturoTotal = 0;
+    let valido = true;
+    simState.cartera.forEach(c => {
+      const sim = sims[c.id][e.id];
+      if (!sim) { valido = false; return; }
+      montoFuturoTotal += (sim.precioFuturo + sim.cupones) * c.vn / 100;
+    });
+    if (!valido || montoTotalHoy === 0) {
+      return `<div class="resultado-stat"><div class="resultado-stat-name">${e.nombre.replace(/</g,'&lt;')}</div><div class="resultado-stat-value">—</div><div class="resultado-stat-detail">Datos incompletos</div></div>`;
     }
+    const retTotal = (montoFuturoTotal / montoTotalHoy) - 1;
+    const retClass = retTotal > 0 ? 'pos' : (retTotal < 0 ? 'neg' : '');
+    // TNA aproximada
+    const retAnualizado = diasHastaSim > 0 ? Math.pow(1 + retTotal, 365/diasHastaSim) - 1 : null;
+    return `<div class="resultado-stat">
+      <div class="resultado-stat-name">${e.nombre.replace(/</g,'&lt;')}</div>
+      <div class="resultado-stat-value ${retClass}">${fmtPctSigned(retTotal)}</div>
+      <div class="resultado-stat-detail">
+        ${retAnualizado != null ? 'TNA equiv.: ' + fmtPctSigned(retAnualizado) + ' · ' : ''}
+        Dif: ${fmtMoney(montoFuturoTotal - montoTotalHoy, 0)}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function actualizarCabecerasResultados() {
+  const ths = document.querySelectorAll('#resultadosTabla thead th[data-esc-id]');
+  ths.forEach(th => {
+    const id = parseInt(th.getAttribute('data-esc-id'));
+    const esc = simState.escenarios.find(x => x.id === id);
+    if (esc) th.textContent = esc.nombre;
   });
-
-  document.getElementById('statDuracionCartera').textContent = durCartera.toFixed(4);
-  document.getElementById('statTIRCartera').textContent = fmt.pct(tirCartera);
-  const embi = (tirCartera - bonosState.us_treasury) * 10000;
-  document.getElementById('statEMBI').textContent = Math.round(embi) + ' bps';
-
-  renderBonosStats();
+  // También actualizar stats
+  const stats = document.querySelectorAll('#resultadosStats .resultado-stat .resultado-stat-name');
+  stats.forEach((el, i) => {
+    const esc = simState.escenarios[i];
+    if (esc) el.textContent = esc.nombre;
+  });
 }
 
-function renderBonosStats() {
-  const stats = document.getElementById('bonosStats');
-  const nBonos = bonosState.bonos.length;
-  const nAr = bonosState.bonos.filter(b => b.info.ley === 'Argentina').length;
-  const nNy = bonosState.bonos.filter(b => b.info.ley === 'Nueva York').length;
-  const tirProm = bonosState.bonos.reduce((a,b) => a + b.tir, 0) / nBonos;
-  stats.innerHTML = `
-    <div class="stat"><div class="stat-label">Bonos en la curva</div><div class="stat-value accent">${nBonos}</div><div class="stat-detail">${nAr} Ley AR · ${nNy} Ley NY</div></div>
-    <div class="stat"><div class="stat-label">TIR promedio</div><div class="stat-value">${fmt.pct(tirProm)}</div><div class="stat-detail">Promedio simple de la curva</div></div>
-    <div class="stat"><div class="stat-label">Última actualización</div><div class="stat-value" id="statUltimaAct" style="font-size:16px;">Datos iniciales</div><div class="stat-detail">Usar botón "Actualizar precios"</div></div>
-  `;
-}
-
-// ============ ACTUALIZAR PRECIOS ============
-async function actualizarPrecios() {
-  const btn = document.getElementById('btnUpdatePrices');
-  const label = document.getElementById('btnUpdateLabel');
-  const status = document.getElementById('updateStatus');
-
-  btn.disabled = true;
-  btn.classList.add('loading');
-  label.textContent = 'Actualizando...';
-  status.className = 'update-status';
-  status.innerHTML = '<span class="dot-status"></span>Consultando bonistas.com...';
-
-  const tickers = bonosState.bonos.map(b => b.ticker);
-  let ok = 0, fail = 0;
-  const errores = [];
-
+// ============ FETCH BONISTAS.COM ============
+async function fetchPrecioBonistas(ticker) {
+  const url = 'https://bonistas.com/bono-cotizacion-rendimiento-precio-hoy/' + ticker;
   const PROXIES = [
-    (url) => 'https://proxy.cors.sh/' + url,
-    (url) => 'https://api.allorigins.win/raw?url=' + encodeURIComponent(url),
-    (url) => 'https://corsproxy.dev/?url=' + encodeURIComponent(url),
-    (url) => 'https://api.codetabs.com/v1/proxy?quest=' + encodeURIComponent(url),
+    { name: 'cors.sh', fn: (u) => 'https://proxy.cors.sh/' + u },
+    { name: 'allorigins', fn: (u) => 'https://api.allorigins.win/raw?url=' + encodeURIComponent(u) },
+    { name: 'corsproxy.dev', fn: (u) => 'https://corsproxy.dev/?url=' + encodeURIComponent(u) },
+    { name: 'codetabs', fn: (u) => 'https://api.codetabs.com/v1/proxy?quest=' + encodeURIComponent(u) },
   ];
-  let proxyIdx = null;
-
-  for (const tk of tickers) {
-    const url = 'https://bonistas.com/bono-cotizacion-rendimiento-precio-hoy/' + tk;
-    let html = null;
-    if (proxyIdx === null) {
-      for (let i = 0; i < PROXIES.length; i++) {
-        try {
-          const res = await fetch(PROXIES[i](url));
-          if (res.ok) {
-            const t = await res.text();
-            if (t && t.length > 500 && t.toLowerCase().includes(tk.toLowerCase())) {
-              html = t;
-              proxyIdx = i;
-              break;
-            }
-          }
-        } catch(e) { /* try next */ }
-      }
-      if (proxyIdx === null) { fail++; errores.push(tk); continue; }
-    } else {
-      try {
-        const res = await fetch(PROXIES[proxyIdx](url));
-        if (res.ok) html = await res.text();
-      } catch(e) { fail++; errores.push(tk); continue; }
-    }
-    if (!html) { fail++; errores.push(tk); continue; }
-    const precio = extraerPrecioBonistas(html, tk);
-    if (precio == null || isNaN(precio) || precio <= 0) { fail++; errores.push(tk); continue; }
-    const bono = bonosState.bonos.find(b => b.ticker === tk);
-    if (bono) {
-      bono.precio = precio;
-      recalcularBono(bono);
-      const cart = bonosState.cartera.find(c => c.ticker === tk);
-      if (cart) cart.precio_vn = precio / 100;
-      const inp = document.querySelector(`#curvaTabla input[data-field="precio"][data-ticker="${tk}"]`);
-      if (inp) inp.value = precio.toFixed(2);
-      actualizarFilaCompleta(tk);
-      ok++;
-    }
+  const errores = [];
+  for (const proxy of PROXIES) {
+    try {
+      const res = await fetch(proxy.fn(url));
+      if (!res.ok) { errores.push(`${proxy.name}: ${res.status}`); continue; }
+      const html = await res.text();
+      if (!html || html.length < 500) { errores.push(`${proxy.name}: respuesta corta`); continue; }
+      const precio = extraerPrecioBonistas(html, ticker);
+      if (precio != null && !isNaN(precio) && precio > 0) return { ok: true, precio };
+      errores.push(`${proxy.name}: no se pudo parsear`);
+    } catch(e) { errores.push(`${proxy.name}: ${e.message.substring(0,20)}`); }
   }
-
-  btn.disabled = false;
-  btn.classList.remove('loading');
-  label.textContent = 'Actualizar precios desde bonistas.com';
-  const hora = new Date().toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' });
-
-  if (ok > 0 && fail === 0) {
-    status.className = 'update-status success';
-    status.innerHTML = `<span class="dot-status"></span>${ok} precios actualizados · ${hora}`;
-  } else if (ok > 0 && fail > 0) {
-    status.className = 'update-status';
-    status.innerHTML = `<span class="dot-status" style="color:#EAB308"></span>${ok} OK, ${fail} sin datos (${errores.slice(0,3).join(',')}${errores.length>3?'…':''}) · ${hora}`;
-  } else {
-    status.className = 'update-status error';
-    status.innerHTML = `<span class="dot-status"></span>No se pudieron obtener precios. Editá los precios a mano.`;
-  }
-
-  renderCarteraYStats();
-  const el = document.getElementById('statUltimaAct');
-  if (el && ok > 0) { el.textContent = hora; el.style.fontSize = '22px'; el.style.color = '#15803d'; }
+  return { ok: false, error: errores.join(' | ') };
 }
 
-// Parser preciso: bonistas.com renderiza el precio en un tag específico
-// Usamos DOMParser para navegar el HTML de forma robusta
 function extraerPrecioBonistas(html, ticker) {
   try {
     const parser = new DOMParser();
     const doc = parser.parseFromString(html, 'text/html');
-
-    // Estrategia 1: buscar meta description (bonistas la usa con el precio)
+    // Estrategia 1: meta description
     const meta = doc.querySelector('meta[name="description"]');
     if (meta) {
       const desc = meta.getAttribute('content') || '';
-      // Formato típico: "AL30D cotiza a $64.23 con TIR..."
-      const m = desc.match(/\$\s*([0-9]+(?:[.,][0-9]+))/);
+      const m = desc.match(/\$\s*([0-9]{1,4}(?:[.,][0-9]{1,4}))/);
       if (m) {
         const v = parseFloat(m[1].replace(',','.'));
-        if (v > 0 && v < 500) return v;
+        if (v > 5 && v < 500) return v;
       }
     }
-
-    // Estrategia 2: buscar en el texto renderizado
-    // El HTML de bonistas suele tener: <div>Precio</div><div class="...">$64.23</div>
-    // o similar. Vamos a buscar todos los "$XX.XX" en el body y quedarnos con el más plausible
-    const bodyText = (doc.body ? doc.body.textContent : '') || '';
-
-    // Patrón 1: "Precio" seguido de "$XX.XX" cerca
-    // El precio del bono suele ser entre 10 y 200 en dólares
-    const rePrecio = /Precio[\s\S]{0,80}?\$\s*([0-9]{1,4}(?:[.,][0-9]{1,4}))/i;
-    let m = bodyText.match(rePrecio);
-    if (m) {
-      const v = parseFloat(m[1].replace(',','.'));
-      if (v > 0 && v < 500) return v;
+    // Estrategia 2: buscar en body patrones típicos
+    const body = (doc.body ? doc.body.textContent : '') || '';
+    // Buscar "Precio" seguido de un número cercano
+    const rePrecio = /Precio[^\d\-]{0,80}?(\d{1,4}[.,]\d{1,4})/i;
+    const m2 = body.match(rePrecio);
+    if (m2) {
+      const v = parseFloat(m2[1].replace(',','.'));
+      if (v > 5 && v < 500) return v;
     }
-
-    // Patrón 2: primer "$" seguido de valor entre 10 y 200
-    const reDollar = /\$\s*([0-9]{2,3}[.,][0-9]{1,4})(?!\d)/g;
-    let match;
-    while ((match = reDollar.exec(bodyText)) !== null) {
-      const v = parseFloat(match[1].replace(',','.'));
-      if (v >= 10 && v <= 200) return v;
-    }
-
-    // Patrón 3 (fallback): buscar cerca del ticker el primer número tipo XX.XX
-    const idx = bodyText.indexOf(ticker);
-    if (idx >= 0) {
-      const chunk = bodyText.slice(idx, idx + 500);
-      const m2 = chunk.match(/([0-9]{2,3}[.,][0-9]{1,4})(?!\d)/);
-      if (m2) {
-        const v = parseFloat(m2[1].replace(',','.'));
-        if (v > 10 && v < 500) return v;
-      }
+    // Estrategia 3: primer $XX.XX en rango plausible
+    const reDol = /\$\s*(\d{2,3}[.,]\d{1,4})/g;
+    let m3;
+    while ((m3 = reDol.exec(body)) !== null) {
+      const v = parseFloat(m3[1].replace(',','.'));
+      if (v >= 10 && v <= 300) return v;
     }
     return null;
-  } catch(e) {
-    console.error('parse err:', e);
-    return null;
-  }
+  } catch(e) { return null; }
 }
+
+async function actualizarPreciosCartera() {
+  if (!simState.cartera.length) return;
+  const btn = document.getElementById('btnUpdatePrices');
+  const label = document.getElementById('btnUpdateLabel');
+  const status = document.getElementById('updateStatus');
+  btn.disabled = true;
+  btn.classList.add('loading');
+  label.textContent = 'Actualizando...';
+  status.className = 'update-status';
+  status.textContent = `Consultando bonistas.com (${simState.cartera.length} bono${simState.cartera.length !== 1 ? 's' : ''})...`;
+
+  const tickersUnicos = [...new Set(simState.cartera.map(c => c.ticker))];
+  let ok = 0, fail = 0;
+  const fallidos = [];
+  const precios = {};
+  for (const tk of tickersUnicos) {
+    const resp = await fetchPrecioBonistas(tk);
+    if (resp.ok) {
+      precios[tk] = resp.precio;
+      ok++;
+    } else {
+      fallidos.push(tk);
+      fail++;
+    }
+  }
+  // Actualizar la cartera
+  simState.cartera.forEach(c => {
+    if (precios[c.ticker]) c.precio = precios[c.ticker];
+  });
+
+  btn.disabled = false;
+  btn.classList.remove('loading');
+  label.textContent = 'Actualizar precios desde bonistas.com';
+  const hora = new Date().toLocaleTimeString('es-AR', { hour:'2-digit', minute:'2-digit' });
+  if (ok > 0 && fail === 0) {
+    status.className = 'update-status success';
+    status.textContent = `${ok} precio${ok!==1?'s':''} actualizado${ok!==1?'s':''} · ${hora}`;
+  } else if (ok > 0 && fail > 0) {
+    status.className = 'update-status';
+    status.textContent = `${ok} OK, ${fail} fallaron (${fallidos.slice(0,3).join(',')}${fallidos.length>3?'…':''}) · ${hora}`;
+  } else {
+    status.className = 'update-status error';
+    status.textContent = `No se pudo obtener ningún precio. Los proxies CORS pueden estar caídos. Probá en unos minutos.`;
+  }
+
+  renderCartera();
+  renderResultados();
+}
+
+// ============ INIT ============
+function initBonos() {
+  // Fecha de simulación default: 6 meses adelante
+  const hoy = hoyFecha();
+  const defFecha = new Date(hoy); defFecha.setMonth(defFecha.getMonth() + 6);
+  simState.fechaSim = defFecha;
+
+  const inpFecha = document.getElementById('inputFechaSim');
+  inpFecha.value = fechaStr(defFecha);
+  inpFecha.min = fechaStr(hoy);
+  inpFecha.addEventListener('input', (e) => {
+    const d = parseFecha(e.target.value);
+    if (d && d >= hoy) {
+      simState.fechaSim = d;
+      renderResultados();
+    }
+  });
+
+  const inpUST = document.getElementById('inputUSTreasury');
+  inpUST.value = simState.usTreasury.toFixed(4);
+  inpUST.addEventListener('input', (e) => {
+    const v = parseFloat(e.target.value);
+    if (!isNaN(v) && v >= 0 && v <= 0.5) {
+      simState.usTreasury = v;
+      renderResultados();
+    }
+  });
+
+  // EMBI actual mostrado
+  document.getElementById('displayEMBIActual').textContent = simState.embiActual + ' bps';
+
+  // Toggle de modo
+  document.getElementById('btnModoEMBI').addEventListener('click', () => cambiarModo('embi'));
+  document.getElementById('btnModoTIR').addEventListener('click', () => cambiarModo('tir'));
+
+  // Agregar bono
+  document.getElementById('btnAddBono').addEventListener('click', () => {
+    const usados = simState.cartera.map(c => c.ticker);
+    const disponibles = Object.keys(BONOS_DB.bonos).filter(t => !usados.includes(t));
+    const tk = disponibles[0] || Object.keys(BONOS_DB.bonos)[0];
+    const bono = BONOS_DB.bonos[tk];
+    simState.cartera.push({
+      id: simState._nextCarteraId++,
+      ticker: tk,
+      vn: 1000000,
+      precio: bono.precio_inicial,
+    });
+    renderCartera();
+    renderEscenarios();
+    renderResultados();
+  });
+
+  // Agregar escenario
+  document.getElementById('btnAddEscenario').addEventListener('click', () => {
+    if (simState.escenarios.length >= 4) {
+      alert('Máximo 4 escenarios');
+      return;
+    }
+    simState.escenarios.push(nuevoEscenario());
+    renderEscenarios();
+    renderResultados();
+  });
+
+  // Botón actualizar precios
+  document.getElementById('btnUpdatePrices').addEventListener('click', actualizarPreciosCartera);
+
+  // Precargar: 2 escenarios por default
+  simState.escenarios.push(nuevoEscenario('Base'));
+  simState.escenarios[0].embi = simState.embiActual;
+  const esc2 = nuevoEscenario('Compresión');
+  esc2.embi = Math.max(0, simState.embiActual - 150);
+  simState.escenarios.push(esc2);
+
+  renderCartera();
+  renderEscenarios();
+  renderResultados();
+}
+
+function cambiarModo(nuevo) {
+  if (simState.modo === nuevo) return;
+  simState.modo = nuevo;
+  // Actualizar toggles
+  document.querySelectorAll('.toggle-btn').forEach(b => {
+    b.classList.toggle('active', b.getAttribute('data-modo') === nuevo);
+  });
+  // Actualizar modo en escenarios existentes
+  simState.escenarios.forEach(e => {
+    e.modo = nuevo;
+    // Si cambió a TIR, inicializar tirs para todos los bonos de cartera
+    if (nuevo === 'tir') {
+      simState.cartera.forEach(c => {
+        if (e.tirs[c.ticker] == null) {
+          const b = BONOS_DB.bonos[c.ticker];
+          if (b) e.tirs[c.ticker] = b.tir_actual;
+        }
+      });
+    }
+  });
+  renderEscenarios();
+  renderResultados();
+}
+
 
 // ============ TABS ============
 function initTabs() {
@@ -2912,32 +3430,6 @@ function initTabs() {
     });
   });
 }
-
-function initBonos() {
-  // Al inicializar, recalculamos todos los bonos con sus precios actuales (para tener DM/conv/tir consistentes)
-  bonosState.bonos.forEach(recalcularBono);
-  renderBonosStats();
-  renderCurvaTablaInicial();
-  renderCarteraYStats();
-
-  document.getElementById('btnUpdatePrices').addEventListener('click', actualizarPrecios);
-  document.getElementById('btnResetSensibilidad').addEventListener('click', () => {
-    bonosState.variaciones_tir = {};
-    document.querySelectorAll('#curvaTabla input[data-field="dtir"]').forEach(inp => inp.value = '0');
-    bonosState.bonos.forEach(b => actualizarSensibilidad(b.ticker));
-  });
-
-  const usInp = document.getElementById('inputUSTreasury');
-  usInp.value = bonosState.us_treasury.toFixed(4);
-  usInp.addEventListener('input', (e) => {
-    const v = parseFloat(e.target.value);
-    if (!isNaN(v) && v >= 0 && v <= 0.5) {
-      bonosState.us_treasury = v;
-      renderCarteraYStats();
-    }
-  });
-}
-
 
 // ============ INIT ============
 renderStats();
