@@ -1518,7 +1518,50 @@ tbody tr.row-detail td {
 .resultado-stat .resultado-stat-value { font-family: 'JetBrains Mono', monospace; font-size: 22px; font-weight: 700; letter-spacing: -0.5px; }
 .resultado-stat .resultado-stat-value.pos { color: #15803d; }
 .resultado-stat .resultado-stat-value.neg { color: var(--leiva-red-dark); }
-.resultado-stat .resultado-stat-detail { font-size: 11px; color: var(--ink-muted); margin-top: 3px; }
+.resultado-stat .resultado-stat-detail { font-size: 11.5px; color: var(--ink-muted); margin-top: 6px; }
+.resultado-stat .resultado-stat-detail strong { color: var(--ink); font-weight: 700; }
+.resultado-stat .resultado-stat-pct { font-size: 14px; font-weight: 700; margin-top: 2px; letter-spacing: -0.2px; }
+.resultado-stat .resultado-stat-pct.pos { color: #15803d; }
+.resultado-stat .resultado-stat-pct.neg { color: var(--leiva-red-dark); }
+.resultado-stat .resultado-stat-pct .pct-sep { color: var(--ink-muted); font-weight: 400; margin: 0 4px; }
+
+/* Gráfico de sensibilidad */
+.chart-wrap {
+  margin: 0 20px 20px;
+  background: #141618;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid #2a2a2a;
+}
+.chart-header {
+  display: flex; justify-content: space-between; align-items: flex-start;
+  padding: 18px 22px 14px; gap: 20px; flex-wrap: wrap;
+  border-bottom: 1px solid #2a2a2a;
+}
+.chart-title { color: #fff; font-size: 15px; font-weight: 700; letter-spacing: -0.3px; }
+.chart-sub { color: #8a8a8a; font-size: 11.5px; margin-top: 4px; max-width: 560px; line-height: 1.4; }
+.chart-legend { display: flex; gap: 14px; flex-wrap: wrap; align-items: center; }
+.chart-lg-item { color: #cccccc; font-size: 11.5px; font-weight: 600; display: inline-flex; align-items: center; gap: 7px; }
+.chart-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+.chart-dash { width: 18px; height: 3px; display: inline-block; background-image: linear-gradient(90deg, #38BDF8 0 7px, transparent 7px 11px, #38BDF8 11px 18px); }
+.chart-body { padding: 12px 10px 18px; }
+.chart-body svg { width: 100%; height: auto; display: block; }
+.chart-body text { font-family: 'Manrope', sans-serif; }
+
+.chart-empty { color: #666; font-size: 13px; padding: 60px 20px; text-align: center; }
+
+/* Botón generar PDF */
+.btn-report {
+  padding: 8px 14px; background: var(--white); border: 1.5px solid var(--leiva-red);
+  color: var(--leiva-red); border-radius: 6px;
+  font-family: 'Manrope', sans-serif; font-size: 12.5px; font-weight: 700;
+  cursor: pointer; display: inline-flex; align-items: center; gap: 7px;
+  transition: all 0.15s; margin-left: auto;
+}
+.btn-report:hover { background: var(--leiva-red); color: var(--white); }
+.btn-report:disabled { opacity: 0.5; cursor: not-allowed; }
+.bonos-block .block-header { align-items: center; }
+
 .empty-state-sim {
   padding: 40px 20px; text-align: center; color: var(--ink-muted); font-size: 13px;
 }
@@ -1685,11 +1728,29 @@ tbody tr.row-detail td {
   <section class="bonos-block">
     <div class="block-header">
       <h2>3 · Resultados por escenario</h2>
+      <button class="btn-report" id="btnGenerarPDF" type="button">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M9 13h6M9 17h6M9 9h1"/></svg>
+        Generar reporte PDF
+      </button>
     </div>
     <div class="resultados-wrap">
       <table class="resultados-tabla" id="resultadosTabla"></table>
     </div>
     <div class="resultados-stats" id="resultadosStats"></div>
+    <div class="chart-wrap" id="chartWrap">
+      <div class="chart-header">
+        <div>
+          <div class="chart-title" id="chartTitle">Sensibilidad de la cartera vs Riesgo País</div>
+          <div class="chart-sub" id="chartSub">Valor esperado en US$ (eje izquierdo) y retorno % (eje derecho) para distintos niveles de EMBI+ a la fecha de simulación.</div>
+        </div>
+        <div class="chart-legend">
+          <span class="chart-lg-item"><span class="chart-dot" style="background:#DA0F2C"></span>Cartera (US$)</span>
+          <span class="chart-lg-item"><span class="chart-dash" style="background:#38BDF8"></span>EMBI+ actual</span>
+          <span class="chart-lg-item"><span class="chart-dot" style="background:#fff; border:2px solid #DA0F2C"></span>Escenarios</span>
+        </div>
+      </div>
+      <div class="chart-body" id="chartBody"></div>
+    </div>
     <div class="curva-nota">
       <strong>Metodología:</strong> El <em>precio futuro</em> se calcula descontando los flujos restantes desde la fecha de simulación a la nueva TIR (modelo DCF puro).
       Los <em>cupones</em> son la suma simple de pagos recibidos entre hoy y la fecha de simulación (no se asume reinversión).
@@ -2958,9 +3019,10 @@ function nuevoEscenario(nombre) {
     const b = BONOS_DB.bonos[c.ticker];
     if (b) tirs[c.ticker] = b.tir_actual;
   });
+  const id = simState._nextEscenarioId++;
   return {
-    id: simState._nextEscenarioId++,
-    nombre: nombre || `Escenario ${simState.escenarios.length + 1}`,
+    id,
+    nombre: nombre || `Escenario ${id}`,
     modo: simState.modo,
     embi: simState.embiActual,
     tirs,
@@ -3095,7 +3157,7 @@ function renderResultados() {
   });
 
   // Construir cabecera: una supercolumna por escenario con subcolumnas
-  const subCols = ['TIR nueva', 'Precio fut.', 'Cupones', 'Retorno %'];
+  const subCols = ['TIR nueva', 'Precio fut.', 'Cupones', 'Monto final', 'Retorno %'];
   const theadEsc = `<tr class="header-escenarios">
     <th class="ticker-h sticky-col" rowspan="2">Especie</th>
     <th rowspan="2">Precio hoy</th>
@@ -3118,12 +3180,14 @@ function renderResultados() {
     const celdasEsc = simState.escenarios.map(e => {
       const sim = sims[c.id][e.id];
       if (!sim) {
-        return `<td class="col-sep col-escenario">—</td><td class="col-escenario">—</td><td class="col-escenario">—</td><td class="col-escenario">—</td>`;
+        return `<td class="col-sep col-escenario">—</td><td class="col-escenario">—</td><td class="col-escenario">—</td><td class="col-escenario">—</td><td class="col-escenario">—</td>`;
       }
       const retClass = sim.retornoPct > 0 ? 'ret-pos' : (sim.retornoPct < 0 ? 'ret-neg' : '');
+      const montoFinal = (sim.precioFuturo + sim.cupones) * c.vn / 100;
       return `<td class="col-sep col-escenario">${fmtPct(sim.tirNueva)}</td>
               <td class="col-escenario">${fmtNum(sim.precioFuturo)}</td>
               <td class="col-escenario">${fmtNum(sim.cupones)}</td>
+              <td class="col-escenario">${fmtMoney(montoFinal, 0)}</td>
               <td class="col-escenario ${retClass}">${fmtPctSigned(sim.retornoPct)}</td>`;
     }).join('');
     return `<tr>
@@ -3146,13 +3210,15 @@ function renderResultados() {
       montoFuturoTotal += montoFuturo;
     });
     if (!valido || montoTotalHoy === 0) {
-      return `<td class="col-sep col-escenario">—</td><td class="col-escenario">—</td><td class="col-escenario">—</td><td class="col-escenario">—</td>`;
+      return `<td class="col-sep col-escenario">—</td><td class="col-escenario">—</td><td class="col-escenario">—</td><td class="col-escenario">—</td><td class="col-escenario">—</td>`;
     }
     const retTotal = (montoFuturoTotal / montoTotalHoy) - 1;
     const retClass = retTotal > 0 ? 'ret-pos' : (retTotal < 0 ? 'ret-neg' : '');
+    const diffClass = (montoFuturoTotal - montoTotalHoy) > 0 ? 'ret-pos' : ((montoFuturoTotal - montoTotalHoy) < 0 ? 'ret-neg' : '');
     return `<td class="col-sep col-escenario">—</td>
             <td class="col-escenario">—</td>
-            <td class="col-escenario">${fmtMoney(montoFuturoTotal - montoTotalHoy, 0)}</td>
+            <td class="col-escenario ${diffClass}">${(montoFuturoTotal-montoTotalHoy>=0?'+':'')}${fmtMoney(montoFuturoTotal - montoTotalHoy, 0)}</td>
+            <td class="col-escenario">${fmtMoney(montoFuturoTotal, 0)}</td>
             <td class="col-escenario ${retClass}">${fmtPctSigned(retTotal)}</td>`;
   }).join('');
 
@@ -3165,7 +3231,7 @@ function renderResultados() {
 
   t.innerHTML = `<thead>${theadEsc}${theadSub}</thead><tbody>${bodyRows}${totalRow}</tbody>`;
 
-  // Stats por escenario
+  // Stats por escenario — valor absoluto como protagonista
   statsDiv.innerHTML = simState.escenarios.map(e => {
     let montoFuturoTotal = 0;
     let valido = true;
@@ -3178,18 +3244,619 @@ function renderResultados() {
       return `<div class="resultado-stat"><div class="resultado-stat-name">${e.nombre.replace(/</g,'&lt;')}</div><div class="resultado-stat-value">—</div><div class="resultado-stat-detail">Datos incompletos</div></div>`;
     }
     const retTotal = (montoFuturoTotal / montoTotalHoy) - 1;
+    const diffAbs = montoFuturoTotal - montoTotalHoy;
     const retClass = retTotal > 0 ? 'pos' : (retTotal < 0 ? 'neg' : '');
     // TNA aproximada
     const retAnualizado = diasHastaSim > 0 ? Math.pow(1 + retTotal, 365/diasHastaSim) - 1 : null;
+    const diffSigno = diffAbs >= 0 ? '+' : '';
     return `<div class="resultado-stat">
       <div class="resultado-stat-name">${e.nombre.replace(/</g,'&lt;')}</div>
-      <div class="resultado-stat-value ${retClass}">${fmtPctSigned(retTotal)}</div>
-      <div class="resultado-stat-detail">
-        ${retAnualizado != null ? 'TNA equiv.: ' + fmtPctSigned(retAnualizado) + ' · ' : ''}
-        Dif: ${fmtMoney(montoFuturoTotal - montoTotalHoy, 0)}
-      </div>
+      <div class="resultado-stat-value ${retClass}">${diffSigno}${fmtMoney(diffAbs, 0)}</div>
+      <div class="resultado-stat-pct ${retClass}">${fmtPctSigned(retTotal)}${retAnualizado != null ? ' <span class="pct-sep">·</span> TNA ' + fmtPctSigned(retAnualizado) : ''}</div>
+      <div class="resultado-stat-detail">Monto final: <strong>${fmtMoney(montoFuturoTotal, 0)}</strong></div>
     </div>`;
   }).join('');
+
+  // Renderizar el gráfico después de los stats
+  renderGraficoCartera(sims, montoTotalHoy, hoy, fechaSim);
+}
+
+// ============ GRÁFICO ============
+// Calcula el valor total de cartera para un EMBI dado (shift paralelo)
+function valorCarteraParaEMBI(embi, hoy, fechaSim) {
+  let total = 0;
+  const delta = (embi - simState.embiActual) / 10000;
+  for (const c of simState.cartera) {
+    const flujos = FLUJOS_BONOS[c.ticker];
+    if (!flujos) return null;
+    const tirActual = calcularTIR(flujos, c.precio, hoy);
+    if (isNaN(tirActual)) return null;
+    const tirNueva = tirActual + delta;
+    const precioFuturo = calcularPrecio(flujos, tirNueva, fechaSim);
+    const cupones = cuponesEntre(flujos, hoy, fechaSim);
+    total += (precioFuturo + cupones) * c.vn / 100;
+  }
+  return total;
+}
+
+function renderGraficoCartera(sims, montoTotalHoy, hoy, fechaSim) {
+  const title = document.getElementById('chartTitle');
+  const sub = document.getElementById('chartSub');
+  const body = document.getElementById('chartBody');
+  if (!simState.cartera.length || !simState.escenarios.length) {
+    body.innerHTML = `<div class="chart-empty">Agregá bonos y escenarios para visualizar el gráfico.</div>`;
+    return;
+  }
+
+  if (simState.modo === 'embi') {
+    title.textContent = 'Sensibilidad de la cartera vs Riesgo País';
+    sub.textContent = 'Valor esperado en US$ (eje izquierdo) para distintos niveles de EMBI+ a la fecha de simulación. Los puntos marcan tus escenarios.';
+    body.innerHTML = buildChartSensibilidad(sims, montoTotalHoy, hoy, fechaSim);
+  } else {
+    title.textContent = 'Comparativa de escenarios (TIR por bono)';
+    sub.textContent = 'Monto final por escenario a la fecha de simulación, comparado con el monto actual de la cartera.';
+    body.innerHTML = buildChartBarras(sims, montoTotalHoy);
+  }
+}
+
+// --- Chart modo EMBI: curva de sensibilidad ---
+function buildChartSensibilidad(sims, montoTotalHoy, hoy, fechaSim) {
+  // Rango X dinámico: desde min(embis) - margen hasta max(embis) + margen, con rango min 400 bps
+  const embisEsc = simState.escenarios.map(e => e.embi);
+  const embisAll = [simState.embiActual, ...embisEsc];
+  let xMin = Math.min(...embisAll);
+  let xMax = Math.max(...embisAll);
+  const rangoActual = xMax - xMin;
+  const margen = Math.max(200, rangoActual * 0.5);
+  xMin = Math.max(0, Math.floor((xMin - margen) / 50) * 50);
+  xMax = Math.ceil((xMax + margen) / 50) * 50;
+  // Si el rango queda muy chico, forzar algo razonable
+  if (xMax - xMin < 400) { xMax = xMin + 400; }
+
+  // Muestreo (~60 puntos)
+  const nPts = 60;
+  const step = (xMax - xMin) / nPts;
+  const puntos = [];
+  for (let i = 0; i <= nPts; i++) {
+    const embi = xMin + i * step;
+    const val = valorCarteraParaEMBI(embi, hoy, fechaSim);
+    if (val != null) puntos.push({ embi, val });
+  }
+  if (!puntos.length) return `<div class="chart-empty">No se pudo calcular la curva de sensibilidad.</div>`;
+
+  // Rango Y
+  const vals = puntos.map(p => p.val);
+  let yMin = Math.min(...vals, montoTotalHoy);
+  let yMax = Math.max(...vals, montoTotalHoy);
+  const yPad = (yMax - yMin) * 0.1 || 100;
+  yMin -= yPad; yMax += yPad;
+  // Redondear a múltiplos lindos
+  const yStep = niceStep((yMax - yMin) / 6);
+  yMin = Math.floor(yMin / yStep) * yStep;
+  yMax = Math.ceil(yMax / yStep) * yStep;
+
+  // Dimensiones SVG
+  const W = 1200, H = 420;
+  const padL = 85, padR = 70, padT = 20, padB = 50;
+  const plotW = W - padL - padR;
+  const plotH = H - padT - padB;
+
+  // Escalas
+  const xScale = (x) => padL + ((x - xMin) / (xMax - xMin)) * plotW;
+  const yScale = (y) => padT + plotH - ((y - yMin) / (yMax - yMin)) * plotH;
+
+  // Grid horizontal
+  const yTicks = [];
+  for (let y = yMin; y <= yMax + 0.001; y += yStep) yTicks.push(y);
+  const xTicks = [];
+  const xTickStep = niceStep((xMax - xMin) / 7);
+  for (let x = Math.ceil(xMin/xTickStep)*xTickStep; x <= xMax; x += xTickStep) xTicks.push(x);
+
+  const gridH = yTicks.map(y => `<line x1="${padL}" y1="${yScale(y)}" x2="${padL+plotW}" y2="${yScale(y)}" stroke="#2a2a2a" stroke-width="1"/>`).join('');
+  const gridV = xTicks.map(x => `<line x1="${xScale(x)}" y1="${padT}" x2="${xScale(x)}" y2="${padT+plotH}" stroke="#1f1f1f" stroke-width="1"/>`).join('');
+
+  // Labels ejes
+  const labelsY = yTicks.map(y => `<text x="${padL-10}" y="${yScale(y)+4}" fill="#8a8a8a" font-size="11" text-anchor="end">${fmtMoneyShort(y)}</text>`).join('');
+  const labelsX = xTicks.map(x => `<text x="${xScale(x)}" y="${padT+plotH+22}" fill="#8a8a8a" font-size="11" text-anchor="middle">${Math.round(x)} pb</text>`).join('');
+
+  // Línea de referencia: monto actual (línea horizontal gris sutil)
+  const refY = yScale(montoTotalHoy);
+  const refLine = refY >= padT && refY <= padT+plotH
+    ? `<line x1="${padL}" y1="${refY}" x2="${padL+plotW}" y2="${refY}" stroke="#4a4a4a" stroke-width="1" stroke-dasharray="2,4"/>
+       <text x="${padL+plotW-6}" y="${refY-5}" fill="#777" font-size="10.5" text-anchor="end">Monto actual: ${fmtMoneyShort(montoTotalHoy)}</text>` : '';
+
+  // Línea de sensibilidad (área + línea)
+  const pathLine = puntos.map((p, i) => `${i === 0 ? 'M' : 'L'}${xScale(p.embi).toFixed(1)},${yScale(p.val).toFixed(1)}`).join(' ');
+  const pathArea = pathLine + ` L${xScale(puntos[puntos.length-1].embi).toFixed(1)},${padT+plotH} L${xScale(puntos[0].embi).toFixed(1)},${padT+plotH} Z`;
+
+  // EMBI actual (línea vertical dashed)
+  let markerActual = '';
+  if (simState.embiActual >= xMin && simState.embiActual <= xMax) {
+    const xA = xScale(simState.embiActual);
+    markerActual = `<line x1="${xA}" y1="${padT}" x2="${xA}" y2="${padT+plotH}" stroke="#38BDF8" stroke-width="1.5" stroke-dasharray="5,5" opacity="0.85"/>
+                    <text x="${xA}" y="${padT-6}" fill="#38BDF8" font-size="11" font-weight="700" text-anchor="middle">EMBI actual · ${simState.embiActual} pb</text>`;
+  }
+
+  // Puntos de escenarios
+  let puntosEsc = '';
+  const colores = ['#DA0F2C','#EAB308','#15803D','#8B5CF6'];
+  simState.escenarios.forEach((e, idx) => {
+    if (e.embi < xMin || e.embi > xMax) return;
+    const val = valorCarteraParaEMBI(e.embi, hoy, fechaSim);
+    if (val == null) return;
+    const x = xScale(e.embi), y = yScale(val);
+    const color = colores[idx % colores.length];
+    puntosEsc += `
+      <circle cx="${x}" cy="${y}" r="7" fill="${color}" stroke="#fff" stroke-width="2.5"/>
+      <circle cx="${x}" cy="${y}" r="12" fill="${color}" opacity="0.15"/>
+      <text x="${x}" y="${y-16}" fill="#fff" font-size="11.5" font-weight="700" text-anchor="middle">${escapeText(e.nombre)}</text>
+      <text x="${x}" y="${y+22}" fill="#cccccc" font-size="10" text-anchor="middle">${e.embi} pb · ${fmtMoneyShort(val)}</text>
+    `;
+  });
+
+  // Etiquetas ejes
+  const labelAxisY = `<text x="20" y="${padT + plotH/2}" fill="#aaa" font-size="11" font-weight="700" transform="rotate(-90, 20, ${padT + plotH/2})" text-anchor="middle">Valor cartera (US$)</text>`;
+  const labelAxisX = `<text x="${padL + plotW/2}" y="${H-10}" fill="#aaa" font-size="11" font-weight="700" text-anchor="middle">EMBI+ Argentina (puntos básicos)</text>`;
+
+  return `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
+    <defs>
+      <linearGradient id="gradCartera" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#DA0F2C" stop-opacity="0.35"/>
+        <stop offset="100%" stop-color="#DA0F2C" stop-opacity="0.02"/>
+      </linearGradient>
+    </defs>
+    ${gridV}
+    ${gridH}
+    ${refLine}
+    <path d="${pathArea}" fill="url(#gradCartera)"/>
+    <path d="${pathLine}" fill="none" stroke="#DA0F2C" stroke-width="2.5" stroke-linejoin="round"/>
+    ${markerActual}
+    ${puntosEsc}
+    ${labelsY}
+    ${labelsX}
+    ${labelAxisY}
+    ${labelAxisX}
+    <line x1="${padL}" y1="${padT+plotH}" x2="${padL+plotW}" y2="${padT+plotH}" stroke="#3a3a3a" stroke-width="1"/>
+    <line x1="${padL}" y1="${padT}" x2="${padL}" y2="${padT+plotH}" stroke="#3a3a3a" stroke-width="1"/>
+  </svg>`;
+}
+
+// --- Chart modo TIR: barras por escenario ---
+function buildChartBarras(sims, montoTotalHoy) {
+  const W = 1200, H = 380;
+  const padL = 90, padR = 40, padT = 30, padB = 60;
+  const plotW = W - padL - padR;
+  const plotH = H - padT - padB;
+
+  // Datos
+  const datos = simState.escenarios.map(e => {
+    let total = 0, ok = true;
+    simState.cartera.forEach(c => {
+      const sim = sims[c.id][e.id];
+      if (!sim) { ok = false; return; }
+      total += (sim.precioFuturo + sim.cupones) * c.vn / 100;
+    });
+    return { nombre: e.nombre, montoFin: ok ? total : null };
+  }).filter(d => d.montoFin != null);
+  if (!datos.length) return `<div class="chart-empty">Faltan datos para calcular los escenarios.</div>`;
+
+  // Agregamos barra "Hoy" al inicio para referencia
+  const barras = [{ nombre: 'Hoy', montoFin: montoTotalHoy, esRef: true }, ...datos];
+  const vals = barras.map(b => b.montoFin);
+  let yMin = Math.min(...vals), yMax = Math.max(...vals);
+  const yPad = (yMax - yMin) * 0.15 || 100;
+  yMin = Math.max(0, yMin - yPad); yMax = yMax + yPad;
+  const yStep = niceStep((yMax - yMin) / 6);
+  yMin = Math.floor(yMin / yStep) * yStep;
+  yMax = Math.ceil(yMax / yStep) * yStep;
+
+  const yScale = (y) => padT + plotH - ((y - yMin) / (yMax - yMin)) * plotH;
+  const nB = barras.length;
+  const bWidth = Math.min(90, plotW / (nB * 1.5));
+  const bGap = (plotW - bWidth * nB) / (nB + 1);
+  const xBar = (i) => padL + bGap + i * (bWidth + bGap);
+
+  const yTicks = [];
+  for (let y = yMin; y <= yMax + 0.001; y += yStep) yTicks.push(y);
+  const gridH = yTicks.map(y => `<line x1="${padL}" y1="${yScale(y)}" x2="${padL+plotW}" y2="${yScale(y)}" stroke="#2a2a2a" stroke-width="1"/>`).join('');
+  const labelsY = yTicks.map(y => `<text x="${padL-10}" y="${yScale(y)+4}" fill="#8a8a8a" font-size="11" text-anchor="end">${fmtMoneyShort(y)}</text>`).join('');
+
+  const colores = ['#8a8a8a','#DA0F2C','#EAB308','#15803D','#8B5CF6'];
+  let barrasHtml = '';
+  const yRef = yScale(montoTotalHoy);
+  const refLine = `<line x1="${padL}" y1="${yRef}" x2="${padL+plotW}" y2="${yRef}" stroke="#4a4a4a" stroke-width="1" stroke-dasharray="2,4"/>
+                   <text x="${padL+plotW-6}" y="${yRef-5}" fill="#777" font-size="10.5" text-anchor="end">Monto actual</text>`;
+
+  barras.forEach((b, i) => {
+    const x = xBar(i), y = yScale(b.montoFin);
+    const h = padT + plotH - y;
+    const color = b.esRef ? '#8a8a8a' : colores[i % colores.length];
+    const diff = b.montoFin - montoTotalHoy;
+    const pct = montoTotalHoy > 0 ? diff / montoTotalHoy : 0;
+    const pctLabel = b.esRef ? '' : fmtPctSigned(pct);
+    const pctColor = pct > 0 ? '#4ade80' : (pct < 0 ? '#f87171' : '#fff');
+    barrasHtml += `
+      <rect x="${x}" y="${y}" width="${bWidth}" height="${h}" fill="${color}" rx="3"/>
+      <text x="${x + bWidth/2}" y="${y - 20}" fill="#fff" font-size="12" font-weight="700" text-anchor="middle">${fmtMoneyShort(b.montoFin)}</text>
+      ${pctLabel ? `<text x="${x + bWidth/2}" y="${y - 6}" fill="${pctColor}" font-size="11" font-weight="700" text-anchor="middle">${pctLabel}</text>` : ''}
+      <text x="${x + bWidth/2}" y="${padT + plotH + 20}" fill="#cccccc" font-size="12" font-weight="600" text-anchor="middle">${escapeText(b.nombre)}</text>
+    `;
+  });
+
+  const labelAxisY = `<text x="22" y="${padT + plotH/2}" fill="#aaa" font-size="11" font-weight="700" transform="rotate(-90, 22, ${padT + plotH/2})" text-anchor="middle">Monto final cartera (US$)</text>`;
+
+  return `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
+    ${gridH}
+    ${refLine}
+    ${barrasHtml}
+    ${labelsY}
+    ${labelAxisY}
+    <line x1="${padL}" y1="${padT+plotH}" x2="${padL+plotW}" y2="${padT+plotH}" stroke="#3a3a3a" stroke-width="1"/>
+    <line x1="${padL}" y1="${padT}" x2="${padL}" y2="${padT+plotH}" stroke="#3a3a3a" stroke-width="1"/>
+  </svg>`;
+}
+
+// Helper: múltiplo "lindo" para ticks de ejes (1, 2, 2.5, 5 x 10^n)
+function niceStep(x) {
+  if (x <= 0) return 1;
+  const exp = Math.floor(Math.log10(x));
+  const base = Math.pow(10, exp);
+  const n = x / base;
+  let mult;
+  if (n < 1.5) mult = 1;
+  else if (n < 3) mult = 2;
+  else if (n < 7) mult = 5;
+  else mult = 10;
+  return mult * base;
+}
+
+function fmtMoneyShort(v) {
+  if (v == null || isNaN(v)) return '—';
+  const abs = Math.abs(v);
+  if (abs >= 1e9) return 'US$ ' + (v/1e9).toFixed(2) + 'B';
+  if (abs >= 1e6) return 'US$ ' + (v/1e6).toFixed(2) + 'M';
+  if (abs >= 1e3) return 'US$ ' + Math.round(v/1e3) + 'k';
+  return 'US$ ' + Math.round(v);
+}
+
+function escapeText(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ============ REPORTE PDF ============
+function generarReportePDF() {
+  if (!simState.cartera.length) { alert('Agregá al menos un bono a la cartera para generar el reporte.'); return; }
+  if (!simState.escenarios.length) { alert('Agregá al menos un escenario para generar el reporte.'); return; }
+
+  const hoy = hoyFecha();
+  const fechaSim = simState.fechaSim || hoy;
+  const diasHastaSim = diasEntre(hoy, fechaSim);
+  const horasGen = new Date().toLocaleString('es-AR', { day:'2-digit', month:'2-digit', year:'numeric', hour:'2-digit', minute:'2-digit' });
+  const fechaSimLabel = fechaSim.toLocaleDateString('es-AR', { day:'2-digit', month:'long', year:'numeric' });
+
+  // Recalcular sims
+  const sims = {};
+  simState.cartera.forEach(c => {
+    sims[c.id] = {};
+    simState.escenarios.forEach(e => {
+      sims[c.id][e.id] = simularBonoEnEscenario(c.ticker, c.precio, e, fechaSim, hoy);
+    });
+  });
+
+  const montoTotalHoy = simState.cartera.reduce((s, c) => s + (c.vn * c.precio / 100), 0);
+
+  // Tabla cartera
+  const carteraRows = simState.cartera.map(c => {
+    const b = BONOS_DB.bonos[c.ticker] || {};
+    const info = b.info || {};
+    const monto = (c.vn * c.precio) / 100;
+    const pct = montoTotalHoy > 0 ? monto / montoTotalHoy : 0;
+    return `<tr>
+      <td class="t-ticker">${c.ticker}</td>
+      <td>${escapeText(info.nombre || '')}</td>
+      <td><span class="t-ley ${info.ley === 'Argentina' ? 't-ley-ar' : 't-ley-ny'}">${info.ley === 'Argentina' ? 'AR' : 'NY'}</span></td>
+      <td class="t-num">${fmtNum(c.vn, 0)}</td>
+      <td class="t-num">${fmtNum(c.precio)}</td>
+      <td class="t-num">${fmtMoney(monto, 0)}</td>
+      <td class="t-num">${fmtPct(pct, 1)}</td>
+    </tr>`;
+  }).join('');
+
+  // Resumen escenarios
+  const escResumen = simState.escenarios.map((e, idx) => {
+    const colores = ['#DA0F2C','#EAB308','#15803D','#8B5CF6'];
+    const col = colores[idx % colores.length];
+    let detalle = '';
+    if (simState.modo === 'embi') {
+      const delta = e.embi - simState.embiActual;
+      detalle = `EMBI+ esperado: <strong>${e.embi} pb</strong> <span style="color:#666;">(${delta >= 0 ? '+' : ''}${delta} pb vs actual)</span>`;
+    } else {
+      const tirsResumen = simState.cartera.map(c => `${c.ticker}: ${fmtPct(e.tirs[c.ticker], 2)}`).join(' · ');
+      detalle = `TIR por bono: <span style="color:#444;">${tirsResumen}</span>`;
+    }
+    return `<div class="esc-row">
+      <span class="esc-dot" style="background:${col}"></span>
+      <span class="esc-nombre">${escapeText(e.nombre)}</span>
+      <span class="esc-detalle">${detalle}</span>
+    </div>`;
+  }).join('');
+
+  // Tabla de resultados: una fila por bono, columnas por escenario
+  const subCols = ['TIR nueva', 'Precio fut.', 'Cupones', 'Monto final', 'Retorno %'];
+  const resHeadEsc = `<tr>
+    <th rowspan="2" class="t-left">Especie</th>
+    <th rowspan="2">Precio hoy</th>
+    <th rowspan="2">Monto hoy</th>
+    ${simState.escenarios.map(e => `<th colspan="${subCols.length}" class="t-esc-head">${escapeText(e.nombre)}</th>`).join('')}
+  </tr>`;
+  const resHeadSub = `<tr>${simState.escenarios.map(() => subCols.map(c => `<th class="t-sub-head">${c}</th>`).join('')).join('')}</tr>`;
+
+  const resBodyRows = simState.cartera.map(c => {
+    const montoHoy = (c.vn * c.precio) / 100;
+    const celdas = simState.escenarios.map(e => {
+      const sim = sims[c.id][e.id];
+      if (!sim) return `<td>—</td><td>—</td><td>—</td><td>—</td><td>—</td>`;
+      const retClass = sim.retornoPct > 0 ? 't-pos' : (sim.retornoPct < 0 ? 't-neg' : '');
+      const montoFinal = (sim.precioFuturo + sim.cupones) * c.vn / 100;
+      return `<td class="t-num">${fmtPct(sim.tirNueva)}</td>
+              <td class="t-num">${fmtNum(sim.precioFuturo)}</td>
+              <td class="t-num">${fmtNum(sim.cupones)}</td>
+              <td class="t-num">${fmtMoney(montoFinal, 0)}</td>
+              <td class="t-num ${retClass}">${fmtPctSigned(sim.retornoPct)}</td>`;
+    }).join('');
+    return `<tr>
+      <td class="t-ticker">${c.ticker}</td>
+      <td class="t-num">${fmtNum(c.precio)}</td>
+      <td class="t-num">${fmtMoney(montoHoy, 0)}</td>
+      ${celdas}
+    </tr>`;
+  }).join('');
+
+  // Fila cartera total
+  const totalCeldas = simState.escenarios.map(e => {
+    let montoFuturoTotal = 0, ok = true;
+    simState.cartera.forEach(c => {
+      const sim = sims[c.id][e.id];
+      if (!sim) { ok = false; return; }
+      montoFuturoTotal += (sim.precioFuturo + sim.cupones) * c.vn / 100;
+    });
+    if (!ok) return `<td>—</td><td>—</td><td>—</td><td>—</td><td>—</td>`;
+    const retTotal = (montoFuturoTotal / montoTotalHoy) - 1;
+    const diff = montoFuturoTotal - montoTotalHoy;
+    const retClass = retTotal > 0 ? 't-pos' : (retTotal < 0 ? 't-neg' : '');
+    return `<td class="t-num">—</td>
+            <td class="t-num">—</td>
+            <td class="t-num ${retClass}">${diff >= 0 ? '+' : ''}${fmtMoney(diff, 0)}</td>
+            <td class="t-num"><strong>${fmtMoney(montoFuturoTotal, 0)}</strong></td>
+            <td class="t-num ${retClass}"><strong>${fmtPctSigned(retTotal)}</strong></td>`;
+  }).join('');
+
+  const resTotalRow = `<tr class="t-total">
+    <td class="t-ticker">CARTERA</td>
+    <td>—</td>
+    <td class="t-num"><strong>${fmtMoney(montoTotalHoy, 0)}</strong></td>
+    ${totalCeldas}
+  </tr>`;
+
+  // Stats cards
+  const statsCards = simState.escenarios.map(e => {
+    let montoFuturoTotal = 0, ok = true;
+    simState.cartera.forEach(c => {
+      const sim = sims[c.id][e.id];
+      if (!sim) { ok = false; return; }
+      montoFuturoTotal += (sim.precioFuturo + sim.cupones) * c.vn / 100;
+    });
+    if (!ok) return '';
+    const retTotal = (montoFuturoTotal / montoTotalHoy) - 1;
+    const diff = montoFuturoTotal - montoTotalHoy;
+    const retAnualizado = diasHastaSim > 0 ? Math.pow(1 + retTotal, 365/diasHastaSim) - 1 : null;
+    const retClass = retTotal > 0 ? 'r-pos' : (retTotal < 0 ? 'r-neg' : '');
+    return `<div class="r-card">
+      <div class="r-card-name">${escapeText(e.nombre)}</div>
+      <div class="r-card-value ${retClass}">${diff >= 0 ? '+' : ''}${fmtMoney(diff, 0)}</div>
+      <div class="r-card-pct ${retClass}">${fmtPctSigned(retTotal)}${retAnualizado != null ? ' · TNA ' + fmtPctSigned(retAnualizado) : ''}</div>
+      <div class="r-card-detail">Monto final: <strong>${fmtMoney(montoFuturoTotal, 0)}</strong></div>
+    </div>`;
+  }).join('');
+
+  // SVG del gráfico (clon del actual)
+  const svgEnPantalla = document.querySelector('#chartBody svg');
+  const svgReport = svgEnPantalla ? svgEnPantalla.outerHTML : '<div style="padding:40px;text-align:center;color:#888;">Sin gráfico disponible</div>';
+
+  // Modo descripción
+  const modoLabel = simState.modo === 'embi' ? 'Shift paralelo de Riesgo País' : 'TIR individual por bono';
+
+  // Armo el HTML completo
+  const htmlReporte = `<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Reporte simulador cartera · ${horasGen}</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+@page { size: A4 landscape; margin: 12mm; }
+* { box-sizing: border-box; }
+body {
+  font-family: 'Manrope', system-ui, sans-serif;
+  color: #1a1a1a; background: #fff;
+  font-size: 11px; line-height: 1.4; margin: 0; padding: 20px;
+  -webkit-print-color-adjust: exact; print-color-adjust: exact;
+}
+.rep-header {
+  display: flex; justify-content: space-between; align-items: flex-end;
+  border-bottom: 3px solid #DA0F2C; padding-bottom: 10px; margin-bottom: 16px;
+}
+.rep-brand {
+  font-size: 20px; font-weight: 800; color: #1a1a1a; letter-spacing: -0.5px;
+}
+.rep-brand small {
+  display: block; font-size: 10px; font-weight: 600; color: #666;
+  text-transform: uppercase; letter-spacing: 1px; margin-top: 2px;
+}
+.rep-meta { text-align: right; font-size: 10px; color: #666; }
+.rep-meta strong { color: #1a1a1a; font-size: 11px; display: block; }
+
+.rep-params {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;
+  margin-bottom: 16px;
+}
+.rep-param {
+  background: #f6f6f6; border-left: 3px solid #DA0F2C; padding: 8px 12px;
+}
+.rep-param .lab { font-size: 9px; color: #666; text-transform: uppercase; letter-spacing: 0.8px; font-weight: 700; }
+.rep-param .val { font-family: 'JetBrains Mono', monospace; font-size: 14px; font-weight: 700; color: #1a1a1a; margin-top: 2px; }
+
+h2 { font-size: 13px; margin: 18px 0 8px; color: #1a1a1a; letter-spacing: -0.2px; }
+h2 .n { color: #DA0F2C; margin-right: 6px; }
+
+table { width: 100%; border-collapse: collapse; font-size: 10px; }
+table th {
+  background: #1a1a1a; color: #fff; padding: 6px 7px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.5px; font-size: 9px; text-align: center;
+}
+table th.t-left { text-align: left; }
+table th.t-esc-head { background: #DA0F2C; border-left: 1px solid #fff; }
+table th.t-sub-head { background: #2a2a2a; font-size: 8.5px; }
+table td { padding: 5px 7px; border-bottom: 1px solid #e5e5e5; text-align: center; }
+table td.t-num { font-family: 'JetBrains Mono', monospace; text-align: right; }
+table td.t-ticker { font-family: 'JetBrains Mono', monospace; font-weight: 700; color: #DA0F2C; text-align: left; }
+table tr.t-total { background: #f6f6f6; font-weight: 700; }
+table tr.t-total td { border-top: 2px solid #1a1a1a; }
+.t-pos { color: #15803d; font-weight: 700; }
+.t-neg { color: #991B1B; font-weight: 700; }
+.t-ley { padding: 2px 6px; border-radius: 3px; font-size: 9px; font-weight: 700; letter-spacing: 0.4px; }
+.t-ley-ar { background: #EEF2FF; color: #4338CA; }
+.t-ley-ny { background: #FEF3C7; color: #92400E; }
+
+.esc-row { display: flex; align-items: center; gap: 10px; padding: 5px 0; font-size: 11px; }
+.esc-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; flex-shrink: 0; }
+.esc-nombre { font-weight: 700; min-width: 120px; color: #1a1a1a; }
+.esc-detalle { color: #333; }
+
+.rep-stats {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 10px; margin: 12px 0;
+}
+.r-card { border: 1px solid #e5e5e5; border-radius: 6px; padding: 10px 12px; }
+.r-card-name { font-size: 9px; color: #666; text-transform: uppercase; letter-spacing: 0.8px; font-weight: 700; margin-bottom: 4px; }
+.r-card-value { font-family: 'JetBrains Mono', monospace; font-size: 20px; font-weight: 800; letter-spacing: -0.5px; }
+.r-card-pct { font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700; margin-top: 2px; }
+.r-card-detail { font-size: 10px; color: #666; margin-top: 4px; }
+.r-card-detail strong { color: #1a1a1a; }
+.r-pos { color: #15803d; }
+.r-neg { color: #991B1B; }
+
+.chart-container {
+  background: #141618; border-radius: 8px; padding: 10px;
+  margin-top: 10px; page-break-inside: avoid;
+}
+.chart-container svg { width: 100%; height: auto; }
+
+.rep-note {
+  margin-top: 16px; padding: 10px 12px; background: #f6f6f6;
+  border-left: 3px solid #999; font-size: 9.5px; color: #555; line-height: 1.5;
+}
+.rep-footer {
+  margin-top: 14px; padding-top: 10px; border-top: 1px solid #e5e5e5;
+  display: flex; justify-content: space-between; font-size: 9px; color: #999;
+}
+
+.page-break { page-break-before: always; }
+@media print {
+  body { padding: 0; }
+}
+</style>
+</head>
+<body>
+
+<div class="rep-header">
+  <div class="rep-brand">LEIVA HNOS S.A.
+    <small>Mesa de Operaciones · Simulador de cartera soberanos</small>
+  </div>
+  <div class="rep-meta">
+    <strong>Reporte generado</strong>
+    ${horasGen}
+  </div>
+</div>
+
+<div class="rep-params">
+  <div class="rep-param"><div class="lab">Fecha simulación</div><div class="val">${fechaSimLabel}</div></div>
+  <div class="rep-param"><div class="lab">Días hacia adelante</div><div class="val">${diasHastaSim} días</div></div>
+  <div class="rep-param"><div class="lab">Modo</div><div class="val" style="font-size:12px;">${modoLabel}</div></div>
+  <div class="rep-param"><div class="lab">EMBI+ actual · US Treasury</div><div class="val">${simState.embiActual} pb · ${fmtPct(simState.usTreasury)}</div></div>
+</div>
+
+<h2><span class="n">1 ·</span>Cartera actual</h2>
+<table>
+  <thead>
+    <tr>
+      <th class="t-left">Ticker</th>
+      <th class="t-left">Especie</th>
+      <th>Ley</th>
+      <th>VN</th>
+      <th>Precio</th>
+      <th>Monto hoy</th>
+      <th>% Cartera</th>
+    </tr>
+  </thead>
+  <tbody>${carteraRows}
+    <tr class="t-total">
+      <td class="t-ticker">TOTAL</td>
+      <td colspan="4"></td>
+      <td class="t-num"><strong>${fmtMoney(montoTotalHoy, 0)}</strong></td>
+      <td class="t-num"><strong>100.0%</strong></td>
+    </tr>
+  </tbody>
+</table>
+
+<h2><span class="n">2 ·</span>Escenarios simulados</h2>
+<div>${escResumen}</div>
+
+<h2><span class="n">3 ·</span>Resultados por escenario</h2>
+<table>
+  <thead>${resHeadEsc}${resHeadSub}</thead>
+  <tbody>${resBodyRows}${resTotalRow}</tbody>
+</table>
+
+<div class="rep-stats">${statsCards}</div>
+
+<div class="chart-container">${svgReport}</div>
+
+<div class="rep-note">
+  <strong>Metodología:</strong> El precio futuro se calcula descontando los flujos restantes desde la fecha de simulación a la nueva TIR (modelo DCF).
+  Los cupones son la suma simple de pagos recibidos entre hoy y la fecha de simulación (sin reinversión).
+  Retorno % = (Precio futuro + Cupones) / Precio actual − 1.
+  En modo Riesgo País se aplica un shift paralelo: Δ TIR por bono = (EMBI nuevo − EMBI actual) / 10000.
+  La TNA equivalente anualiza el retorno del período suponiendo tasa compuesta.
+</div>
+
+<div class="rep-footer">
+  <div>Leiva Hnos S.A. · ALYC · Paraná, Entre Ríos</div>
+  <div>Documento de uso interno · No constituye recomendación de inversión</div>
+</div>
+
+<scr`+`ipt>
+window.addEventListener('load', function() {
+  setTimeout(function() {
+    window.print();
+  }, 400);
+});
+</scr`+`ipt>
+
+</body>
+</html>`;
+
+  // Abrir ventana e inyectar HTML
+  const w = window.open('', '_blank', 'width=1200,height=800');
+  if (!w) {
+    alert('El navegador bloqueó la ventana emergente. Permití popups para este sitio y volvé a intentar.');
+    return;
+  }
+  w.document.open();
+  w.document.write(htmlReporte);
+  w.document.close();
 }
 
 function actualizarCabecerasResultados() {
@@ -3379,11 +4046,13 @@ function initBonos() {
 
   // Botón actualizar precios
   document.getElementById('btnUpdatePrices').addEventListener('click', actualizarPreciosCartera);
+  document.getElementById('btnGenerarPDF').addEventListener('click', generarReportePDF);
 
-  // Precargar: 2 escenarios por default
-  simState.escenarios.push(nuevoEscenario('Base'));
-  simState.escenarios[0].embi = simState.embiActual;
-  const esc2 = nuevoEscenario('Compresión');
+  // Precargar: 2 escenarios por default — Escenario 1 con EMBI actual, Escenario 2 con compresión de -150 bps
+  const esc1 = nuevoEscenario();
+  esc1.embi = simState.embiActual;
+  simState.escenarios.push(esc1);
+  const esc2 = nuevoEscenario();
   esc2.embi = Math.max(0, simState.embiActual - 150);
   simState.escenarios.push(esc2);
 
